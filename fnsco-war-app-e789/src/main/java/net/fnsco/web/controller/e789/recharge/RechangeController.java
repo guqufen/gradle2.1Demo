@@ -20,8 +20,8 @@ import com.google.common.collect.Maps;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import net.fnsco.core.alipay.AlipayClientUtil;
 import net.fnsco.core.alipay.AlipayAppPayRequestParams;
+import net.fnsco.core.alipay.AlipayClientUtil;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
@@ -176,8 +176,8 @@ public class RechangeController extends BaseController {
      * @date   2018年2月1日 下午3:16:09
      */
     @PostMapping(value = "/alipay")
-    @ApiOperation(value = "支付宝支付",notes = "tangliang")
-    public ResultDTO<String> alipayPayMent(AlipayRechargeJO alipayRechargeJO){
+    @ApiOperation(value = "我的页面-钱包-支付宝充值",notes = "tangliang")
+    public ResultDTO<AlipayAppPayParamsVO> alipayPayMent(@RequestBody AlipayRechargeJO alipayRechargeJO){
     	
     	if (Strings.isNullOrEmpty(alipayRechargeJO.getPaymentAmount())) {
             return ResultDTO.fail("充值金额不能为空");
@@ -213,7 +213,7 @@ public class RechangeController extends BaseController {
          */
         AlipayAppPayRequestParams requestParams = new AlipayAppPayRequestParams();
         requestParams.setBody("e789帐号充值");
-        requestParams.setSubject("充值");
+        requestParams.setSubject("e789帐号充值");
         requestParams.setTotalAmount(String.format("%.2f", amountB.doubleValue()));
         requestParams.setOutTradeNo(tradeWithdraw.getOrderNo());
         requestParams.setNotifyUrl(notifyUrl);

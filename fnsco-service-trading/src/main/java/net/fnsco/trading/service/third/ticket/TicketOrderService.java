@@ -9,17 +9,23 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSON;
 import com.beust.jcommander.internal.Lists;
 import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
 
+import io.swagger.annotations.ApiOperation;
+import net.fnsco.core.alipay.AlipayAppPayRequestParams;
+import net.fnsco.core.alipay.AlipayClientUtil;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.CodeUtil;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.SmsUtil;
 import net.fnsco.trading.comm.TradeConstants;
@@ -40,7 +46,8 @@ import net.sf.json.JSONObject;
 
 @Service
 public class TicketOrderService extends BaseService {
-
+	@Autowired
+	private Environment           env;
     private Logger                   logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private TicketOrderDAO           ticketOrderDAO;
@@ -294,7 +301,60 @@ public class TicketOrderService extends BaseService {
         TicketOrderDO obj = this.ticketOrderDAO.getById(id);
         return obj;
     }
+    /**
+     * 支付宝火车票支付回调
+     * @param ticketOrder
+     * @return
+     */
+    @Transactional
+    public ResultDTO payByZFBNotify(TradeWithdrawDO tradeWithdraw) {
+    	TicketOrderDO order = this.ticketOrderDAO.getByUserIdOrderNo(tradeWithdraw.getAppUserId(), tradeWithdraw.getOrderNo());
+    	order.setStatus(TicketConstants.OrderStateEnum.PAYING.getCode());
+        order.setLastModifyTime(new Date());
+        ticketOrderDAO.update(order);
+        JSONObject obj = TrainTicketsUtil.pay(order.getPayOrderNo());
+        String error_code = obj.getString("error_code");
+        //判断是否调用成功，只有error_code=0的时候表示返回成功
+        if (!"0".equals(error_code)) {
+            String reason = obj.getString("reason");
+            appAccountBalanceService.doFrozenBalance(order.getAppUserId(), BigDecimal.ZERO.subtract(order.getOrderAmount()));
+            order.setStatus(TicketConstants.OrderStateEnum.SIT_DOWN.getCode());
+            order.setLastModifyTime(new Date());
+            ticketOrderDAO.update(order);
+            return ResultDTO.fail(reason);
+        }
+        return ResultDTO.success();
+    }
+    /**
+     * 
+     * pay:(支付宝支付订单)
+     *
+     * @param ticketOrder
+     * @return   ResultDTO    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    @Transactional
+    public ResultDTO payByZFB(TicketOrderDO ticketOrder) {
 
+        TicketOrderDO order = this.ticketOrderDAO.getByUserIdOrderNo(ticketOrder.getAppUserId(), ticketOrder.getOrderNo());
+        if (null == order) {
+            return ResultDTO.fail("订单不存在");
+        }
+        if (!TicketConstants.OrderStateEnum.SIT_DOWN.getCode().equals(order.getStatus())) {
+            return ResultDTO.fail("订单状态不正常");
+        }
+        
+        AlipayAppPayRequestParams requestParams = new AlipayAppPayRequestParams();
+        requestParams.setBody("e789火车票购买");
+        requestParams.setSubject("火车票购买");
+        requestParams.setTotalAmount(String.format("%.2f", order.getOrderAmount()));
+        requestParams.setOutTradeNo(order.getOrderNo());
+        String notifyUrl = env.getProperty("alipay.notify_url");
+        requestParams.setNotifyUrl(notifyUrl);
+        String body =  AlipayClientUtil.createPayOrderParams(requestParams);
+        return ResultDTO.success(body);
+    }
     /**
      * 
      * pay:(支付订单)

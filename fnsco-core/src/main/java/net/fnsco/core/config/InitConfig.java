@@ -40,6 +40,7 @@ public class InitConfig {
         AlipayClientUtil.setAppId(env.getProperty(AlipayConstants.APP_ID));
         AlipayClientUtil.setAlipayPublicKey(env.getProperty(AlipayConstants.ALIPAY_PUBLIC_KEY));
         AlipayClientUtil.setAppPrivateKey(env.getProperty(AlipayConstants.APP_PRIVATE_KEY));
+        AlipayClientUtil.setAlipayAppPublicKey(env.getProperty(AlipayConstants.ALIPAY_APP_PUBLIC_KEY));
         
         AlipayClientUtil.initAlipayClient();
         return 1;
