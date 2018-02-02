@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.core.alipay.AlipayAppPayRequestParams;
 import net.fnsco.core.alipay.AlipayClientUtil;
+import net.fnsco.core.alipay.AlipayRefundRequestParams;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
@@ -134,10 +136,6 @@ public class AlipayNotifyController extends BaseController{
 		/**
 		 * 在认证是支付宝发来的数据后，接下来处理业务
 		 */
-		
-		/**
-		 * 在认证是支付宝发来的数据后，接下来处理业务
-		 */
 		Map<String,String> params = (Map<String, String>) rsaMap.get("params");
 		boolean tradeStatus = AlipayClientUtil.checkTradeStatue(params);
 		
@@ -147,15 +145,17 @@ public class AlipayNotifyController extends BaseController{
 		}
 		
 		String orderNo = params.get("out_trade_no");
-		TradeWithdrawDO tradeWithdraw = tradeWithdrawService.getByOrderNo(orderNo);
-		if(null == tradeWithdraw) {
-			logger.error("该订单已经不存在，不处理!orderNo="+orderNo);
-			return "fail";
-		}
-		ResultDTO result = ticketOrderService.payByZFBNotify(tradeWithdraw);
+		ResultDTO result = ticketOrderService.payByZFBNotify(orderNo);
     	if(result.isSuccess()) {
     		return "success";
+    	}else {
+    	AlipayRefundRequestParams requestParams = new AlipayRefundRequestParams();
+    	requestParams.setRefundReason("");
+    	requestParams.setRefundAmount("");
+    	requestParams.setOutTradeNo(orderNo);
+    	requestParams.setNotifyUrl("");
+    	String body = AlipayClientUtil.createTradeReturnOrderParams(requestParams);
+    	return body;
     	}
-    	return "fail";
     }
 }
