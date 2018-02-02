@@ -170,6 +170,7 @@ public class RechangeController extends BaseController {
         tradeWithdraw.setStatus(WithdrawStateEnum.INIT.getCode());
         tradeWithdraw.setFee(BigDecimal.ZERO);
         tradeWithdraw.setBackUrl(notifyUrl);
+        tradeWithdraw.setChannelMerId(env.getProperty("alipay.appid"));
         tradeWithdraw.setChannelType(TradeConstants.ChannelTypeEnum.ALI_PAY.getCode());
         tradeWithdraw.setTradeSubType(TradeConstants.TxnSubTypeEnum.INCOME_RESEARCH.getCode());
         tradeWithdraw.setTradeType(TradeConstants.TradeTypeEnum.INCOME.getCode());
