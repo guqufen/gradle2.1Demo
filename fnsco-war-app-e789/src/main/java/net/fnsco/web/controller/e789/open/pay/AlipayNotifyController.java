@@ -15,10 +15,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.alipay.AlipayClientUtil;
 import net.fnsco.core.base.BaseController;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.trading.comm.TradeConstants.WithdrawStateEnum;
 import net.fnsco.trading.service.account.AppAccountBalanceService;
 import net.fnsco.trading.service.account.entity.AppAccountBalanceDO;
+import net.fnsco.trading.service.third.ticket.TicketOrderService;
 import net.fnsco.trading.service.withdraw.TradeWithdrawService;
 import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
 
@@ -38,7 +40,8 @@ public class AlipayNotifyController extends BaseController{
 	private TradeWithdrawService tradeWithdrawService; 
 	@Autowired
 	private AppAccountBalanceService appAccountBalanceService;
-	
+	@Autowired
+    private TicketOrderService   ticketOrderService;
 	/**
 	 * appAliPayNotify:(支付宝APP支付异步通知接口，仅支付宝方调用，其他人不可调用)
 	 *
@@ -121,4 +124,47 @@ public class AlipayNotifyController extends BaseController{
 		tradeWithdrawService.doUpdate(tradeWithdraw);
 		return "success";
 	}
+	/**
+     * 火车票购买支付宝支付回调
+     * @return
+     */
+    @RequestMapping(value = "/ticketPayNotify")
+	@ApiOperation(value = "支付宝APP火车票支付异步通知接口，仅支付宝方调用")
+    public String ticketPayNotify() {
+    	Map<String,Object> rsaMap = AlipayClientUtil.rsaCheckV1(request);
+		boolean flag = (boolean) rsaMap.get("signature");
+		/**
+		 * 先对来源数据认证，如果不是支付宝方调用，则舍弃
+		 */
+		if(!flag) {
+			logger.error("本次调用非正常调用!");
+			return "fail";
+		}
+		/**
+		 * 在认证是支付宝发来的数据后，接下来处理业务
+		 */
+		
+		/**
+		 * 在认证是支付宝发来的数据后，接下来处理业务
+		 */
+		Map<String,String> params = (Map<String, String>) rsaMap.get("params");
+		boolean tradeStatus = AlipayClientUtil.checkTradeStatue(params);
+		
+		if(!tradeStatus) {
+			logger.error("该订单非完成支付状态，不处理!orderNo="+params.get("out_trade_no"));
+			return "fail";
+		}
+		
+		String orderNo = params.get("out_trade_no");
+		TradeWithdrawDO tradeWithdraw = tradeWithdrawService.getByOrderNo(orderNo);
+		if(null == tradeWithdraw) {
+			logger.error("该订单已经不存在，不处理!orderNo="+orderNo);
+			return "fail";
+		}
+		ResultDTO result = ticketOrderService.payByZFBNotify(tradeWithdraw);
+    	if(result.isSuccess()) {
+    		return "success";
+    	}
+    	return "fail";
+    }
 }
