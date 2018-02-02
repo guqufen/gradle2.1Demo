@@ -11,7 +11,7 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
 
 @RestController
-@RequestMapping(value = "/trade/zxyh", method = RequestMethod.POST)
+@RequestMapping(value = "/trade/zxyh", method = RequestMethod.GET)
 @Api(value = "/trade/zxyh", tags = { "中信银行回调" })
 /**
  * 商户被扫接口回调
