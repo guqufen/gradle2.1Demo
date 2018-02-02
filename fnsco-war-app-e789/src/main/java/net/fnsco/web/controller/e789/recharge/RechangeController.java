@@ -182,8 +182,8 @@ public class RechangeController extends BaseController {
          * 支付宝下单，将参数返回给app端
          */
         AlipayAppPayRequestParams requestParams = new AlipayAppPayRequestParams();
-        requestParams.setBody("e789帐号充值");
-        requestParams.setSubject("e789帐号充值");
+        requestParams.setBody("充值订单");
+        requestParams.setSubject("充值订单");
         requestParams.setTotalAmount(String.format("%.2f", amountB.doubleValue()));
         requestParams.setOutTradeNo(tradeWithdraw.getOrderNo());
         requestParams.setNotifyUrl(notifyUrl);
