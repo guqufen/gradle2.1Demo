@@ -94,7 +94,7 @@ public class PrepaidRefillController extends BaseController {
 			return ResultDTO.fail(ApiConstant.E_APP_PHONE_ERROR);
 		}
 
-		// 目前只支持帐户余额支付
+		// 帐户余额支付
 		if ("0" == chargeDTO.getPayType()) {
 
 			// 余额支付，需要校验用户支付密码是否正确
@@ -122,7 +122,7 @@ public class PrepaidRefillController extends BaseController {
 			}
 
 			// 手机充值
-			if (0 == chargeDTO.getType()) {
+			/*if (0 == chargeDTO.getType()) {
 
 				return prepaidRefillService.prepaidRefillCharge(chargeDTO);
 
@@ -134,10 +134,11 @@ public class PrepaidRefillController extends BaseController {
 			} else {
 
 				return ResultDTO.fail("手机充值-交易类型不匹配");
-			}
+			}*/
+			return prepaidRefillService.acctRecharge(chargeDTO);
 			// 支付宝充值
 		} else if ("1" == chargeDTO.getPayType()) {
-			return prepaidRefillService.aliPay(chargeDTO);
+			return prepaidRefillService.aliPayRecharge(chargeDTO);
 		}
 
 		logger.error("手机充值-支付方式非法，暂时只支持帐户余额充值方式，请重新选择！！");

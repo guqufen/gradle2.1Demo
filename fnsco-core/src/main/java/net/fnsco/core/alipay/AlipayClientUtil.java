@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
@@ -70,9 +71,10 @@ public class AlipayClientUtil {
 		request.setNotifyUrl(requestParams.getNotifyUrl());
 		AlipayTradeAppPayResponse response = null;
 		try {
+			logger.error("支付宝支付请求参数:"+JSON.toJSONString(request));
 			// 这里和普通的接口调用不同，使用的是sdkExecute
 			response = alipayClient.sdkExecute(request);
-			logger.error(response.getBody());// 就是orderString 可以直接给客户端请求，无需再做处理。
+			logger.error("返回给APP支付宝支付的数据:"+response.getBody());// 就是orderString 可以直接给客户端请求，无需再做处理。
 		} catch (AlipayApiException e) {
 			logger.error("发起支付宝支付报错!", e);
 		}
@@ -89,20 +91,26 @@ public class AlipayClientUtil {
 	 * @author tangliang
 	 * @date   2018年2月1日 下午4:29:53
 	 */
-	public static String createTradeReturnOrderParams(AlipayRefundRequestParams requestParams) {
+	public static AlipayTradeRefundResponse createTradeReturnOrderParams(AlipayRefundRequestParams requestParams) {
 		AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
 		
 		AlipayTradeRefundModel model = new AlipayTradeRefundModel();
+		model.setRefundAmount(requestParams.getRefundAmount());
+		model.setRefundReason(requestParams.getRefundReason());
+		model.setOutTradeNo(requestParams.getOutTradeNo());
 		request.setBizModel(model);
-		request.setNotifyUrl(requestParams.getNotifyUrl());
 		AlipayTradeRefundResponse response = null;
 		try {
+			logger.error("发起退款业务，发送数据为:"+JSON.toJSONString(request));
 			response = alipayClient.sdkExecute(request);
 		} catch (AlipayApiException e) {
 			logger.error("发起支付宝退款接口报错!", e);
 		}
 		
-		return response.getBody();
+		if(response.isSuccess()) {
+			logger.error("该订单退款成功!orderNo="+requestParams.getOutTradeNo()+",退款金额为:"+requestParams.getRefundAmount());
+		}
+		return response;
 	}
 	
 	/**
