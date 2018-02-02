@@ -89,7 +89,7 @@ public class AlipayClientUtil {
 	 * @author tangliang
 	 * @date   2018年2月1日 下午4:29:53
 	 */
-	public static String createTradeReturnOrderParams(AlipayRefundRequestParams requestParams) {
+	public static AlipayTradeRefundResponse createTradeReturnOrderParams(AlipayRefundRequestParams requestParams) {
 		AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
 		
 		AlipayTradeRefundModel model = new AlipayTradeRefundModel();
@@ -107,7 +107,7 @@ public class AlipayClientUtil {
 		if(response.isSuccess()) {
 			logger.error("该订单退款成功!orderNo="+requestParams.getOutTradeNo()+",退款金额为:"+requestParams.getRefundAmount());
 		}
-		return response.getBody();
+		return response;
 	}
 	
 	/**
