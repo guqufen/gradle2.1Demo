@@ -183,7 +183,8 @@ public class PrepaidRefillService extends BaseService {
 	 */
 	public ResultDTO<ChargeResultDTO> flowCharge(ChargeDTO chargeDTO) {
 
-		return ResultDTO.success(recharge(chargeDTO));
+		String orderid = CodeUtil.generateOrderCode("");
+		return ResultDTO.success(recharge(chargeDTO, orderid));
 
 		/*
 		 * String result = null; ChargeResultDTO ph = new ChargeResultDTO();
@@ -840,7 +841,8 @@ public class PrepaidRefillService extends BaseService {
 	 */
 	public ResultDTO<ChargeResultDTO> acctRecharge(ChargeDTO chargeDTO) {
 
-		return ResultDTO.success(recharge(chargeDTO));
+		String orderid = CodeUtil.generateOrderCode("");
+		return ResultDTO.success(recharge(chargeDTO, orderid));
 	}
 
 	/**
@@ -849,7 +851,7 @@ public class PrepaidRefillService extends BaseService {
 	 * @param chargeDTO
 	 * @return :充值结果
 	 */
-	public ChargeResultDTO recharge(ChargeDTO chargeDTO) {
+	public ChargeResultDTO recharge(ChargeDTO chargeDTO, String orderId) {
 
 		String result = null;
 		String hfUrl = "http://op.juhe.cn/ofpay/mobile/onlineorder";// 话费充值请求url
@@ -857,12 +859,12 @@ public class PrepaidRefillService extends BaseService {
 		String payName = null;
 
 		ChargeResultDTO ph = new ChargeResultDTO();
-		String orderid = CodeUtil.generateOrderCode("");
+//		String orderid = CodeUtil.generateOrderCode("");
 
 		RechargeOrderDO phoneChargeOrderDO = new RechargeOrderDO();
 		phoneChargeOrderDO.setType(String.valueOf(chargeDTO.getType()));// 设置充值类型0-话费；1-流量
 		phoneChargeOrderDO.setAppUserId(String.valueOf(chargeDTO.getUserId()));// 设置app用户ID
-		phoneChargeOrderDO.setOrderNo(orderid);// 设置商户订单ID
+		phoneChargeOrderDO.setOrderNo(orderId);// 设置商户订单ID
 		phoneChargeOrderDO.setMobile(chargeDTO.getPhone());// 设置充值手机号
 		phoneChargeOrderDO.setName(chargeDTO.getName());// 设置充值名称:xx元
 		phoneChargeOrderDO.setAmt(chargeDTO.getInprice().replace(".", ""));// 设置交易金额
@@ -870,8 +872,8 @@ public class PrepaidRefillService extends BaseService {
 		rechargeOrderService.doAdd(phoneChargeOrderDO);
 
 		TradeWithdrawDO tradeWithdrawDO = new TradeWithdrawDO();
-		tradeWithdrawDO.setOrderNo(orderid);// 设置订单号
-		tradeWithdrawDO.setOriginalOrderNo(orderid);// 设置原订单号(默认等于当前订单号)
+		tradeWithdrawDO.setOrderNo(orderId);// 设置订单号
+		tradeWithdrawDO.setOriginalOrderNo(orderId);// 设置原订单号(默认等于当前订单号)
 		tradeWithdrawDO.setAmount(new BigDecimal(phoneChargeOrderDO.getAmt()));// 设置交易金额，优惠金额
 		tradeWithdrawDO.setAppUserId(chargeDTO.getUserId());// 设置帐号ID
 		tradeWithdrawDO.setTradeType(2);// 交易类型:2-消费
@@ -913,7 +915,7 @@ public class PrepaidRefillService extends BaseService {
 			phoneChargeOrderDO1.setRespMsg("帐户余额冻结失败,帐户余额不足.");// 设置响应
 			int ret = rechargeOrderService.doUpdate(phoneChargeOrderDO1);
 			if (ret < 0) {
-				logger.error(payName + "帐户余额不足，phoneChargeOrder数据更新失败。orderNo=" + orderid + "userId="
+				logger.error(payName + "帐户余额不足，phoneChargeOrder数据更新失败。orderNo=" + orderId + "userId="
 						+ chargeDTO.getUserId());
 			}
 			ph.setRespCode(TradeConstants.RespCodeEnum.FAIL.getCode());
@@ -928,11 +930,11 @@ public class PrepaidRefillService extends BaseService {
 
 				// md5,校验值，md5(OpenID+key+phone+pid+orderid)，结果转为小写
 				String sign = Md5Util.MD5(env.getProperty("jh.phone.OpenId") + env.getProperty("jh.phone.feekey")
-						+ chargeDTO.getPhone() + chargeDTO.getPid() + orderid).toLowerCase();
+						+ chargeDTO.getPhone() + chargeDTO.getPid() + orderId).toLowerCase();
 				StringBuffer sBuffer = new StringBuffer();
 				String sendData = sBuffer.append("?key=").append(env.getProperty("jh.phone.feekey")).append("&phoneno=")
 						.append(chargeDTO.getPhone()).append("&cardnum=").append(chargeDTO.getPid()).append("&orderid=")
-						.append(orderid).append("&sign=").append(sign).toString();
+						.append(orderId).append("&sign=").append(sign).toString();
 				result = HttpUtils.get(hfUrl + sendData);// 改成调用HttpClientUtil工具类方法
 
 				// 流量充值
@@ -940,12 +942,12 @@ public class PrepaidRefillService extends BaseService {
 
 				// md5,校验值，md5(OpenID+key+phone+pid+orderid)，结果转为小写
 				String sign = Md5Util.MD5(env.getProperty("jh.phone.OpenId") + env.getProperty("jh.phone.flowkey")
-						+ chargeDTO.getPhone() + chargeDTO.getPid() + orderid).toLowerCase();
+						+ chargeDTO.getPhone() + chargeDTO.getPid() + orderId).toLowerCase();
 
 				StringBuffer sb = new StringBuffer();
 				String sendData = sb.append("?key=").append(env.getProperty("jh.phone.flowkey")).append("&phone=")
 						.append(chargeDTO.getPhone()).append("&pid=").append(chargeDTO.getPid()).append("&orderid=")
-						.append(orderid).append("&sign=").append(sign).toString();
+						.append(orderId).append("&sign=").append(sign).toString();
 				result = HttpUtils.get(flUrl + sendData);// 改成调用HttpClientUtil工具类方法
 			}
 
@@ -975,7 +977,7 @@ public class PrepaidRefillService extends BaseService {
 
 				ph.setRespCode(TradeConstants.RespCodeEnum.HANDLING.getCode());
 				ph.setRespMsg(juhe.getReason());
-				ph.setOrderNo(orderid);
+				ph.setOrderNo(orderId);
 
 				// 如果扣掉的金额和返回的实际金额不一致，需要将不一致的金额扣掉/加上
 				if (0 != inprice.compareTo(realInprice)) {
