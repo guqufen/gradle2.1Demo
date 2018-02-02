@@ -24,7 +24,7 @@ import net.fnsco.core.base.BaseController;
 public class RechargeAlipayController extends BaseController {
 
 	/**
-	 * 支付宝回调接口
+	 * 支付宝回调接口,接收支付结果信息
 	 * 
 	 * @return
 	 */
@@ -47,6 +47,10 @@ public class RechargeAlipayController extends BaseController {
 		/**
 		 * 在认证是支付宝发来的数据后，接下来处理业务
 		 */
+		
+		
+		//退款
+		
 
 		return "success";
 	}
