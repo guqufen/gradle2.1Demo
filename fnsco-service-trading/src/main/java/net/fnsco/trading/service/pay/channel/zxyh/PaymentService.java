@@ -80,7 +80,7 @@ public class PaymentService extends BaseService  {
 	 * @throws @since
 	 *             CodingExample Ver 1.1
 	 */
-	public Integer getDealStatus(Integer id, String paySubType, String secMerId, String orderNo, Date orderCeateTime) {
+	public TradeOrderDO getDealStatus(Integer id, String paySubType, String secMerId, String orderNo, Date orderCeateTime) {
 		String merId = env.getProperty("zxyh.merId");
 		String prefix = env.getProperty("zxyh.query.trade.url");
 		String url = "/MPay/backTransAction.do";
@@ -103,7 +103,7 @@ public class PaymentService extends BaseService  {
 			tradeResultZXDTO.setTxnSubType("381004");
 			tradeResultZXDTO.setSeqId(orderNo); // 原交易中信流水号或原交易商户订单号
 		} else {
-			return 0;
+			return null;
 		}
 		String mercStr = JSON.toJSONString(tradeResultZXDTO);
 		mercMap = JSON.parseObject(mercStr, Map.class);
@@ -136,7 +136,7 @@ public class PaymentService extends BaseService  {
 		} else if ("04".equals(respMap.get("txnState")) || "06".equals(respMap.get("txnState"))
 				|| "08".equals(respMap.get("txnState")) || "09".equals(respMap.get("txnState"))) {
 			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_IN_PROGRESS.getCode());
-			return 0;
+			return null;
 		}
 		tradeOrderDO.setPayOrderNo((String) respMap.get("origSeqId")); // 对应的中信订单号
 		tradeOrderDO.setRespMsg(E789ApiConstant.ResponCodeEnum.getNameByCode(tradeOrderDO.getRespCode()));
@@ -145,7 +145,7 @@ public class PaymentService extends BaseService  {
 			tradeOrderDO.setCompleteTime(DateUtils.StrToDate(endTime));// 交易完成时间
 		}
 		Integer row = tradeOrderService.doUpdate(tradeOrderDO);
-		return row;
+		return tradeOrderDO;
 	}
 
 	/**
