@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.alipay.AlipayClientUtil;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.trading.comm.TradeConstants.WithdrawStateEnum;
 import net.fnsco.trading.service.account.AppAccountBalanceService;
 import net.fnsco.trading.service.account.entity.AppAccountBalanceDO;
 import net.fnsco.trading.service.withdraw.TradeWithdrawService;
@@ -80,10 +81,18 @@ public class AlipayNotifyController extends BaseController{
 		}
 		
 		/**
+		 * 处理完成的订单，不处理
+		 */
+		if(tradeWithdraw.getStatus() == WithdrawStateEnum.SUCCESS.getCode()) {
+			logger.error("该订单已经处理过，不处理!orderNo="+orderNo);
+			return "fail";
+		}
+		
+		/**
 		 * 充值成功后，需要在帐号上增加余额
 		 */
 		Integer appUserId = tradeWithdraw.getAppUserId();
-		BigDecimal fund = new BigDecimal(params.get("total_amount"));
+		BigDecimal fund = new BigDecimal(params.get("total_amount")).multiply(new BigDecimal(100));
 		AppAccountBalanceDO accountBalance = appAccountBalanceService.doQueryByAppUserId(appUserId);
 		
 		if(accountBalance == null) {

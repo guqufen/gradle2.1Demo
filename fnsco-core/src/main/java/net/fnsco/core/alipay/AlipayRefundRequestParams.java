@@ -31,10 +31,31 @@ public class AlipayRefundRequestParams implements Serializable{
 	 * 商户网站唯一订单号。示例值:70501111111S001111119
 	 */
 	private String outTradeNo;
+	
 	/**
-	 * 回调地址
+	 * 支付宝交易号，和商户订单号不能同时为空 。示例值:2014112611001004680073956707
 	 */
-	private String notifyUrl;
+	private String tradeNo;
+	/**
+	 * tradeNo
+	 *
+	 * @return  the tradeNo
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getTradeNo() {
+		return tradeNo;
+	}
+	/**
+	 * tradeNo
+	 *
+	 * @param   tradeNo    the tradeNo to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setTradeNo(String tradeNo) {
+		this.tradeNo = tradeNo;
+	}
 	/**
 	 * refundReason
 	 *
@@ -94,26 +115,6 @@ public class AlipayRefundRequestParams implements Serializable{
 	
 	public void setOutTradeNo(String outTradeNo) {
 		this.outTradeNo = outTradeNo;
-	}
-	/**
-	 * notifyUrl
-	 *
-	 * @return  the notifyUrl
-	 * @since   CodingExample Ver 1.0
-	*/
-	
-	public String getNotifyUrl() {
-		return notifyUrl;
-	}
-	/**
-	 * notifyUrl
-	 *
-	 * @param   notifyUrl    the notifyUrl to set
-	 * @since   CodingExample Ver 1.0
-	 */
-	
-	public void setNotifyUrl(String notifyUrl) {
-		this.notifyUrl = notifyUrl;
 	}
 	
 }

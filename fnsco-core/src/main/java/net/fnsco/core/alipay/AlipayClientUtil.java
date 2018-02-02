@@ -93,8 +93,10 @@ public class AlipayClientUtil {
 		AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
 		
 		AlipayTradeRefundModel model = new AlipayTradeRefundModel();
+		model.setRefundAmount(requestParams.getRefundAmount());
+		model.setRefundReason(requestParams.getRefundReason());
+		model.setOutTradeNo(requestParams.getOutTradeNo());
 		request.setBizModel(model);
-		request.setNotifyUrl(requestParams.getNotifyUrl());
 		AlipayTradeRefundResponse response = null;
 		try {
 			response = alipayClient.sdkExecute(request);
@@ -102,6 +104,9 @@ public class AlipayClientUtil {
 			logger.error("发起支付宝退款接口报错!", e);
 		}
 		
+		if(response.isSuccess()) {
+			logger.error("该订单退款成功!orderNo="+requestParams.getOutTradeNo()+",退款金额为:"+requestParams.getRefundAmount());
+		}
 		return response.getBody();
 	}
 	
