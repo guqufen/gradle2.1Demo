@@ -36,7 +36,7 @@ public class AlipayNotifyController extends BaseController{
 	@Autowired
     private TicketOrderService   ticketOrderService;
 	/**
-	 * appAliPayNotify:(支付宝APP支付异步通知接口，仅支付宝方调用，其他人不可调用)
+	 * appAliPayNotify:(支付宝APP充值支付异步通知接口，仅支付宝方调用，其他人不可调用)
 	 *
 	 * @param  @return    设定文件
 	 * @return String    DOM对象
@@ -45,7 +45,7 @@ public class AlipayNotifyController extends BaseController{
 	 */
 	@Transactional
 	@RequestMapping(value = "/appPayNotify")
-	@ApiOperation(value = "支付宝APP支付异步通知接口，仅支付宝方调用")
+	@ApiOperation(value = "支付宝APP充值支付异步通知接口，仅支付宝方调用")
 	@ResponseBody
 	public String appAliPayNotify() {
 		
