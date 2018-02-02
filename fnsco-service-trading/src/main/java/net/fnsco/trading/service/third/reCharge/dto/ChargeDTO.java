@@ -20,51 +20,53 @@ public class ChargeDTO extends DTO {
 	private String name;
 	@ApiModelProperty(value = "充值方式:0-余额/1-微信/2-支付宝", example = "充值方式:0-余额/1-微信/2-支付宝")
 	private String payType;
+	@ApiModelProperty(value = "支付密码", example = "支付密码")
+	private String payPassword;
 
 	// 以下主要针对支付宝方式交易参数
 	/**
 	 * 对一笔交易的具体描述信息。如果是多种商品，请将商品描述字符串累加传给body。示例值:Iphone6 16G
 	 */
-	private String body;
+	// private String body;
 
 	/**
 	 * 商品的标题/交易标题/订单标题/订单关键字等。示例值:大乐透
 	 */
-	private String subject;
+	// private String subject;
 
 	/**
 	 * 商户网站唯一订单号。示例值:70501111111S001111119
 	 */
-	private String outTradeNo;
+	// private String outTradeNo;
 
 	/**
 	 * 回调地址
 	 */
 	private String notifyUrl;
-
-	public String getBody() {
-		return body;
-	}
-
-	public void setBody(String body) {
-		this.body = body;
-	}
-
-	public String getSubject() {
-		return subject;
-	}
-
-	public void setSubject(String subject) {
-		this.subject = subject;
-	}
-
-	public String getOutTradeNo() {
-		return outTradeNo;
-	}
-
-	public void setOutTradeNo(String outTradeNo) {
-		this.outTradeNo = outTradeNo;
-	}
+	//
+	// public String getBody() {
+	// return body;
+	// }
+	//
+	// public void setBody(String body) {
+	// this.body = body;
+	// }
+	//
+	// public String getSubject() {
+	// return subject;
+	// }
+	//
+	// public void setSubject(String subject) {
+	// this.subject = subject;
+	// }
+	//
+	// public String getOutTradeNo() {
+	// return outTradeNo;
+	// }
+	//
+	// public void setOutTradeNo(String outTradeNo) {
+	// this.outTradeNo = outTradeNo;
+	// }
 
 	public String getNotifyUrl() {
 		return notifyUrl;
@@ -132,6 +134,14 @@ public class ChargeDTO extends DTO {
 
 	public void setPayType(String payType) {
 		this.payType = payType;
+	}
+
+	public String getPayPassword() {
+		return payPassword;
+	}
+
+	public void setPayPassword(String payPassword) {
+		this.payPassword = payPassword;
 	}
 
 }
