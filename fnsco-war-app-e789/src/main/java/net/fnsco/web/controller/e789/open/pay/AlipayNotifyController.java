@@ -19,7 +19,6 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.trading.comm.TradeConstants.WithdrawStateEnum;
 import net.fnsco.trading.service.account.AppAccountBalanceService;
-import net.fnsco.trading.service.account.entity.AppAccountBalanceDO;
 import net.fnsco.trading.service.third.ticket.TicketOrderService;
 import net.fnsco.trading.service.withdraw.TradeWithdrawService;
 import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
@@ -96,21 +95,8 @@ public class AlipayNotifyController extends BaseController{
 		 */
 		Integer appUserId = tradeWithdraw.getAppUserId();
 		BigDecimal fund = new BigDecimal(params.get("total_amount")).multiply(new BigDecimal(100));
-		AppAccountBalanceDO accountBalance = appAccountBalanceService.doQueryByAppUserId(appUserId);
-		
-		if(accountBalance == null) {
-			accountBalance = new AppAccountBalanceDO();
-			accountBalance.setAppUserId(appUserId);
-			accountBalance.setCreateTime(new Date());
-			accountBalance.setUpdateTime(accountBalance.getCreateTime());
-			accountBalance.setFreezeAmount(new BigDecimal("0.00"));
-			accountBalance.setFund(fund);
-			appAccountBalanceService.doAdd(accountBalance, getUserId());
-		}else {
-			accountBalance.setFund(accountBalance.getFund().add(fund));
-			accountBalance.setUpdateTime(new Date());
-			appAccountBalanceService.doUpdate(accountBalance, getUserId());
-		}
+		appAccountBalanceService.initialiseAccountBalance(appUserId);
+		appAccountBalanceService.updateFund(appUserId,BigDecimal.ZERO.subtract(fund));
 		
 		/**
 		 * 更新订单信息

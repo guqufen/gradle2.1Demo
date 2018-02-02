@@ -51,6 +51,7 @@ public class AccountBalanceController extends BaseController {
  		AccountBalanceVO resultVO = new AccountBalanceVO();
  		if(null == appAccountBalanceDO) {
  			 resultVO.setAccountBalance("0.00");
+ 			 appAccountBalanceService.initialiseAccountBalance(accountBalanceJO.getUserId());//如果该用户不存在余额数据，则初始化一条
  			 return success(resultVO);
  		}
  		

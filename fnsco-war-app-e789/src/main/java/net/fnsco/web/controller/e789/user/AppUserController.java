@@ -1,10 +1,6 @@
 package net.fnsco.web.controller.e789.user;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,7 +11,6 @@ import com.google.common.base.Strings;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import net.fnsco.bigdata.service.domain.MerchantEntity;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.appuser.AppUserService;
@@ -24,8 +19,6 @@ import net.fnsco.order.api.dto.AppUserDTO;
 import net.fnsco.order.api.dto.AppUserLoginInfoDTO;
 import net.fnsco.order.service.domain.AppUser;
 import net.fnsco.trading.comm.HeadImageEnum;
-import net.fnsco.trading.service.account.AppAccountBalanceService;
-import net.fnsco.trading.service.account.entity.AppAccountBalanceDO;
 import net.fnsco.trading.service.bank.AppUserBankService;
 import net.fnsco.trading.service.bank.entity.AppUserBankDO;
 import net.fnsco.trading.service.merchant.AppUserMerchantService;
@@ -50,8 +43,6 @@ import net.fnsco.web.controller.e789.vo.LoginVO;
 public class AppUserController extends BaseController {
     @Autowired
     private AppUserService        appUserService;
-    @Autowired
-    private AppAccountBalanceService appAccountBalanceService;
     @Autowired
     private AppUserBankService    appUserBankService;
     @Autowired
@@ -120,16 +111,6 @@ public class AppUserController extends BaseController {
         }        
         loginVO.setUnReadMsgIds(appUserLoginInfoDTO.getUnReadMsgIds());
         
-        /**
-         * 插入余额
-         */
-        AppAccountBalanceDO appAccountBalance = new AppAccountBalanceDO();
-        appAccountBalance.setAppUserId(appUserLoginInfoDTO.getUserId());
-        appAccountBalance.setCreateTime(new Date());
-        appAccountBalance.setFreezeAmount(new BigDecimal(0));
-        appAccountBalance.setFund(new BigDecimal(0));
-        appAccountBalance.setUpdateTime(new Date());
-        appAccountBalanceService.doAdd(appAccountBalance, getUserId());
         return ResultDTO.success(loginVO);
     }
 
