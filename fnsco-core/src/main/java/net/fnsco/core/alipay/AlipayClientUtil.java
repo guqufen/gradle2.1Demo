@@ -13,9 +13,12 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.domain.AlipayTradeRefundModel;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
+import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
+import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.beust.jcommander.internal.Maps;
 
 /**
@@ -32,6 +35,7 @@ public class AlipayClientUtil {
 	private static String appId = "";
 	private static String appPrivateKey = "";
 	private static String alipayPublicKey = "";
+	private static String alipayAppPublicKey = "";
 
 	private static AlipayClient alipayClient = null;
 
@@ -51,7 +55,7 @@ public class AlipayClientUtil {
 	 * @author tangliang
 	 * @date 2018年1月31日 下午4:39:52
 	 */
-	public static String createPayOrderParams(AlipayRequestParams requestParams) {
+	public static String createPayOrderParams(AlipayAppPayRequestParams requestParams) {
 		// 实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
 		AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
 		// SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
@@ -74,6 +78,36 @@ public class AlipayClientUtil {
 		}
 
 		return response.getBody();
+	}
+	
+	/**
+	 * createTradeReturnOrderParams:(本方法为支付宝退款接口，详情说明:当交易发生之后一段时间内，由于买家或者卖家的原因需要退款时，卖家可以通过退款接口将支付款退还给买家，支付宝将在收到退款请求并且验证成功之后，按照退款规则将支付款按原路退到买家帐号上。 交易超过约定时间（签约时设置的可退款时间）的订单无法进行退款 支付宝退款支持单笔交易分多次退款，多次退款需要提交原支付订单的商户订单号和设置不同的退款单号。一笔退款失败后重新提交，要采用原来的退款单号。总退款金额不能超过用户实际支付金额)
+	 * 
+	 * @param  @param requestParams
+	 * @param  @return    设定文件
+	 * @return String    DOM对象
+	 * @author tangliang
+	 * @date   2018年2月1日 下午4:29:53
+	 */
+	public static AlipayTradeRefundResponse createTradeReturnOrderParams(AlipayRefundRequestParams requestParams) {
+		AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
+		
+		AlipayTradeRefundModel model = new AlipayTradeRefundModel();
+		model.setRefundAmount(requestParams.getRefundAmount());
+		model.setRefundReason(requestParams.getRefundReason());
+		model.setOutTradeNo(requestParams.getOutTradeNo());
+		request.setBizModel(model);
+		AlipayTradeRefundResponse response = null;
+		try {
+			response = alipayClient.sdkExecute(request);
+		} catch (AlipayApiException e) {
+			logger.error("发起支付宝退款接口报错!", e);
+		}
+		
+		if(response.isSuccess()) {
+			logger.error("该订单退款成功!orderNo="+requestParams.getOutTradeNo()+",退款金额为:"+requestParams.getRefundAmount());
+		}
+		return response;
 	}
 	
 	/**
@@ -105,7 +139,7 @@ public class AlipayClientUtil {
 		
 		boolean flag = false;
 		try {
-			flag = AlipaySignature.rsaCheckV1(params, alipayPublicKey, AlipayConstants.CHARSET,
+			flag = AlipaySignature.rsaCheckV1(params, alipayAppPublicKey, AlipayConstants.CHARSET,
 					"RSA2");
 		} catch (AlipayApiException e) {
 			logger.error("校验签名异常!", e);
@@ -136,6 +170,28 @@ public class AlipayClientUtil {
 		return false;
 	}
 	
+	/**
+	 * alipayAppPublicKey
+	 *
+	 * @return  the alipayAppPublicKey
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public static String getAlipayAppPublicKey() {
+		return alipayAppPublicKey;
+	}
+
+	/**
+	 * alipayAppPublicKey
+	 *
+	 * @param   alipayAppPublicKey    the alipayAppPublicKey to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public static void setAlipayAppPublicKey(String alipayAppPublicKey) {
+		AlipayClientUtil.alipayAppPublicKey = alipayAppPublicKey;
+	}
+
 	/**
 	 * appId
 	 *

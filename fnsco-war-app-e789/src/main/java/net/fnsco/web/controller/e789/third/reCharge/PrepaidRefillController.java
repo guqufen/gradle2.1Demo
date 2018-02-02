@@ -78,103 +78,71 @@ public class PrepaidRefillController extends BaseController {
 	@ApiOperation(value = "话费/流量充值url")
 	public ResultDTO<ChargeResultDTO> prepaidCharge(@RequestBody FlowChargeJO fl) {
 
+		ChargeDTO chargeDTO = fl.getChargeDTO();
+
 		// 判断APP用户ID是否合法
 		Integer id = getUserId();
-		if (null == id || id != fl.getUserId()) {
+		if (null == id || id != chargeDTO.getUserId()) {
 			logger.error("用户登录状态非法。");
 			return ResultDTO.fail("用户登录状态非法。");
 		}
 
 		// 判断手机号长度是否合法
-		if (fl.getPhone().length() > 11) {
+		if (chargeDTO.getPhone().length() > 11) {
 
 			logger.error("手机充值-手机号码非法，请输入11位手机号，不能带空格！！");
 			return ResultDTO.fail(ApiConstant.E_APP_PHONE_ERROR);
 		}
 
-		// 校验用户支付密码是否正确
-		AppUser mAppUser = appUserService.selectAppUserById(fl.getUserId());// 根据id查询用户是否存在获取原密码
-		if (null == mAppUser) {
+		// 帐户余额支付
+		if ("0" == chargeDTO.getPayType()) {
 
-			logger.error("手机充值-用户Id未找到相关信息，appUserId=" + fl.getUserId());
-			return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
-		}
-		logger.info("手机充值-输入的支付密码加密前的passwd=" + fl.getPayPassword());
-		String password = Md5Util.getInstance().md5(fl.getPayPassword());
-		if (!password.equals(mAppUser.getPayPassword())) {// 查到的密码和原密码做比较
+			// 余额支付，需要校验用户支付密码是否正确
+			AppUser mAppUser = appUserService.selectAppUserById(chargeDTO.getUserId());// 根据id查询用户是否存在获取原密码
+			if (null == mAppUser) {
 
-			logger.error("手机充值-支付密码错误，请核对后重新输入！！db_passwd=" + mAppUser.getPayPassword() + ",password=" + password);
-			return ResultDTO.fail(E789ApiConstant.E_APP_PAY_PASSWORD_ERROR);
-		}
+				logger.error("手机充值-用户Id未找到相关信息，appUserId=" + chargeDTO.getUserId());
+				return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
+			}
+			logger.info("手机充值-输入的支付密码加密前的passwd=" + fl.getPayPassword());
+			String password = Md5Util.getInstance().md5(fl.getPayPassword());
+			if (!password.equals(mAppUser.getPayPassword())) {// 查到的密码和原密码做比较
 
-		// 目前只支持帐户余额支付
-		if ("0" == fl.getPayType()) {
+				logger.error("手机充值-支付密码错误，请核对后重新输入！！db_passwd=" + mAppUser.getPayPassword() + ",password=" + password);
+				return ResultDTO.fail(E789ApiConstant.E_APP_PAY_PASSWORD_ERROR);
+			}
 
 			// 根据userId和待扣金额查询账户是否有足够的钱进行充值交易
-			Boolean isEnough = appAccountBalanceService.doJudgeBalance(fl.getUserId(),
-					new BigDecimal(fl.getInprice()).multiply(new BigDecimal(100)));
+			Boolean isEnough = appAccountBalanceService.doJudgeBalance(chargeDTO.getUserId(),
+					new BigDecimal(chargeDTO.getInprice()).multiply(new BigDecimal(100)));
 			if (!isEnough) {
 
-				logger.error("手机充值-帐户余额不足，请充值！！appUserId=" + fl.getUserId());
+				logger.error("手机充值-帐户余额不足，请充值！！appUserId=" + chargeDTO.getUserId());
 				return ResultDTO.fail(ApiConstant.E_ACCOUNT_BALANCE_NULL);
 			}
 
-			ChargeDTO chargeDTO = new ChargeDTO();
-			chargeDTO.setType(fl.getType());
-			chargeDTO.setInprice(fl.getInprice());
-			chargeDTO.setPhone(fl.getPhone());
-			chargeDTO.setUserId(fl.getUserId());
-			chargeDTO.setName(fl.getName());
-			chargeDTO.setPid(fl.getPid());
-
 			// 手机充值
-			if (0 == fl.getType()) {
+			/*if (0 == chargeDTO.getType()) {
 
 				return prepaidRefillService.prepaidRefillCharge(chargeDTO);
 
 				// 话费充值
-			} else if (1 == fl.getType()) {
+			} else if (1 == chargeDTO.getType()) {
 
 				return prepaidRefillService.flowCharge(chargeDTO);
 
 			} else {
 
 				return ResultDTO.fail("手机充值-交易类型不匹配");
-			}
+			}*/
+			return prepaidRefillService.acctRecharge(chargeDTO);
 			// 支付宝充值
-		} else if ("1" == fl.getPayType()) {
-			
+		} else if ("1" == chargeDTO.getPayType()) {
+			return prepaidRefillService.aliPayRecharge(chargeDTO);
 		}
 
 		logger.error("手机充值-支付方式非法，暂时只支持帐户余额充值方式，请重新选择！！");
 		return ResultDTO.fail("暂时只支持帐户余额充值方式，请重新选择！！");
-		/**
-		 * if ("1001".equals(ph.getRespCode())) {
-		 * 
-		 * // 成功，则更新原账户 Boolean b =
-		 * appAccountBalanceService.doUpdateFrozenAmount(fl.getUserId(), new
-		 * BigDecimal(fl.getInprice()).multiply(new BigDecimal(100))); if (!b) {
-		 * logger.error("手机充值-充值成功之后，账户扣款更新失败，请联系相关技术人员查看,orderNo=" +
-		 * ph.getOrderNo()); }
-		 * 
-		 * return ResultDTO.success(ph);
-		 * 
-		 * // 系统异常，进行中。先扣掉账户金额，待后续定时查询结果用 } else if
-		 * ("1000".equals(ph.getRespCode())) { Boolean b =
-		 * appAccountBalanceService.doUpdateFrozenAmount(fl.getUserId(), new
-		 * BigDecimal(fl.getInprice()).multiply(new BigDecimal(100))); if (!b) {
-		 * logger.error("手机充值-充值交易正在进行中，账户扣款更新失败，请联系相关技术人员查看,orderNo=" +
-		 * ph.getOrderNo()); }
-		 * 
-		 * return ResultDTO.success(ph);
-		 * 
-		 * // 失败，更新原账户 } else { isEnough =
-		 * appAccountBalanceService.doFrozenBalance(fl.getUserId(), new
-		 * BigDecimal(0).subtract(new BigDecimal(fl.getInprice()).setScale(2,
-		 * BigDecimal.ROUND_HALF_UP) .multiply(new BigDecimal(100)))); if
-		 * (!isEnough) { logger.error("手机充值-充值失败之后，账户更新失败，请联系相关技术人员查看,orderNo="
-		 * + ph.getOrderNo()); } return ResultDTO.fail(ph.getRespMsg()); }
-		 **/
 	}
 
 	@RequestMapping("/queryResult")

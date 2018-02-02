@@ -100,6 +100,10 @@ public class TradeWithdrawService extends BaseService {
     public Integer researchForSuccess(TradeWithdrawDO tradeWithdraw) {
         logger.info("开始修改TradeWithdrawService.update,tradeWithdraw=" + tradeWithdraw.toString());
         int rows = this.tradeWithdrawDAO.update(tradeWithdraw);
+        /**
+         * 先判断是否有余额信息数据，如果没有则添加
+         */
+        appAccountBalanceService.initialiseAccountBalance(tradeWithdraw.getAppUserId());
         BigDecimal fund = BigDecimal.ZERO.subtract(tradeWithdraw.getAmount());
         appAccountBalanceService.doFrozenBalance(tradeWithdraw.getAppUserId(), fund);
         return rows;

@@ -146,4 +146,27 @@ public class AppAccountBalanceService extends BaseService {
         }
         return false;
     }
+	
+	/**
+	 * initialiseAccountBalance:(如果存在，则不处理,否则初始化一个帐号余额为0的数据)
+	 *
+	 * @param  @param appUserId
+	 * @param  @return    设定文件
+	 * @return AppAccountBalanceDO    DOM对象
+	 * @author tangliang
+	 * @date   2018年2月2日 上午10:33:25
+	 */
+	public AppAccountBalanceDO initialiseAccountBalance(Integer appUserId) {
+		AppAccountBalanceDO accountBalance = this.doQueryByAppUserId(appUserId);
+        if(null == accountBalance) {
+            AppAccountBalanceDO appAccountBalance = new AppAccountBalanceDO();
+            appAccountBalance.setAppUserId(appUserId);
+            appAccountBalance.setCreateTime(new Date());
+            appAccountBalance.setFreezeAmount(new BigDecimal(0));
+            appAccountBalance.setFund(new BigDecimal(0));
+            appAccountBalance.setUpdateTime(new Date());
+            appAccountBalance = this.doAdd(appAccountBalance, 0);
+        }
+        return accountBalance;
+	}
 }

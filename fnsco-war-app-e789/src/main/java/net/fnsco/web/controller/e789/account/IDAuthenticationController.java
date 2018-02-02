@@ -80,7 +80,8 @@ public class IDAuthenticationController extends BaseController {
         	// 上传文件原名
             MultipartFile file = entity.getValue();
             String fileName = file.getOriginalFilename();
-            Map<String,String>  map =  CreateFileUtils.filePath(file,fileName,env);
+            String url = env.getProperty("cardFileUpload");
+            Map<String,String>  map =  CreateFileUtils.filePath(file,fileName,url);
             String fileURL = map.get("fileURL");
             String fileKey = map.get("fileKey");
             if (!file.isEmpty()) {
