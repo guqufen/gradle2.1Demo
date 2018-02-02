@@ -1,10 +1,8 @@
 package net.fnsco.web.controller.e789.withdraw;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,18 +14,15 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.core.utils.DateUtils;
 import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.service.dao.master.AppUserDao;
 import net.fnsco.order.service.domain.AppUser;
 import net.fnsco.trading.service.account.AppAccountBalanceService;
-import net.fnsco.trading.service.account.dao.AppAccountBalanceDAO;
 import net.fnsco.trading.service.account.entity.AppAccountBalanceDO;
 import net.fnsco.trading.service.bank.AppUserBankService;
 import net.fnsco.trading.service.bank.entity.AppUserBankDO;
 import net.fnsco.trading.service.withdraw.TradeWithdrawService;
-import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
 import net.fnsco.web.controller.e789.jo.WithdrawCashJO;
 import net.fnsco.web.controller.e789.vo.CommonVO;
 
@@ -51,8 +46,6 @@ public class TradeWithdrawController extends BaseController {
 	private AppUserBankService appUserBankService;
 	@Autowired
 	private TradeWithdrawService tradeWithdrawService;
-	@Autowired
-	private AppAccountBalanceDAO appAccountBalanceDAO;
     /**
      * withdrawals:(提现接口)
      *
@@ -64,7 +57,6 @@ public class TradeWithdrawController extends BaseController {
      */
     @RequestMapping(value = "/withdrawals")
     @ApiOperation(value = "我的-钱包-提现-提现接口")
-    @Transactional
     public ResultDTO<CommonVO> withdrawals(@RequestBody WithdrawCashJO withdrawCashJO) {
     	
     	if(null == withdrawCashJO.getUserId()) {
@@ -88,20 +80,21 @@ public class TradeWithdrawController extends BaseController {
     	withdrawCashJO.setPayPassword(Md5Util.getInstance().md5(withdrawCashJO.getPayPassword()));
     	
     	/**
-    	 * 判断余额
-    	 */
-    	AppAccountBalanceDO appAccountBalance = appAccountBalanceService.doQueryByAppUserId(withdrawCashJO.getUserId());
-    	if(null == appAccountBalance || null == appAccountBalance.getFund() || appAccountBalance.getFund().compareTo(new BigDecimal(0)) <=0 || appAccountBalance.getFund().compareTo(new BigDecimal(withdrawCashJO.getCashAccount())) <0 ) {
-    		return ResultDTO.fail(ApiConstant.E_ACCOUNT_BALANCE_NULL);
-    	}
-    	
-    	/**
     	 * 判断支付密码
     	 */
     	AppUser appUser = appUserDao.selectAppUserById(withdrawCashJO.getUserId());
     	if(null == appUser || Strings.isNullOrEmpty(appUser.getPayPassword()) || !withdrawCashJO.getPayPassword().equals(appUser.getPayPassword())) {
     		return ResultDTO.fail(ApiConstant.E_PAY_PASSWORD_NULL);
     	}
+    	
+    	/**
+    	 * 判断余额
+    	 */
+    	AppAccountBalanceDO appAccountBalance = appAccountBalanceService.doQueryByAppUserId(withdrawCashJO.getUserId());
+    	if(null == appAccountBalance.getFund() || appAccountBalance.getFund().compareTo(new BigDecimal(0)) <=0 || appAccountBalance.getFund().compareTo(new BigDecimal(withdrawCashJO.getCashAccount())) <0 ) {
+    		return ResultDTO.fail(ApiConstant.E_ACCOUNT_BALANCE_NULL);
+    	}
+    	
     	
     	/**
     	 * 校验银行卡信息
@@ -112,42 +105,13 @@ public class TradeWithdrawController extends BaseController {
     	}
     	
     	/**
-    	 * 余额大于提现余额、支付密码正确，开始提现操作
+    	 * 提现操作
     	 */
-    	TradeWithdrawDO tradeWithdraw = new TradeWithdrawDO();
-    	tradeWithdraw.setAmount(new BigDecimal(withdrawCashJO.getCashAccount()));
-    	tradeWithdraw.setAppUserId(withdrawCashJO.getUserId());
-    	tradeWithdraw.setBankAccountCardId(appUserBank.getAccountCardId());
-    	tradeWithdraw.setBankAccountName(appUserBank.getAccountName());
-    	tradeWithdraw.setBankAccountNo(appUserBank.getAccountNo());
-    	tradeWithdraw.setBankAccountPhone(appUserBank.getAccountPhone());
-    	tradeWithdraw.setBankAccountType(appUserBank.getAccountType());
-    	tradeWithdraw.setBankOpenBank(appUserBank.getOpenBank());
-    	tradeWithdraw.setBankOpenBankNum(appUserBank.getOpenBankNum());
-    	tradeWithdraw.setBankSubBankName(appUserBank.getSubBankName());
-    	tradeWithdraw.setStatus(1);
-    	tradeWithdraw.setTradeType(2);
-    	tradeWithdraw.setTradeSubType(20);
-    	tradeWithdraw.setFee(new BigDecimal(0));
-    	tradeWithdraw.setRespCode("1000");
-    	tradeWithdraw.setRespMsg("提现记录产生");
-    	tradeWithdraw.setSuccTime(DateUtils.dateFormat1ToStr(new Date()));
-    	tradeWithdrawService.doAdd(tradeWithdraw);
+    	boolean withdrawResult = tradeWithdrawService.doAccountBalanceWithdrawals(withdrawCashJO.getUserId(), withdrawCashJO.getCashAccount(), appUserBank);
     	
-    	
-    	/**
-    	 * 减掉余额,利用sql来判断扣除,防止扣除不及时
-    	 */
-    	int result = appAccountBalanceDAO.updateFund(new BigDecimal(withdrawCashJO.getCashAccount()), withdrawCashJO.getUserId(),new Date());
-    	if(result <= 0) {
-    		tradeWithdraw.setStatus(2);
-    		tradeWithdraw.setRespCode("1002");
-        	tradeWithdraw.setRespMsg("提现失败");
-    		tradeWithdrawService.doUpdate(tradeWithdraw);
+    	if(!withdrawResult) {
     		return ResultDTO.fail(ApiConstant.E_ACCOUNT_BALANCE_NULL);
     	}
-    	
-    	
         return success(null);
     }
 }

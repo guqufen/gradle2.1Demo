@@ -63,12 +63,7 @@ public class TradedataE789Controller extends BaseController {
 		if (null == tradeDataJO.getUserId()) {
 			return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
 		}
-		if (null == tradeDataJO.getPageNum()) {
-			tradeDataJO.setPageNum(1);
-		}
-		if (null == tradeDataJO.getPageSize()) {
-			tradeDataJO.setPageSize(20);
-		}
+		
 		TradeOrderDO tradeOrderDO = new TradeOrderDO();
 		tradeOrderDO.setUserId(tradeDataJO.getUserId());
 		ResultPageDTO<TradeOrderDO> resultData = tradeOrderService.page(tradeOrderDO, tradeDataJO.getPageNum(),

@@ -95,7 +95,7 @@ public class AlipayNotifyController extends BaseController{
 		 */
 		Integer appUserId = tradeWithdraw.getAppUserId();
 		BigDecimal fund = new BigDecimal(params.get("total_amount")).multiply(new BigDecimal(100));
-		appAccountBalanceService.initialiseAccountBalance(appUserId);
+		appAccountBalanceService.doQueryByAppUserId(appUserId);
 		appAccountBalanceService.updateFund(appUserId,BigDecimal.ZERO.subtract(fund));
 		
 		/**

@@ -1,8 +1,6 @@
 package net.fnsco.web.controller.e789.bill;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -23,6 +21,7 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.core.utils.NumberUtil;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.trading.service.withdraw.TradeWithdrawService;
 import net.fnsco.trading.service.withdraw.dto.MonthWithdrawCountDTO;
@@ -64,35 +63,23 @@ public class BillContrller extends BaseController {
 			return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
 		}
 		
-		if(null == billJO.getPageNum()) {
-			billJO.setPageNum(1);
-		}
-		
-		if(null == billJO.getPageSize()) {
-			billJO.setPageSize(20);
-		}
-		
 		BillTotalVO resultData = new BillTotalVO();
 		resultData.setCurrentPageNum(billJO.getPageNum());
 		resultData.setPageSize(billJO.getPageSize());
-		
 		
 		TradeWithdrawDO tradeWithdraw = new TradeWithdrawDO();
 		tradeWithdraw.setAppUserId(billJO.getUserId());
 		tradeWithdraw.setAppShowList(true);
 		ResultPageDTO<TradeWithdrawDO> datasResult = tradeWithdrawService.page(tradeWithdraw, billJO.getPageNum(), billJO.getPageSize());
 		List<TradeWithdrawDO> datas =  datasResult.getList();
-		Set<String> sets = Sets.newHashSet(); 
+		Set<String> sets = Sets.newHashSet(); //存放月数据
 		List<BillVO> data = Lists.newArrayList();
-		List<BillDayVO> billDetails = null;
+		List<BillDayVO> billDetails = null;//存放每日数据
+		
 		for (TradeWithdrawDO tradeWithdrawDO : datas) {
-			String createMonth = formatYYYYMMDate(tradeWithdrawDO.getCreateTime());
-			if(Strings.isNullOrEmpty(createMonth)) {
-				datasResult.setTotal(datasResult.getTotal()-1);
-				continue;
-			}
+			String createMonth = NumberUtil.formatYYYYMMDate(tradeWithdrawDO.getCreateTime());//获取月份数据
 			
-			if(!sets.contains(createMonth)) {
+			if(!sets.contains(createMonth)) {//如果已经存在月份，则下继续执行，如果不存在则新增加月份
 				sets.add(createMonth);
 				BillVO mouthBillVo = new BillVO();
 				billDetails =  Lists.newArrayList();
@@ -101,7 +88,7 @@ public class BillContrller extends BaseController {
 				data.add(mouthBillVo);
 			}
 			BillDayVO billDayVO = new BillDayVO();
-			billDayVO.setAmount(formatRMBNumber(tradeWithdrawDO.getAmount()));
+			billDayVO.setAmount(NumberUtil.formatRMBNumber(tradeWithdrawDO.getAmount()));
 			billDayVO.setStatus(tradeWithdrawDO.getStatus());
 			if(null != tradeWithdrawDO.getTradeType() && 2==tradeWithdrawDO.getTradeType()) {
 				billDayVO.setBillType("1");
@@ -115,11 +102,11 @@ public class BillContrller extends BaseController {
 		}
 		
 		String backMouth = null;
-		if(billJO.getPageNum() > 1) {
+		if(billJO.getPageNum() > 1) {//当页码大于1的时候，需要获取到上一页最后一条数据的月份，用于判断是否需要显示
 			ResultPageDTO<TradeWithdrawDO> datasResultBack = tradeWithdrawService.page(tradeWithdraw, billJO.getPageNum()-1, billJO.getPageSize());
 			if(CollectionUtils.isNotEmpty(datasResultBack.getList())) {
 				TradeWithdrawDO tradeWithdrawDOBack = datasResultBack.getList().get(datasResultBack.getList().size()-1);
-				backMouth = formatYYYYMMDate(tradeWithdrawDOBack.getCreateTime());
+				backMouth = NumberUtil.formatYYYYMMDate(tradeWithdrawDOBack.getCreateTime());
 			}
 		}
 		
@@ -130,11 +117,11 @@ public class BillContrller extends BaseController {
 			if(CollectionUtils.isNotEmpty(countWithdraws)) {
 				for (MonthWithdrawCountDTO monthWithdrawCountDTO : countWithdraws) {
 					if(monthWithdrawCountDTO.getTradeType()==1) {
-						billVO.setTotalRevenue(formatRMBNumber(new BigDecimal(monthWithdrawCountDTO.getTotalAmount())));;
+						billVO.setTotalRevenue(NumberUtil.formatRMBNumber(new BigDecimal(monthWithdrawCountDTO.getTotalAmount())));;
 					}else {
-						billVO.setTotalExpenditure(addRMBNumber(billVO.getTotalExpenditure(),formatRMBNumber(monthWithdrawCountDTO.getTotalAmount())));
+						billVO.setTotalExpenditure(NumberUtil.addRMBNumber(billVO.getTotalExpenditure(),NumberUtil.formatRMBNumber(monthWithdrawCountDTO.getTotalAmount())));
 					}
-					
+					//根据当前第一条数据的月份跟上一页最后一页的的月份对比，如果相等不需要显示，不相等需要显示月份统计总和
 					if(billJO.getPageNum() == 1) {
 						billVO.setDisplay(true);
 					}else {
@@ -146,6 +133,7 @@ public class BillContrller extends BaseController {
 						}
 					}
 				}
+				//如果统计结果为空，则赋值0
 				if(Strings.isNullOrEmpty(billVO.getTotalExpenditure())) {
 					billVO.setTotalExpenditure("-0.00");
 				}else {
@@ -169,58 +157,4 @@ public class BillContrller extends BaseController {
 		
         return success(resultData);
     }
-	
-	/**
-	 * formatYYYYMMDate:(获取这种格式的日期字符串yyyy-MM)
-	 *
-	 * @param  @param date
-	 * @param  @return    设定文件
-	 * @return String    DOM对象
-	 * @author tangliang
-	 * @date   2017年12月7日 下午1:59:41
-	 */
-	private String formatYYYYMMDate(Date date) {
-		if(null == date) {
-			return null;
-		}
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月");
-		return sdf.format(date);
-	}
-	
-	/**
-	 * formatRMBNumber:(改为保留两位小数 RMB显示)
-	 *
-	 * @param  @param str
-	 * @param  @return    设定文件
-	 * @return String    DOM对象
-	 * @author tangliang
-	 * @date   2017年12月7日 下午6:09:41
-	 */
-	private String formatRMBNumber(BigDecimal str) {
-		if(str == null) {
-			return String.format("%.2f", 0);
-		}else {
-			return String.format("%.2f", str.divide(new BigDecimal(100)).doubleValue());
-		}
-	}
-	
-	private String formatRMBNumber(String str) {
-		if(str == null) {
-			return String.format("%.2f", 0);
-		}else {
-			return String.format("%.2f", new BigDecimal(str).divide(new BigDecimal(100)).doubleValue());
-		}
-	}
-	private String addRMBNumber(String str,String str2) {
-		if(Strings.isNullOrEmpty(str)) {
-			str = "0";
-		}
-		if(Strings.isNullOrEmpty(str2)) {
-			str2 = "0";
-		}
-		
-		BigDecimal result  = new BigDecimal(str).add(new BigDecimal(str2));
-		
-		return String.format("%.2f", result.doubleValue());
-	}
 }
