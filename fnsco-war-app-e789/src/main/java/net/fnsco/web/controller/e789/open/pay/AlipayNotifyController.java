@@ -85,6 +85,7 @@ public class AlipayNotifyController extends BaseController{
 		//交易超时未付款或关闭
 		if("TRADE_CLOSED".equals(tradeStatus)) {
 			tradeWithdrawService.doAlipayRechangeNotify(params, false, tradeWithdraw);
+			return "success";
 		}
 		
 		boolean tradeStatusVali = AlipayClientUtil.checkTradeStatue(params);
