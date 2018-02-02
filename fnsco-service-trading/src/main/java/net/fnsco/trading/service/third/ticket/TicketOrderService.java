@@ -79,7 +79,7 @@ public class TicketOrderService extends BaseService {
             }
             JSONObject obj = TrainTicketsUtil.getOrderStatus(order.getPayOrderNo());
             if (null != obj) {
-                //0占座中1失败2成功4购买成功
+                //0未占座1占座中2已占座3占座失败4支付中5支付完成6取消订单7退票中8退票完成'
                 String result = obj.getString("result");
                 if (result != null) {
                     JSONObject obj1 = JSONObject.fromObject(result);
@@ -307,8 +307,8 @@ public class TicketOrderService extends BaseService {
      * @return
      */
     @Transactional
-    public ResultDTO payByZFBNotify(TradeWithdrawDO tradeWithdraw) {
-    	TicketOrderDO order = this.ticketOrderDAO.getByUserIdOrderNo(tradeWithdraw.getAppUserId(), tradeWithdraw.getOrderNo());
+    public ResultDTO payByZFBNotify(String orderNo) {
+    	TicketOrderDO order = this.ticketOrderDAO.getByUserIdOrderNo(orderNo);
     	order.setStatus(TicketConstants.OrderStateEnum.PAYING.getCode());
         order.setLastModifyTime(new Date());
         ticketOrderDAO.update(order);
@@ -317,7 +317,6 @@ public class TicketOrderService extends BaseService {
         //判断是否调用成功，只有error_code=0的时候表示返回成功
         if (!"0".equals(error_code)) {
             String reason = obj.getString("reason");
-            appAccountBalanceService.doFrozenBalance(order.getAppUserId(), BigDecimal.ZERO.subtract(order.getOrderAmount()));
             order.setStatus(TicketConstants.OrderStateEnum.SIT_DOWN.getCode());
             order.setLastModifyTime(new Date());
             ticketOrderDAO.update(order);
@@ -337,7 +336,7 @@ public class TicketOrderService extends BaseService {
     @Transactional
     public ResultDTO payByZFB(TicketOrderDO ticketOrder) {
 
-        TicketOrderDO order = this.ticketOrderDAO.getByUserIdOrderNo(ticketOrder.getAppUserId(), ticketOrder.getOrderNo());
+        TicketOrderDO order = this.ticketOrderDAO.getByUserIdOrderNo(ticketOrder.getOrderNo());
         if (null == order) {
             return ResultDTO.fail("订单不存在");
         }
@@ -350,7 +349,7 @@ public class TicketOrderService extends BaseService {
         requestParams.setSubject("火车票购买");
         requestParams.setTotalAmount(String.format("%.2f", order.getOrderAmount()));
         requestParams.setOutTradeNo(order.getOrderNo());
-        String notifyUrl = env.getProperty("alipay.notify_url");
+        String notifyUrl = env.getProperty("alipay.ticket.notify_url");
         requestParams.setNotifyUrl(notifyUrl);
         String body =  AlipayClientUtil.createPayOrderParams(requestParams);
         return ResultDTO.success(body);
@@ -367,7 +366,7 @@ public class TicketOrderService extends BaseService {
     @Transactional
     public ResultDTO pay(TicketOrderDO ticketOrder) {
 
-        TicketOrderDO order = this.ticketOrderDAO.getByUserIdOrderNo(ticketOrder.getAppUserId(), ticketOrder.getOrderNo());
+        TicketOrderDO order = this.ticketOrderDAO.getByUserIdOrderNo(ticketOrder.getOrderNo());
         if (null == order) {
             return ResultDTO.fail("订单不存在");
         }
@@ -408,7 +407,7 @@ public class TicketOrderService extends BaseService {
      */
     @Transactional
     public ResultDTO cancelOrder(TicketOrderDO ticketOrder) {
-        TicketOrderDO order = this.ticketOrderDAO.getByUserIdOrderNo(ticketOrder.getAppUserId(), ticketOrder.getOrderNo());
+        TicketOrderDO order = this.ticketOrderDAO.getByUserIdOrderNo(ticketOrder.getOrderNo());
         if (null == order) {
             return ResultDTO.fail("订单不存在");
         }
@@ -443,7 +442,7 @@ public class TicketOrderService extends BaseService {
      */
     @Transactional
     public ResultDTO refund(TicketOrderDO ticketOrder) {
-        TicketOrderDO order = this.ticketOrderDAO.getByUserIdOrderNo(ticketOrder.getAppUserId(), ticketOrder.getOrderNo());
+        TicketOrderDO order = this.ticketOrderDAO.getByUserIdOrderNo(ticketOrder.getOrderNo());
         if (null == order) {
             return ResultDTO.fail("订单不存在");
         }

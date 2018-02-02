@@ -518,8 +518,9 @@ public class TicketController extends BaseController {
         ticketOrder.setAppUserId(payOrderJO.getUserId());
         if("01".equals(payType)) {
         	return	ticketOrderService.payByZFB(ticketOrder);
+        }else {
+        	return ticketOrderService.pay(ticketOrder);
         }
-        return ticketOrderService.pay(ticketOrder);
     }
 
     /**

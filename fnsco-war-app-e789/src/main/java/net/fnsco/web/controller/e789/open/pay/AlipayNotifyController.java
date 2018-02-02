@@ -16,12 +16,10 @@ import com.alipay.api.response.AlipayTradeRefundResponse;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import net.fnsco.bigdata.comm.ServiceConstant.TradeStateEnum;
 import net.fnsco.core.alipay.AlipayClientUtil;
 import net.fnsco.core.alipay.AlipayRefundRequestParams;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.core.utils.CodeUtil;
 import net.fnsco.trading.comm.TradeConstants;
 import net.fnsco.trading.comm.TradeConstants.WithdrawStateEnum;
 import net.fnsco.trading.service.third.reCharge.PrepaidRefillService;
@@ -102,6 +100,7 @@ public class AlipayNotifyController extends BaseController {
 		// 交易超时未付款或关闭
 		if ("TRADE_CLOSED".equals(tradeStatus)) {
 			tradeWithdrawService.doAlipayRechangeNotify(params, false, tradeWithdraw);
+			return "success";
 		}
 
 		boolean tradeStatusVali = AlipayClientUtil.checkTradeStatue(params);
@@ -131,14 +130,12 @@ public class AlipayNotifyController extends BaseController {
 			logger.error("本次调用非正常调用!");
 			return "fail";
 		}
-		/**
-		 * 在认证是支付宝发来的数据后，接下来处理业务
-		 */
 
 		/**
 		 * 在认证是支付宝发来的数据后，接下来处理业务
 		 */
 		Map<String, String> params = (Map<String, String>) rsaMap.get("params");
+
 		boolean tradeStatus = AlipayClientUtil.checkTradeStatue(params);
 
 		if (!tradeStatus) {
@@ -147,12 +144,13 @@ public class AlipayNotifyController extends BaseController {
 		}
 
 		String orderNo = params.get("out_trade_no");
+
 		TradeWithdrawDO tradeWithdraw = tradeWithdrawService.getByOrderNo(orderNo);
 		if (null == tradeWithdraw) {
 			logger.error("该订单已经不存在，不处理!orderNo=" + orderNo);
 			return "fail";
 		}
-		ResultDTO result = ticketOrderService.payByZFBNotify(tradeWithdraw);
+		ResultDTO result = ticketOrderService.payByZFBNotify(tradeWithdraw.getOrderNo());
 		if (result.isSuccess()) {
 			return "success";
 		}
@@ -325,4 +323,5 @@ public class AlipayNotifyController extends BaseController {
 
 		return "success";
 	}
+
 }

@@ -170,6 +170,7 @@ public class RechangeController extends BaseController {
         tradeWithdraw.setStatus(WithdrawStateEnum.INIT.getCode());
         tradeWithdraw.setFee(BigDecimal.ZERO);
         tradeWithdraw.setBackUrl(notifyUrl);
+        tradeWithdraw.setChannelMerId(env.getProperty("alipay.appid"));
         tradeWithdraw.setChannelType(TradeConstants.ChannelTypeEnum.ALI_PAY.getCode());
         tradeWithdraw.setTradeSubType(TradeConstants.TxnSubTypeEnum.INCOME_RESEARCH.getCode());
         tradeWithdraw.setTradeType(TradeConstants.TradeTypeEnum.INCOME.getCode());
@@ -182,8 +183,8 @@ public class RechangeController extends BaseController {
          * 支付宝下单，将参数返回给app端
          */
         AlipayAppPayRequestParams requestParams = new AlipayAppPayRequestParams();
-        requestParams.setBody("e789帐号充值");
-        requestParams.setSubject("e789帐号充值");
+        requestParams.setBody("充值订单");
+        requestParams.setSubject("充值订单");
         requestParams.setTotalAmount(String.format("%.2f", amountB.doubleValue()));
         requestParams.setOutTradeNo(tradeWithdraw.getOrderNo());
         requestParams.setNotifyUrl(notifyUrl);
