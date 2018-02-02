@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alipay.api.response.AlipayTradeRefundResponse;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.alipay.AlipayAppPayRequestParams;
@@ -130,9 +132,10 @@ public class AlipayNotifyController extends BaseController{
     	requestParams.setRefundReason("");
     	requestParams.setRefundAmount("");
     	requestParams.setOutTradeNo(orderNo);
-    	requestParams.setNotifyUrl("");
-    	String body = AlipayClientUtil.createTradeReturnOrderParams(requestParams);
-    	return body;
+    	/*requestParams.setNotifyUrl("");
+    	AlipayTradeRefundResponse body = AlipayClientUtil.createTradeReturnOrderParams(requestParams);
+    	return body;*/
+    	return null;
     	}
     }
 }
