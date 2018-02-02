@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -302,6 +303,50 @@ public class TradeWithdrawService extends BaseService {
      */
     public TradeWithdrawDO getUndoByOrderNo(String orderNo) {
         return tradeWithdrawDAO.getUndoByOrderNo(orderNo);
+    }
+    
+    /**
+     * doAlipayRechangeNotify:(处理支付宝充值回调订单状态)
+     *
+     * @param  @param params
+     * @param  @param isPaySuccess    设定文件
+     * @return void    DOM对象
+     * @author tangliang
+     * @date   2018年2月2日 下午2:27:32
+     */
+    @Transactional
+    public void doAlipayRechangeNotify(Map<String, String> params,boolean isPaySuccess,TradeWithdrawDO tradeWithdraw) {
+		//失败
+		if(!isPaySuccess) {
+			tradeWithdraw.setStatus(2);
+			tradeWithdraw.setRespCode("1002");
+			tradeWithdraw.setUpdateTime(new Date());
+			tradeWithdraw.setOriginalOrderNo(params.get("trade_no"));//支付宝交易凭证号
+			tradeWithdraw.setAmount(new BigDecimal(params.get("total_amount")).multiply(new BigDecimal(100)));
+			tradeWithdraw.setOrderAmount(tradeWithdraw.getAmount());
+			tradeWithdraw.setSuccTime(DateUtils.dateFormat1ToStr(new Date()));
+			tradeWithdraw.setRespMsg("支付宝充值失败!未付款或关闭");
+			this.doUpdate(tradeWithdraw);
+		}else {
+			/**
+			 * 充值成功后，需要在帐号上增加余额
+			 */
+			Integer appUserId = tradeWithdraw.getAppUserId();
+			BigDecimal fund = new BigDecimal(params.get("total_amount")).multiply(new BigDecimal(100));
+			appAccountBalanceService.doQueryByAppUserId(appUserId);
+			appAccountBalanceService.updateFund(appUserId,BigDecimal.ZERO.subtract(fund));
+			
+			/**
+			 * 更新订单信息
+			 */
+			tradeWithdraw.setStatus(3);
+			tradeWithdraw.setRespCode("1001");
+			tradeWithdraw.setUpdateTime(new Date());
+			tradeWithdraw.setOriginalOrderNo(params.get("trade_no"));//支付宝交易凭证号
+			tradeWithdraw.setSuccTime(DateUtils.dateFormat1ToStr(new Date()));
+			tradeWithdraw.setRespMsg("支付宝充值成功");
+			this.doUpdate(tradeWithdraw);
+		}
     }
  
 }

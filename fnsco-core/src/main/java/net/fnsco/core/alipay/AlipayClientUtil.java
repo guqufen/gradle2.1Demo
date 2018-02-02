@@ -101,6 +101,7 @@ public class AlipayClientUtil {
 		request.setBizModel(model);
 		AlipayTradeRefundResponse response = null;
 		try {
+			logger.error("发起退款业务，发送数据为:"+JSON.toJSONString(request));
 			response = alipayClient.sdkExecute(request);
 		} catch (AlipayApiException e) {
 			logger.error("发起支付宝退款接口报错!", e);

@@ -1,7 +1,5 @@
 package net.fnsco.web.controller.e789.open.pay;
 
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.alipay.AlipayClientUtil;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.core.utils.DateUtils;
 import net.fnsco.trading.comm.TradeConstants.WithdrawStateEnum;
-import net.fnsco.trading.service.account.AppAccountBalanceService;
 import net.fnsco.trading.service.third.ticket.TicketOrderService;
 import net.fnsco.trading.service.withdraw.TradeWithdrawService;
 import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
@@ -37,8 +33,6 @@ public class AlipayNotifyController extends BaseController{
 	
 	@Autowired
 	private TradeWithdrawService tradeWithdrawService; 
-	@Autowired
-	private AppAccountBalanceService appAccountBalanceService;
 	@Autowired
     private TicketOrderService   ticketOrderService;
 	/**
@@ -68,18 +62,13 @@ public class AlipayNotifyController extends BaseController{
 		 * 在认证是支付宝发来的数据后，接下来处理业务
 		 */
 		Map<String,String> params = (Map<String, String>) rsaMap.get("params");
-		boolean tradeStatus = AlipayClientUtil.checkTradeStatue(params);
-		
-		if(!tradeStatus) {
-			logger.error("该订单非完成支付状态，不处理!orderNo="+params.get("out_trade_no"));
-			return "fail";
-		}
-		
 		String orderNo = params.get("out_trade_no");
 		TradeWithdrawDO tradeWithdraw = tradeWithdrawService.getByOrderNo(orderNo);
+		String tradeStatus = params.get("trade_status");
+		
 		if(null == tradeWithdraw) {
 			logger.error("该订单已经不存在，不处理!orderNo="+orderNo);
-			return "fail";
+			return "success";
 		}
 		
 		/**
@@ -87,27 +76,20 @@ public class AlipayNotifyController extends BaseController{
 		 */
 		if(tradeWithdraw.getStatus() == WithdrawStateEnum.SUCCESS.getCode()) {
 			logger.error("该订单已经处理过，不处理!orderNo="+orderNo);
-			return "fail";
+			return "success";
+		}
+		//交易超时未付款或关闭
+		if("TRADE_CLOSED".equals(tradeStatus)) {
+			tradeWithdrawService.doAlipayRechangeNotify(params, false, tradeWithdraw);
 		}
 		
-		/**
-		 * 充值成功后，需要在帐号上增加余额
-		 */
-		Integer appUserId = tradeWithdraw.getAppUserId();
-		BigDecimal fund = new BigDecimal(params.get("total_amount")).multiply(new BigDecimal(100));
-		appAccountBalanceService.doQueryByAppUserId(appUserId);
-		appAccountBalanceService.updateFund(appUserId,BigDecimal.ZERO.subtract(fund));
-		
-		/**
-		 * 更新订单信息
-		 */
-		tradeWithdraw.setStatus(3);
-		tradeWithdraw.setRespCode("1001");
-		tradeWithdraw.setUpdateTime(new Date());
-		tradeWithdraw.setOriginalOrderNo(params.get("trade_no"));//支付宝交易凭证号
-		tradeWithdraw.setSuccTime(DateUtils.dateFormat1ToStr(new Date()));
-		tradeWithdraw.setRespMsg("支付宝充值成功");
-		tradeWithdrawService.doUpdate(tradeWithdraw);
+		boolean tradeStatusVali = AlipayClientUtil.checkTradeStatue(params);
+		if(!tradeStatusVali) {
+			logger.error("该订单非完成支付状态，不处理!orderNo="+params.get("out_trade_no"));
+			return "fail";
+		}
+		//成功处理
+		tradeWithdrawService.doAlipayRechangeNotify(params, true, tradeWithdraw);
 		return "success";
 	}
 	/**
