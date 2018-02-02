@@ -76,9 +76,9 @@ public class PrepaidRefillController extends BaseController {
 
 	@RequestMapping("/prepaidCharge")
 	@ApiOperation(value = "话费/流量充值url")
-	public ResultDTO<ChargeResultDTO> prepaidCharge(@RequestBody FlowChargeJO fl) {
+	public ResultDTO<ChargeResultDTO> prepaidCharge(@RequestBody ChargeDTO chargeDTO) {
 
-		ChargeDTO chargeDTO = fl.getChargeDTO();
+//		ChargeDTO chargeDTO = fl.getChargeDTO();
 
 		// 判断APP用户ID是否合法
 		Integer id = getUserId();
@@ -104,8 +104,8 @@ public class PrepaidRefillController extends BaseController {
 				logger.error("手机充值-用户Id未找到相关信息，appUserId=" + chargeDTO.getUserId());
 				return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
 			}
-			logger.info("手机充值-输入的支付密码加密前的passwd=" + fl.getPayPassword());
-			String password = Md5Util.getInstance().md5(fl.getPayPassword());
+			logger.info("手机充值-输入的支付密码加密前的passwd=" + chargeDTO.getPayPassword());
+			String password = Md5Util.getInstance().md5(chargeDTO.getPayPassword());
 			if (!password.equals(mAppUser.getPayPassword())) {// 查到的密码和原密码做比较
 
 				logger.error("手机充值-支付密码错误，请核对后重新输入！！db_passwd=" + mAppUser.getPayPassword() + ",password=" + password);
@@ -135,6 +135,7 @@ public class PrepaidRefillController extends BaseController {
 
 				return ResultDTO.fail("手机充值-交易类型不匹配");
 			}*/
+			chargeDTO.setPayPassword(null);
 			return prepaidRefillService.acctRecharge(chargeDTO);
 			// 支付宝充值
 		} else if ("1" == chargeDTO.getPayType()) {
