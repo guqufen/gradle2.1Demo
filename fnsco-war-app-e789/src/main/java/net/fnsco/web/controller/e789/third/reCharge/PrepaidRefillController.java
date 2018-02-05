@@ -24,7 +24,6 @@ import net.fnsco.trading.service.third.reCharge.dto.ChargeDTO;
 import net.fnsco.trading.service.third.reCharge.dto.ChargeResultDTO;
 import net.fnsco.trading.service.third.reCharge.dto.CheckChargePackageDTO;
 import net.fnsco.trading.service.third.reCharge.entity.RechargeOrderDO;
-import net.fnsco.web.controller.e789.jo.FlowChargeJO;
 import net.fnsco.web.controller.e789.jo.FlowPackageCheckJO;
 import net.fnsco.web.controller.e789.third.ticket.jo.ThrRechargeJO;
 
@@ -78,13 +77,15 @@ public class PrepaidRefillController extends BaseController {
 	@ApiOperation(value = "话费/流量充值url")
 	public ResultDTO<ChargeResultDTO> prepaidCharge(@RequestBody ChargeDTO chargeDTO) {
 
-//		ChargeDTO chargeDTO = fl.getChargeDTO();
+		// ChargeDTO chargeDTO = fl.getChargeDTO();
 
 		// 判断APP用户ID是否合法
-		Integer id = getUserId();
-		if (null == id || id != chargeDTO.getUserId()) {
+//		Integer id = getUserId();
+		String userId = this.request.getHeader("userId");//从头部获取userId
+//		logger.info(">>>>>>:" + userId + ",<<<<<<<<<<<<<<<<" + chargeDTO.getUserId()+",==========="+id);
+		if (null == userId || Integer.parseInt(userId) != chargeDTO.getUserId()) {
 			logger.error("用户登录状态非法。");
-			return ResultDTO.fail("用户登录状态非法。");
+			return ResultDTO.fail("用户登录状态非法。head->userId="+userId+",param->userId="+chargeDTO.getUserId());
 		}
 
 		// 判断手机号长度是否合法
@@ -95,7 +96,7 @@ public class PrepaidRefillController extends BaseController {
 		}
 
 		// 帐户余额支付
-		if ("0" == chargeDTO.getPayType()) {
+		if ("0".equals(chargeDTO.getPayType())) {
 
 			// 余额支付，需要校验用户支付密码是否正确
 			AppUser mAppUser = appUserService.selectAppUserById(chargeDTO.getUserId());// 根据id查询用户是否存在获取原密码
@@ -122,28 +123,15 @@ public class PrepaidRefillController extends BaseController {
 			}
 
 			// 手机充值
-			/*if (0 == chargeDTO.getType()) {
-
-				return prepaidRefillService.prepaidRefillCharge(chargeDTO);
-
-				// 话费充值
-			} else if (1 == chargeDTO.getType()) {
-
-				return prepaidRefillService.flowCharge(chargeDTO);
-
-			} else {
-
-				return ResultDTO.fail("手机充值-交易类型不匹配");
-			}*/
 			chargeDTO.setPayPassword(null);
 			return prepaidRefillService.acctRecharge(chargeDTO);
 			// 支付宝充值
-		} else if ("1" == chargeDTO.getPayType()) {
+		} else if ("1".equals(chargeDTO.getPayType())) {
 			return prepaidRefillService.aliPayRecharge(chargeDTO);
 		}
 
-		logger.error("手机充值-支付方式非法，暂时只支持帐户余额充值方式，请重新选择！！");
-		return ResultDTO.fail("暂时只支持帐户余额充值方式，请重新选择！！");
+//		logger.error("手机充值-支付方式非法，暂时只支持帐户余额充值方式，请重新选择！！");
+		return ResultDTO.fail();
 	}
 
 	@RequestMapping("/queryResult")

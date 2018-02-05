@@ -12,8 +12,9 @@ public class ChargeResultDTO extends DTO {
 	private String respMsg;
 	@ApiModelProperty(value = "订单号", example = "订单号")
 	private String orderNo;
+	@ApiModelProperty(value = "支付宝返回的body", example = "支付宝返回的body")
+	private String body;
 
-	
 	public String getRespCode() {
 		return respCode;
 	}
@@ -40,6 +41,14 @@ public class ChargeResultDTO extends DTO {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getBody() {
+		return body;
+	}
+
+	public void setBody(String body) {
+		this.body = body;
 	}
 
 }
