@@ -57,7 +57,8 @@ public class TicketOrderService extends BaseService {
     private AppAccountBalanceService appAccountBalanceService;
     @Autowired
     private TradeWithdrawService     tradeWithdrawService;
-
+    
+    private static final String RECHANGE_NOTIFY_URL = "trade/alipay/ticketPayNotify";//支付宝充值回调
     // 分页
     public ResultPageDTO<TicketOrderDO> page(TicketOrderDO ticketOrder, Integer pageNum, Integer pageSize) {
         logger.info("开始分页查询TicketOrderService.page, ticketOrder=" + ticketOrder.toString());
@@ -335,7 +336,7 @@ public class TicketOrderService extends BaseService {
      */
     @Transactional
     public ResultDTO payByZFB(TicketOrderDO ticketOrder) {
-
+    	String notifyUrl = env.getProperty("app.base.url")+RECHANGE_NOTIFY_URL;
         TicketOrderDO order = this.ticketOrderDAO.getByUserIdOrderNo(ticketOrder.getOrderNo());
         if (null == order) {
             return ResultDTO.fail("订单不存在");
@@ -348,9 +349,9 @@ public class TicketOrderService extends BaseService {
         requestParams.setBody("e789火车票购买");
         requestParams.setSubject("火车票购买");
         requestParams.setTotalAmount(String.format("%.2f", order.getOrderAmount()));
-        requestParams.setOutTradeNo(order.getOrderNo());
-        String notifyUrl = env.getProperty("alipay.ticket.notify_url");
-        requestParams.setNotifyUrl(notifyUrl);
+        requestParams.setOutTradeNo(order.getOrderNo());	
+        String url= env.getProperty("app.base.url") + RECHANGE_NOTIFY_URL;
+        requestParams.setNotifyUrl(url);
         String body =  AlipayClientUtil.createPayOrderParams(requestParams);
         return ResultDTO.success(body);
     }
