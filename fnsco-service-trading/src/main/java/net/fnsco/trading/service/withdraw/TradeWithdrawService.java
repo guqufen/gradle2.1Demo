@@ -210,13 +210,14 @@ public class TradeWithdrawService extends BaseService {
         return tradeWithdrawDAO.queryOngoing(start, type);
     }
 
-    public void doAddForTicket(TicketOrderDO order) {
+    public void doAddForTicket(TicketOrderDO order ,String channelType) {
         AppAccountBalanceDO appAccountBalance = appAccountBalanceService.doQueryByAppUserId(order.getAppUserId());
         TradeWithdrawDO tradeWithdraw = new TradeWithdrawDO();
         tradeWithdraw.setAmount(order.getOrderAmount());
         tradeWithdraw.setAppUserId(order.getAppUserId());
         tradeWithdraw.setOriginalOrderNo(order.getOrderNo());
-        // tradeWithdraw.setChannelMerId(channelMerId);
+        tradeWithdraw.setChannelType(channelType);
+        //tradeWithdraw.setChannelMerId(channelMerId);
         // tradeWithdraw.setFee(fee);
         tradeWithdraw.setFund(appAccountBalance.getFund());
         tradeWithdraw.setStatus(0);
