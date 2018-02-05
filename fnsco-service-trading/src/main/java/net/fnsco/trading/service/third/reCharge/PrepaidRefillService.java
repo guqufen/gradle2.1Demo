@@ -23,7 +23,6 @@ import net.fnsco.core.utils.CodeUtil;
 import net.fnsco.core.utils.HttpUtils;
 import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.trading.comm.TradeConstants;
-import net.fnsco.trading.comm.TradeConstants.TradeTypeEnum;
 import net.fnsco.trading.comm.TradeConstants.WithdrawStateEnum;
 import net.fnsco.trading.service.account.AppAccountBalanceService;
 import net.fnsco.trading.service.third.reCharge.dto.ChargeDTO;
@@ -101,6 +100,105 @@ public class PrepaidRefillService extends BaseService {
 
 		phChargePackageDTO.setList(list);// 设置套餐资费列表
 		return ResultDTO.success(phChargePackageDTO);
+	}
+
+	/**
+	 * 话费充值-套餐查询,单查,通过传入PID和手机号查询实际售价金额
+	 * 
+	 * @param phone:充值号码
+	 * @param amt:充值金额
+	 * @return:售价金额
+	 */
+	public String queryCharge(String phone, Integer amt) {
+		String telQueryUrl = "http://op.juhe.cn/ofpay/mobile/telquery?cardnum=";
+		String result;
+		ChargeResultDTO ph = new ChargeResultDTO();
+		try {
+			/**
+			 * 充值资费查询，聚合数据返回 { "reason": "成功", "result": { "cardid": "191404",
+			 * //卡类ID "cardname": "江苏电信话费100元直充", //卡类名称 "inprice": 98.4, //购买价格
+			 * "game_area": "江苏苏州电信" //手机号码归属地 }, "error_code": 0 }
+			 */
+			String url = telQueryUrl + amt + "&phoneno=" + phone + "&key=" + env.getProperty("jh.phone.feekey");
+			// result = RechargeUtil.get(url, 0);
+			result = HttpUtils.get(url);// 改成调用HttpClientUtil工具类方法
+			logger.info(result);
+
+			JuheDTO juhe = JSON.parseObject(result, JuheDTO.class);
+			if (juhe.getError_code() != 0) {
+				logger.error("话费充值--话费资费查询失败,原因:+" + juhe.getReason());
+				return null;
+
+			} else {
+				logger.info("话费充值--话费资费查询成功" + juhe.getResult());
+
+				Map<String, Object> map = JSONObject.parseObject(juhe.getResult().toString(), Map.class);
+
+				return map.get("inprice").toString();
+			}
+		} catch (Exception e) {
+			logger.error("话费资费查询出现异常，prepaidRefillCheck,", e);
+		}
+
+		return null;
+
+	}
+
+	/**
+	 * 
+	 * @param phone:手机号
+	 * @param pid:套餐ID
+	 * @return:实际售价金额，如果为空表示没找到pid套餐或者查询套餐失败等等，其他表示成功
+	 */
+	public String queryFlowExpen(String phone, String pid) {
+
+		String result = null;
+		String url = "http://v.juhe.cn/flow/telcheck";// 请求接口地址
+		CheckChargePackageDTO phChargePackageDTO = new CheckChargePackageDTO();
+
+		StringBuffer sb = new StringBuffer();
+		String sendData = sb.append("?phone=").append(phone).append("&key=").append(env.getProperty("jh.phone.flowkey"))
+				.toString();
+
+		try {
+
+			result = HttpUtils.get(url + sendData);// 改成调用HttpClientUtil工具类方法
+			JuheDTO juhe = JSONObject.parseObject(result, JuheDTO.class);
+
+			// 查询失败
+			if (juhe.getError_code() != 0) {
+
+				logger.error("流量资费查询出错:" + juhe.getError_code() + ":" + juhe.getReason());
+				return null;
+
+			} else {
+
+				// 获取需要返回的数据域(套餐类型)
+				JSONArray jsonArray = (JSONArray) juhe.getResult();
+				String str = jsonArray.get(0).toString();
+
+				Map<String, Object> map = JSONObject.parseObject(str, Map.class);
+				logger.info(map.toString());
+				phChargePackageDTO.setCompany(map.get("company").toString());
+				phChargePackageDTO.setType(map.get("type").toString());
+				List<Map<String, String>> lists = JSONObject.parseObject(map.get("flows").toString(), List.class);
+				for (Map<String, String> map2 : lists) {
+					map2.get("");
+
+					// 通过pid查找实际售价金额
+					if (map.get("pid").equals(pid.trim())) {
+
+						return new BigDecimal(map2.get("inprice")).setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+					}
+				}
+
+				return null;
+			}
+		} catch (Exception e) {
+			logger.error("流量资费套餐查询异常，flowPackageCheck,", e);
+		}
+		return null;
+
 	}
 
 	/**
@@ -669,10 +767,64 @@ public class PrepaidRefillService extends BaseService {
 		tradeWithdrawDO.setAppUserId(chargeDTO.getUserId());// 设置帐号ID
 		tradeWithdrawDO.setTradeType(2);// 交易类型:2-消费
 		if (0 == chargeDTO.getType()) {
+
+			// 先通过pid查询实际售价
+			String amt = queryCharge(chargeDTO.getPhone(), Integer.parseInt(chargeDTO.getPid()));
+
+			logger.info("话费充值-pid金额校验:amt=[" + amt + "],inprice=[" + chargeDTO.getInprice() + "]");
+			if (!amt.equals(chargeDTO.getInprice())) {
+
+				logger.error("套餐售价金额与app端传入参不一致，交易失败");
+				tradeWithdrawDO.setRespCode(TradeConstants.RespCodeEnum.FAIL.getCode());
+				tradeWithdrawDO.setRespMsg("套餐售价金额与app端传入参不一致，交易失败");
+				tradeWithdrawDO.setStatus(WithdrawStateEnum.FAIL.getCode());
+
+				phoneChargeOrderDO.setRespCode(TradeConstants.RespCodeEnum.FAIL.getCode());
+				phoneChargeOrderDO.setRespMsg("套餐售价金额与app端传入参不一致，交易失败");
+				phoneChargeOrderDO.setStatus(WithdrawStateEnum.FAIL.getCode());
+
+				tradeWithdrawService.doAdd(tradeWithdrawDO);// 新增
+				rechargeOrderService.doAdd(phoneChargeOrderDO);
+
+				return ResultDTO.fail("套餐售价金额与app端传入参不一致，交易失败");
+			}
+
+			// 售价金额正常
+			BigDecimal inprice = new BigDecimal(amt).multiply(new BigDecimal(100)).setScale(0,
+					BigDecimal.ROUND_HALF_UP);
+			tradeWithdrawDO.setAmount(inprice);// 设置交易金额
+			phoneChargeOrderDO.setAmt(tradeWithdrawDO.getAmount().toString());// 设置交易金额
 			tradeWithdrawDO.setTradeSubType(TradeConstants.TxnSubTypeEnum.BUY_HF.getCode());// 交易子类型:22话费充值
 			payName = "话费充值";
 		} else {
+
+			// 先通过pid查询实际售价
+			String amt = queryFlowExpen(chargeDTO.getPhone(), chargeDTO.getPid());
+
+			if (!amt.equals(chargeDTO.getInprice())) {
+				logger.error("套餐售价金额与app端传入参不一致，交易失败");
+
+				logger.error("套餐售价金额与app端传入参不一致，交易失败");
+				tradeWithdrawDO.setRespCode(TradeConstants.RespCodeEnum.FAIL.getCode());
+				tradeWithdrawDO.setRespMsg("套餐售价金额与app端传入参不一致，交易失败");
+
+				phoneChargeOrderDO.setRespCode(TradeConstants.RespCodeEnum.FAIL.getCode());
+				phoneChargeOrderDO.setRespMsg("套餐售价金额与app端传入参不一致，交易失败");
+
+				tradeWithdrawService.doAdd(tradeWithdrawDO);// 新增
+				rechargeOrderService.doAdd(phoneChargeOrderDO);
+
+				return ResultDTO.fail("套餐售价金额与app端传入参不一致，交易失败");
+			}
+
+			// 售价金额正常
+			BigDecimal inprice = new BigDecimal(amt).multiply(new BigDecimal(100)).setScale(0,
+					BigDecimal.ROUND_HALF_UP);
+			tradeWithdrawDO.setAmount(inprice);// 设置交易金额
+			phoneChargeOrderDO.setAmt(tradeWithdrawDO.getAmount().toString());// 设置交易金额
 			tradeWithdrawDO.setTradeSubType(TradeConstants.TxnSubTypeEnum.BUY_LT.getCode());// 交易子类型:23流量充值
+			// tradeWithdrawDO.setTradeSubType(TradeConstants.TxnSubTypeEnum.BUY_LT.getCode());//
+			// 交易子类型:23流量充值
 			payName = "流量充值";
 		}
 		tradeWithdrawDO.setStatus(WithdrawStateEnum.PROCESSING.getCode());// 设置交易状态，1-执行中
@@ -799,11 +951,29 @@ public class PrepaidRefillService extends BaseService {
 		String hfUrl = "http://op.juhe.cn/ofpay/mobile/onlineorder";// 话费充值请求url
 		String flUrl = "http://v.juhe.cn/flow/recharge";// 流量充值请求url
 		String payName = null;
+		JuheDTO juhe1 = new JuheDTO<>();
 
 		try {
 
 			// 话费充值
 			if (0 == chargeDTO.getType()) {
+
+				// // 先通过pid查询实际售价
+				// String amt = queryCharge(chargeDTO.getPhone(),
+				// Integer.parseInt(chargeDTO.getPid()));
+				// if (amt == null) {
+				// logger.error("无此套餐");
+				// juhe1.setError_code(null);
+				// juhe1.setReason("无此套餐");
+				// return juhe1;
+				// }
+				//
+				// if (!amt.equals(chargeDTO.getInprice())) {
+				// logger.error("套餐售价金额与app端传入参不一致，交易失败");
+				// juhe1.setError_code(null);
+				// juhe1.setReason("套餐售价金额与app端传入参不一致，交易失败");
+				// return juhe1;
+				// }
 
 				// md5,校验值，md5(OpenID+key+phone+pid+orderid)，结果转为小写
 				String sign = Md5Util.MD5(env.getProperty("jh.phone.OpenId") + env.getProperty("jh.phone.feekey")
@@ -816,6 +986,24 @@ public class PrepaidRefillService extends BaseService {
 
 				// 流量充值
 			} else {
+
+				// 先通过pid查询实际售价
+				// String amt = queryFlowExpen(chargeDTO.getPhone(),
+				// chargeDTO.getPid());
+				//
+				// if (amt == null) {
+				// logger.error("无此套餐");
+				// juhe1.setError_code(null);
+				// juhe1.setReason("无此套餐");
+				// return juhe1;
+				// }
+				//
+				// if (!amt.equals(chargeDTO.getInprice())) {
+				// logger.error("套餐售价金额与app端传入参不一致，交易失败");
+				// juhe1.setError_code(null);
+				// juhe1.setReason("套餐售价金额与app端传入参不一致，交易失败");
+				// return juhe1;
+				// }
 
 				// md5,校验值，md5(OpenID+key+phone+pid+orderid)，结果转为小写
 				String sign = Md5Util.MD5(env.getProperty("jh.phone.OpenId") + env.getProperty("jh.phone.flowkey")
@@ -853,24 +1041,11 @@ public class PrepaidRefillService extends BaseService {
 		AlipayAppPayRequestParams requestParams = new AlipayAppPayRequestParams();
 		String orderNo = CodeUtil.generateOrderCode("");
 
-		// 更新余额和对应的冻结金额(账户扣款)
-		BigDecimal inprice = new BigDecimal(chargeDTO.getInprice()).multiply(new BigDecimal(100)).setScale(0,
-				BigDecimal.ROUND_HALF_UP);
-
 		// 数据存入订单表中
 		TradeWithdrawDO tradeWithdrawDO = new TradeWithdrawDO();
 		tradeWithdrawDO.setAppUserId(chargeDTO.getUserId());// 设置用户ID
 		tradeWithdrawDO.setOrderNo(orderNo);// 设置商户订单号
-		tradeWithdrawDO.setAmount(inprice);// 设置交易金额
-		if (0 == chargeDTO.getType()) {
-			tradeWithdrawDO.setTradeSubType(TradeConstants.TxnSubTypeEnum.BUY_HF.getCode());// 交易子类型:22话费充值
-			requestParams.setSubject("话费充值订单");// 商品的标题/交易标题/订单标题/订单关键字等。示例值:大乐透
-			requestParams.setBody(chargeDTO.getName());// 对一笔交易的具体描述信息。如果是多种商品，请将商品描述字符串累加传给body。示例值:Iphone6
-		} else {
-			tradeWithdrawDO.setTradeSubType(TradeConstants.TxnSubTypeEnum.BUY_LT.getCode());// 交易子类型:23流量充值
-			requestParams.setSubject("流量充值订单");// 商品的标题/交易标题/订单标题/订单关键字等。示例值:大乐透
-			requestParams.setBody(chargeDTO.getName());// 对一笔交易的具体描述信息。如果是多种商品，请将商品描述字符串累加传给body。示例值:Iphone6
-		}
+
 		tradeWithdrawDO.setStatus(WithdrawStateEnum.PROCESSING.getCode());// 设置交易状态，1-执行中
 		tradeWithdrawDO.setRespCode(TradeConstants.RespCodeEnum.HANDLING.getCode());// 应答码；1000-处理中
 		tradeWithdrawDO.setTradeType(TradeConstants.TradeTypeEnum.INCOME.getCode());// 交易类型；收入、支出
@@ -879,7 +1054,6 @@ public class PrepaidRefillService extends BaseService {
 		tradeWithdrawDO.setChannelType(TradeConstants.ChannelTypeEnum.JHF_PAY.getCode());// 渠道
 		tradeWithdrawDO.setTradeSubType(TradeConstants.TxnSubTypeEnum.INCOME_RESEARCH.getCode());
 		tradeWithdrawDO.setOriginalOrderNo(chargeDTO.getPid());// 暂存套餐ID
-		tradeWithdrawService.doAdd(tradeWithdrawDO);// 新增
 
 		// 数据存入手机充值表
 		RechargeOrderDO reChargeOrderDO = new RechargeOrderDO();
@@ -888,17 +1062,83 @@ public class PrepaidRefillService extends BaseService {
 		reChargeOrderDO.setOrderNo(orderNo);// 设置商户订单ID
 		reChargeOrderDO.setMobile(chargeDTO.getPhone());// 设置充值手机号
 		reChargeOrderDO.setName(chargeDTO.getName());// 设置充值名称:xx元
-		reChargeOrderDO.setAmt(chargeDTO.getInprice().replace(".", ""));// 设置交易金额
-		// reChargeOrderDO.setStatus(WithdrawStateEnum.INIT.getCode());//
-		// 设置交易状态0-进行中，不能设置状态，避免被定时任务跑
+
 		reChargeOrderDO.setRespCode(TradeConstants.RespCodeEnum.HANDLING.getCode());// 应答码:正在处理中
+
+		if (0 == chargeDTO.getType()) {// 话费充值
+
+			// 先通过pid查询实际售价
+			String amt = queryCharge(chargeDTO.getPhone(), Integer.parseInt(chargeDTO.getPid()));
+
+			logger.info("话费充值-pid金额校验:amt=[" + amt + "],inprice=[" + chargeDTO.getInprice() + "]");
+			if (!amt.equals(chargeDTO.getInprice())) {
+
+				logger.error("套餐售价金额与app端传入参不一致，交易失败");
+				tradeWithdrawDO.setRespCode(TradeConstants.RespCodeEnum.FAIL.getCode());
+				tradeWithdrawDO.setRespMsg("套餐售价金额与app端传入参不一致，交易失败");
+				tradeWithdrawDO.setStatus(WithdrawStateEnum.FAIL.getCode());
+
+				reChargeOrderDO.setRespCode(TradeConstants.RespCodeEnum.FAIL.getCode());
+				reChargeOrderDO.setRespMsg("套餐售价金额与app端传入参不一致，交易失败");
+				reChargeOrderDO.setStatus(WithdrawStateEnum.FAIL.getCode());
+
+				tradeWithdrawService.doAdd(tradeWithdrawDO);// 新增
+				rechargeOrderService.doAdd(reChargeOrderDO);
+
+				return ResultDTO.fail("套餐售价金额与app端传入参不一致，交易失败");
+			}
+
+			// 售价金额正常
+			BigDecimal inprice = new BigDecimal(amt).multiply(new BigDecimal(100)).setScale(0,
+					BigDecimal.ROUND_HALF_UP);
+			tradeWithdrawDO.setAmount(inprice);// 设置交易金额
+			reChargeOrderDO.setAmt(tradeWithdrawDO.getAmount().toString());// 设置交易金额
+			tradeWithdrawDO.setTradeSubType(TradeConstants.TxnSubTypeEnum.BUY_HF.getCode());// 交易子类型:22话费充值
+			requestParams.setSubject("话费充值订单");// 商品的标题/交易标题/订单标题/订单关键字等。示例值:大乐透
+			requestParams.setBody(chargeDTO.getName());// 对一笔交易的具体描述信息。如果是多种商品，请将商品描述字符串累加传给body。示例值:Iphone6
+		} else {
+
+			// 先通过pid查询实际售价
+			String amt = queryFlowExpen(chargeDTO.getPhone(), chargeDTO.getPid());
+
+			if (!amt.equals(chargeDTO.getInprice())) {
+				logger.error("套餐售价金额与app端传入参不一致，交易失败");
+
+				logger.error("套餐售价金额与app端传入参不一致，交易失败");
+				tradeWithdrawDO.setRespCode(TradeConstants.RespCodeEnum.FAIL.getCode());
+				tradeWithdrawDO.setRespMsg("套餐售价金额与app端传入参不一致，交易失败");
+
+				reChargeOrderDO.setRespCode(TradeConstants.RespCodeEnum.FAIL.getCode());
+				reChargeOrderDO.setRespMsg("套餐售价金额与app端传入参不一致，交易失败");
+
+				tradeWithdrawService.doAdd(tradeWithdrawDO);// 新增
+				rechargeOrderService.doAdd(reChargeOrderDO);
+
+				return ResultDTO.fail("套餐售价金额与app端传入参不一致，交易失败");
+			}
+
+			// 售价金额正常
+			BigDecimal inprice = new BigDecimal(amt).multiply(new BigDecimal(100)).setScale(0,
+					BigDecimal.ROUND_HALF_UP);
+			tradeWithdrawDO.setAmount(inprice);// 设置交易金额
+			reChargeOrderDO.setAmt(tradeWithdrawDO.getAmount().toString());// 设置交易金额
+			tradeWithdrawDO.setTradeSubType(TradeConstants.TxnSubTypeEnum.BUY_LT.getCode());// 交易子类型:23流量充值
+			requestParams.setSubject("流量充值订单");// 商品的标题/交易标题/订单标题/订单关键字等。示例值:大乐透
+			requestParams.setBody(chargeDTO.getName());// 对一笔交易的具体描述信息。如果是多种商品，请将商品描述字符串累加传给body。示例值:Iphone6
+		}
+
+		tradeWithdrawService.doAdd(tradeWithdrawDO);// 新增
 		rechargeOrderService.doAdd(reChargeOrderDO);
 
 		requestParams.setOutTradeNo(orderNo);// 商户订单号
 		requestParams.setTotalAmount(chargeDTO.getInprice());// 付款价格
-		requestParams.setNotifyUrl(env.getProperty("web.base.url") + "/trade/alipay/rechargePayNotify");// 回调地址
+		requestParams.setNotifyUrl("http://6a2205d0.ngrok.io" + "/admin/trade/alipay/rechargePayNotify");// 回调地址,env.getProperty("web.base.url")
+		logger.info("NotifyUrl:" + requestParams.getNotifyUrl());
 		String body = AlipayClientUtil.createPayOrderParams(requestParams);
 
-		return ResultDTO.success(body);
+		chargeResultDTO.setBody(body);
+		chargeResultDTO.setOrderNo(orderNo);
+		logger.info("alipay->body:" + body);
+		return ResultDTO.success(chargeResultDTO);
 	}
 }

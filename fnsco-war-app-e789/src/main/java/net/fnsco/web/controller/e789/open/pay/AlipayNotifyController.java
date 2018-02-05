@@ -121,9 +121,9 @@ public class AlipayNotifyController extends BaseController {
 	 */
 	@RequestMapping(value = "/ticketPayNotify")
 	@ApiOperation(value = "支付宝APP火车票支付异步通知接口，仅支付宝方调用")
-    @ResponseBody
-    public String ticketPayNotify() {
-    	Map<String,Object> rsaMap = AlipayClientUtil.rsaCheckV1(request);
+	@ResponseBody
+	public String ticketPayNotify() {
+		Map<String, Object> rsaMap = AlipayClientUtil.rsaCheckV1(request);
 		boolean flag = (boolean) rsaMap.get("signature");
 		/**
 		 * 先对来源数据认证，如果不是支付宝方调用，则舍弃
@@ -132,60 +132,61 @@ public class AlipayNotifyController extends BaseController {
 			logger.error("本次调用非正常调用!");
 			return "fail";
 		}
-		
+
 		/**
 		 * 在认证是支付宝发来的数据后，接下来处理业务
 		 */
-		Map<String,String> params = (Map<String, String>) rsaMap.get("params");
+		Map<String, String> params = (Map<String, String>) rsaMap.get("params");
 		String orderNo = params.get("out_trade_no");
 		TradeWithdrawDO tradeWithdraw = tradeWithdrawService.getByOrderNo(orderNo);
 		String tradeStatus = params.get("trade_status");
-		
-		
-		if(null == tradeWithdraw) {
-			logger.error("该订单已经不存在，不处理!orderNo="+orderNo);
+
+		if (null == tradeWithdraw) {
+			logger.error("该订单已经不存在，不处理!orderNo=" + orderNo);
 			return "success";
 		}
-		
+
 		/**
 		 * 处理完成的订单，不处理
 		 */
-		if(tradeWithdraw.getStatus() == WithdrawStateEnum.SUCCESS.getCode()) {
-			logger.error("该订单已经处理过，不处理!orderNo="+orderNo);
+		if (tradeWithdraw.getStatus() == WithdrawStateEnum.SUCCESS.getCode()) {
+			logger.error("该订单已经处理过，不处理!orderNo=" + orderNo);
 			return "success";
 		}
-		//交易超时未付款或关闭
-		if("TRADE_CLOSED".equals(tradeStatus)) {
+		// 交易超时未付款或关闭
+		if ("TRADE_CLOSED".equals(tradeStatus)) {
 			tradeWithdrawService.doAlipayRechangeNotify(params, false, tradeWithdraw);
 			return "success";
 		}
-		
+
 		boolean tradeStatusVali = AlipayClientUtil.checkTradeStatue(params);
-		if(!tradeStatusVali) {
-			logger.error("该订单非完成支付状态，不处理!orderNo="+params.get("out_trade_no"));
+		if (!tradeStatusVali) {
+			logger.error("该订单非完成支付状态，不处理!orderNo=" + params.get("out_trade_no"));
 			return "fail";
 		}
-		//成功处理
-		
+		// 成功处理
+
 		ResultDTO result = ticketOrderService.payByZFBNotify(orderNo);
-    	if(result.isSuccess()) {
-    		return "success";
-    	}else {
-    	AlipayRefundRequestParams requestParams = new AlipayRefundRequestParams();
-    	
-		requestParams.setRefundAmount(String.format("%.2f", tradeWithdraw.getOrderAmount()));
-		requestParams.setRefundReason("火车票购买失败退款");
-		requestParams.setOutTradeNo(orderNo);
-		AlipayTradeRefundResponse response = AlipayClientUtil.createTradeReturnOrderParams(requestParams);
-		if(response.isSuccess()) {
-			logger.error("该订单退款成功!orderNo="+requestParams.getOutTradeNo()+",退款金额为:"+requestParams.getRefundAmount());
+		if (result.isSuccess()) {
+
+			return "success";
+		} else {
+			AlipayRefundRequestParams requestParams = new AlipayRefundRequestParams();
+
+			requestParams.setRefundAmount(String.format("%.2f", tradeWithdraw.getOrderAmount()));
+			requestParams.setRefundReason("火车票购买失败退款");
+			requestParams.setOutTradeNo(orderNo);
+			AlipayTradeRefundResponse response = AlipayClientUtil.createTradeReturnOrderParams(requestParams);
+			if (response.isSuccess()) {
+				logger.error("该订单退款成功!orderNo=" + requestParams.getOutTradeNo() + ",退款金额为:"
+						+ requestParams.getRefundAmount());
+			}
 		}
-    	}
-		
+
 		tradeWithdrawService.doAlipayRechangeNotify(params, true, tradeWithdraw);
 		return "success";
-		
-    }
+
+	}
 
 	/**
 	 * 支付宝回调接口,接收支付结果信息
@@ -197,28 +198,31 @@ public class AlipayNotifyController extends BaseController {
 	@ResponseBody
 	public String rechargeAliPayNotify() {
 
-		ChargeResultDTO ph = new ChargeResultDTO();
+		// ChargeResultDTO ph = new ChargeResultDTO();
 		Map<String, Object> rsaMap = AlipayClientUtil.rsaCheckV1(request);// 解析并校验请求
+
+		logger.info("手机充值-支付宝回调,返给数据:" + rsaMap);
 
 		// 先对来源数据认证，如果不是支付宝方调用，则舍弃
 		boolean flag = (boolean) rsaMap.get("signature");
 		if (!flag) {
-			logger.error("本次调用非正常调用!");
+			logger.error("手机充值-支付宝回调，本次调用非正常调用!");
 			return "fail";
 		}
+		logger.info("手机充值-支付宝回调，数据源校验成功");
 
 		// 认证是支付宝发来的数据后，接下来处理业务，充值话费/流量
 		ChargeDTO chargeDTO = new ChargeDTO();
 		String payName = null;
-		String orderNo = (String) rsaMap.get("out_trade_no");// 商户订单号
-		// String channerOrderId = (String) rsaMap.get("trade_no");// 支付宝订单号
-		String status = (String) rsaMap.get("trade_status");// 交易状态
+		Map<String, String> params = (Map<String, String>) rsaMap.get("params");
+		String orderNo = params.get("out_trade_no");
+		String status = params.get("trade_status");// 交易状态
 
 		// 手机充值表查找订单号交易<主要提供充值手机号,如果为空充值交易进行不下去，故需要去退款>
 		RechargeOrderDO reChargeOrderDO = rechargeOrderService.getByOrderNo(orderNo);
 
 		if (null == reChargeOrderDO) {
-			logger.error("支付宝回调通知函数，订单号在reChargeOrder找不到原交易，orderNo=[" + orderNo + "]");
+			logger.error("手机充值-支付宝回调通知函数，订单号在reChargeOrder找不到原交易，orderNo=[" + orderNo + "]");
 
 			// 退款
 			AlipayRefundRequestParams requestParams = new AlipayRefundRequestParams();
@@ -229,9 +233,12 @@ public class AlipayNotifyController extends BaseController {
 			// 调用成功
 			if ("10000".equals(alipayTradeRefundResponse.getCode())) {
 
+				logger.error(payName + "退款成功,orderno=[" + orderNo + "]");
+
 				// 调用失败
 			} else {
 
+				logger.error(payName + "退款失败,orderno=[" + orderNo + "]");
 			}
 
 			return "success";
@@ -282,6 +289,7 @@ public class AlipayNotifyController extends BaseController {
 
 			return "success";
 		}
+		logger.info("手机充值-支付宝回调，支付成功，继续进行" + payName);
 
 		// 手机充值
 		chargeDTO.setPid(tradeWithdrawDO.getOriginalOrderNo());// 设置套餐ID
