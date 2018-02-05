@@ -18,7 +18,7 @@ public class ChargeDTO extends DTO {
 	private Integer type;
 	@ApiModelProperty(value = "充值名称:取资费查询返回的name字段", example = "充值名称:取资费查询返回的name字段")
 	private String name;
-	@ApiModelProperty(value = "充值方式:0-余额/1-微信/2-支付宝", example = "充值方式:0-余额/1-微信/2-支付宝")
+	@ApiModelProperty(value = "充值方式:0-余额/1-支付宝/2-微信", example = "充值方式:0-余额/1-支付宝/2-微信")
 	private String payType;
 	@ApiModelProperty(value = "支付密码", example = "支付密码")
 	private String payPassword;
