@@ -39,10 +39,10 @@ public class ChargeDTO extends DTO {
 	 */
 	// private String outTradeNo;
 
-	/**
-	 * 回调地址
-	 */
-	private String notifyUrl;
+//	/**
+//	 * 回调地址
+//	 */
+//	private String notifyUrl;
 	//
 	// public String getBody() {
 	// return body;
@@ -68,13 +68,13 @@ public class ChargeDTO extends DTO {
 	// this.outTradeNo = outTradeNo;
 	// }
 
-	public String getNotifyUrl() {
-		return notifyUrl;
-	}
-
-	public void setNotifyUrl(String notifyUrl) {
-		this.notifyUrl = notifyUrl;
-	}
+//	public String getNotifyUrl() {
+//		return notifyUrl;
+//	}
+//
+//	public void setNotifyUrl(String notifyUrl) {
+//		this.notifyUrl = notifyUrl;
+//	}
 
 	public String getPhone() {
 		return phone;

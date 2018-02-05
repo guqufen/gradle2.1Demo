@@ -846,7 +846,9 @@ public class PrepaidRefillService extends BaseService {
 	 * @param alipayRequestParams
 	 * @return
 	 */
-	public ResultDTO aliPayRecharge(ChargeDTO chargeDTO) {
+	public ResultDTO<ChargeResultDTO> aliPayRecharge(ChargeDTO chargeDTO) {
+
+		ChargeResultDTO chargeResultDTO = new ChargeResultDTO();
 
 		AlipayAppPayRequestParams requestParams = new AlipayAppPayRequestParams();
 		String orderNo = CodeUtil.generateOrderCode("");
