@@ -758,7 +758,7 @@ public class PrepaidRefillService extends BaseService {
 		phoneChargeOrderDO.setMobile(chargeDTO.getPhone());// 设置充值手机号
 		phoneChargeOrderDO.setName(chargeDTO.getName());// 设置充值名称:xx元
 		phoneChargeOrderDO.setAmt(chargeDTO.getInprice().replace(".", ""));// 设置交易金额
-		// phoneChargeOrderDO.setStatus(WithdrawStateEnum.INIT.getCode());//设置交易状态0-进行中，不能设置状态，避免被定时任务跑
+		phoneChargeOrderDO.setStatus(null);// 设置交易状态null, 不能设置状态0-进行中，避免被定时任务跑
 		rechargeOrderService.doAdd(phoneChargeOrderDO);
 
 		tradeWithdrawDO.setOrderNo(orderid);// 设置订单号
@@ -768,7 +768,7 @@ public class PrepaidRefillService extends BaseService {
 		tradeWithdrawDO.setTradeType(2);// 交易类型:2-消费
 		if (0 == chargeDTO.getType()) {
 
-			// 先通过pid查询实际售价
+			// 先通过pid查询实际售价,然后判断传过来的金额和售价是否一致
 			String amt = queryCharge(chargeDTO.getPhone(), Integer.parseInt(chargeDTO.getPid()));
 
 			logger.info("话费充值-pid金额校验:amt=[" + amt + "],inprice=[" + chargeDTO.getInprice() + "]");
@@ -798,11 +798,10 @@ public class PrepaidRefillService extends BaseService {
 			payName = "话费充值";
 		} else {
 
-			// 先通过pid查询实际售价
+			// 先通过pid查询实际售价,然后判断传过来的金额和售价是否一致
 			String amt = queryFlowExpen(chargeDTO.getPhone(), chargeDTO.getPid());
 
 			if (!amt.equals(chargeDTO.getInprice())) {
-				logger.error("套餐售价金额与app端传入参不一致，交易失败");
 
 				logger.error("套餐售价金额与app端传入参不一致，交易失败");
 				tradeWithdrawDO.setRespCode(TradeConstants.RespCodeEnum.FAIL.getCode());
@@ -823,8 +822,6 @@ public class PrepaidRefillService extends BaseService {
 			tradeWithdrawDO.setAmount(inprice);// 设置交易金额
 			phoneChargeOrderDO.setAmt(tradeWithdrawDO.getAmount().toString());// 设置交易金额
 			tradeWithdrawDO.setTradeSubType(TradeConstants.TxnSubTypeEnum.BUY_LT.getCode());// 交易子类型:23流量充值
-			// tradeWithdrawDO.setTradeSubType(TradeConstants.TxnSubTypeEnum.BUY_LT.getCode());//
-			// 交易子类型:23流量充值
 			payName = "流量充值";
 		}
 		tradeWithdrawDO.setStatus(WithdrawStateEnum.PROCESSING.getCode());// 设置交易状态，1-执行中
@@ -1062,6 +1059,7 @@ public class PrepaidRefillService extends BaseService {
 		reChargeOrderDO.setOrderNo(orderNo);// 设置商户订单ID
 		reChargeOrderDO.setMobile(chargeDTO.getPhone());// 设置充值手机号
 		reChargeOrderDO.setName(chargeDTO.getName());// 设置充值名称:xx元
+		reChargeOrderDO.setStatus(null);// 状态设置为空，避免设置0进行中时定时任务会跑这条数据
 
 		reChargeOrderDO.setRespCode(TradeConstants.RespCodeEnum.HANDLING.getCode());// 应答码:正在处理中
 
@@ -1102,7 +1100,6 @@ public class PrepaidRefillService extends BaseService {
 			String amt = queryFlowExpen(chargeDTO.getPhone(), chargeDTO.getPid());
 
 			if (!amt.equals(chargeDTO.getInprice())) {
-				logger.error("套餐售价金额与app端传入参不一致，交易失败");
 
 				logger.error("套餐售价金额与app端传入参不一致，交易失败");
 				tradeWithdrawDO.setRespCode(TradeConstants.RespCodeEnum.FAIL.getCode());
@@ -1132,7 +1129,7 @@ public class PrepaidRefillService extends BaseService {
 
 		requestParams.setOutTradeNo(orderNo);// 商户订单号
 		requestParams.setTotalAmount(chargeDTO.getInprice());// 付款价格
-		requestParams.setNotifyUrl("http://6a2205d0.ngrok.io" + "/admin/trade/alipay/rechargePayNotify");// 回调地址,env.getProperty("web.base.url")
+		requestParams.setNotifyUrl(env.getProperty("app.base.url") + "/trade/alipay/rechargePayNotify");// 回调地址,env.getProperty("app.base.url")
 		logger.info("NotifyUrl:" + requestParams.getNotifyUrl());
 		String body = AlipayClientUtil.createPayOrderParams(requestParams);
 
