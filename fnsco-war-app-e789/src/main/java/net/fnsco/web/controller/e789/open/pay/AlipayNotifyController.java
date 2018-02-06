@@ -244,6 +244,13 @@ public class AlipayNotifyController extends BaseController {
 			return "success";
 		}
 
+		// 避免订单重复获取，需要判断订单状态为空的才能继续进行后续步骤
+		if ( null != reChargeOrderDO.getStatus() ) {
+
+			logger.info("该笔订单已经充值成功过，故本次回调充值忽略，orderNo=[" + orderNo + "]");
+			return "success";
+		}
+
 		// 订单表查找订单号交易
 		TradeWithdrawDO tradeWithdrawDO = tradeWithdrawService.getByOrderNo(orderNo);// 通过订单号查找原交易
 		// 订单号流水表为空,则需要将recharge表数据复制给withdraw，然后插表
