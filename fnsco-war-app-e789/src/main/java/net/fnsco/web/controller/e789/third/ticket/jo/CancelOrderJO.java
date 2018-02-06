@@ -8,8 +8,8 @@ public class CancelOrderJO extends CommonJO {
     private String orderNo;
     @ApiModelProperty(value = "支付密码", example = "支付密码")
     private String payPassword;
-    @ApiModelProperty(value = "支付类型:'00'余额，'01'支付宝", example = "支付类型:'00'余额，'01'支付宝")
-    private String payType;
+    @ApiModelProperty(value = "支付类型:0余额，1支付宝", example = "支付类型:0余额，1支付宝")
+    private Integer payType;
 
     /**
      * payPassword
@@ -58,15 +58,17 @@ public class CancelOrderJO extends CommonJO {
 	/**
 	 * @return the payType
 	 */
-	public String getPayType() {
+	public Integer getPayType() {
 		return payType;
 	}
 
 	/**
 	 * @param payType the payType to set
 	 */
-	public void setPayType(String payType) {
+	public void setPayType(Integer payType) {
 		this.payType = payType;
 	}
+
+	
 
 }

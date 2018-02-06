@@ -135,13 +135,13 @@ public class TradedataE789Controller extends BaseController {
 		
 		logger.info("订单号="+tradeDataDetailJO.getOrderNo()+"交易状态="+tradeOrderDO.getRespCode());
 		//查询中信交易状态
-//		if(StringUtils.equals("05", tradeOrderDO.getChannelType())||"1000".equals(tradeOrderDO.getRespCode())){
-//			TradeOrderDO tradeOrderDO2 = new TradeOrderDO();
-//			tradeOrderDO2 = paymentService.getDealStatus(tradeOrderDO.getId(),tradeOrderDO.getPaySubType(),tradeOrderDO.getChannelMerId(),tradeOrderDO.getOrderNo(),tradeOrderDO.getOrderCeateTime());
-//			if(tradeOrderDO2 != null){
-//				vo.setTradeStatus(tradeOrderDO2.getRespCode());//新的交易状态
-//			}
-//		}
+		if(StringUtils.equals("05", tradeOrderDO.getChannelType())||"1000".equals(tradeOrderDO.getRespCode())){
+			TradeOrderDO tradeOrderDO2 = new TradeOrderDO();
+			tradeOrderDO2 = paymentService.getDealStatus(tradeOrderDO.getId(),tradeOrderDO.getPaySubType(),tradeOrderDO.getChannelMerId(),tradeOrderDO.getOrderNo(),tradeOrderDO.getOrderCeateTime());
+			if(tradeOrderDO2 != null){
+				vo.setTradeStatus(tradeOrderDO2.getRespCode());//新的交易状态
+			}
+		}
 		if("1000".equals(tradeOrderDO.getRespCode())) {
 			vo.setTradeStatusName("处理中");
 		}else if("1001".equals(tradeOrderDO.getRespCode())) {
