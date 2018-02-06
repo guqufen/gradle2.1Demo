@@ -43,7 +43,7 @@ public class TicketContactService extends BaseService {
     }
 
     // 删除
-    public Integer doDelete(TicketContactDO ticketContact, Integer loginUserId) {
+    public Integer doDelete(TicketContactDO ticketContact) {
         logger.info("开始删除TicketContactService.delete,ticketContact=" + ticketContact.toString());
         int rows = this.ticketContactDAO.deleteById(ticketContact.getId());
         return rows;

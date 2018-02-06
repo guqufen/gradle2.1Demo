@@ -80,7 +80,7 @@ public class IDAuthenticationController extends BaseController {
         	// 上传文件原名
             MultipartFile file = entity.getValue();
             String fileName = file.getOriginalFilename();
-            String url = env.getProperty("cardFileUpload");
+            String url = env.getProperty("cardFileUpload.url");
             Map<String,String>  map =  CreateFileUtils.filePath(file,fileName,url);
             String fileURL = map.get("fileURL");
             String fileKey = map.get("fileKey");
@@ -148,7 +148,7 @@ public class IDAuthenticationController extends BaseController {
 		String pathFront = imageFrontPath.substring(imageFrontPath.indexOf("^") + 1);
 		//String imageUrlFron = OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), pathFront);
 		String line = System.getProperty("file.separator");// 文件分割符
-		String fileURLFront = this.env.getProperty("fileUpload.url") + line + pathFront;
+		String fileURLFront = this.env.getProperty("cardFileUpload.url") + line + pathFront;
 		//IdCardDTO idCardFront = new IdCardDTO();
 		IdCardFaceDTO idCardFaceFront = new IdCardFaceDTO();
 		if(FileUtils.ifExist(fileURLFront)) {
@@ -201,7 +201,7 @@ public class IDAuthenticationController extends BaseController {
     	cardId = idCardFaceFront.getId_card_number();
 		String pathBack = imagePathBack.substring(imagePathBack.indexOf("^") + 1);
 		//String imageUrlBack = OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), pathBack);
-		String fileURLBack = this.env.getProperty("fileUpload.url") + line + pathBack;
+		String fileURLBack = this.env.getProperty("cardFileUpload.url") + line + pathBack;
 		//IdCardDTO idCardBack = new IdCardDTO();
 		IdCardFaceDTO idCardFaceBack = new IdCardFaceDTO();
 		if(FileUtils.ifExist(fileURLBack)) {
