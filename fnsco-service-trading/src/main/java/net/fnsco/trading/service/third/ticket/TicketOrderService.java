@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSON;
+import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.beust.jcommander.internal.Lists;
 import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
@@ -22,6 +23,7 @@ import com.google.common.base.Strings;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.alipay.AlipayAppPayRequestParams;
 import net.fnsco.core.alipay.AlipayClientUtil;
+import net.fnsco.core.alipay.AlipayRefundRequestParams;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -40,6 +42,7 @@ import net.fnsco.trading.service.third.ticket.util.TrainTicketsUtil;
 import net.fnsco.trading.service.third.ticket.vo.OrderContactVO;
 import net.fnsco.trading.service.third.ticket.vo.TrainOrderListVO;
 import net.fnsco.trading.service.withdraw.TradeWithdrawService;
+import net.fnsco.trading.service.withdraw.dao.TradeWithdrawDAO;
 import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -57,6 +60,8 @@ public class TicketOrderService extends BaseService {
     private AppAccountBalanceService appAccountBalanceService;
     @Autowired
     private TradeWithdrawService     tradeWithdrawService;
+    @Autowired
+    private TradeWithdrawDAO         tradeWithdrawDAO;
     
     private static final String RECHANGE_NOTIFY_URL = "trade/alipay/ticketPayNotify";//支付宝充值回调
     // 分页
@@ -78,6 +83,9 @@ public class TicketOrderService extends BaseService {
             if (Strings.isNullOrEmpty(order.getPayOrderNo())) {
                 continue;
             }
+            //根据火车票订单号去查询渠道类型
+            String channelType = tradeWithdrawDAO.queryByOriginalOrderNo(order.getOrderNo());
+            
             JSONObject obj = TrainTicketsUtil.getOrderStatus(order.getPayOrderNo());
             if (null != obj) {
                 //0未占座1占座中2已占座3占座失败4支付中5支付完成6取消订单7退票中8退票完成'
@@ -154,7 +162,9 @@ public class TicketOrderService extends BaseService {
                         order.setPayTime(DateUtils.toParseYmdhms(payTime));
                         //减去冻结金额
                         if (TicketConstants.OrderStateEnum.PAYING.getCode().equals(order.getStatus())) {
-                            appAccountBalanceService.doUpdateFrozenAmount(order.getAppUserId(), order.getOrderAmount());
+                        	 if(channelType.equals("80")) {
+                        		 appAccountBalanceService.doUpdateFrozenAmount(order.getAppUserId(), order.getOrderAmount());
+                             }
                             order.setStatus(TicketConstants.OrderStateEnum.SUCCESS.getCode());
                             //发送成功短信
                             userIdList.add(order);
@@ -167,10 +177,23 @@ public class TicketOrderService extends BaseService {
                         tradeWithdrawService.doUpdate(tradeWithdraw);
                     } else if ("5".equals(status)) {//出票失败
                         if (!TicketConstants.OrderStateEnum.PAY_FAIL.getCode().equals(order.getStatus())) {
-                            boolean flug = appAccountBalanceService.doUpdateFrozenAmount(order.getAppUserId(), order.getOrderAmount());
-                            if (flug) {
-                                appAccountBalanceService.updateFund(order.getAppUserId(), BigDecimal.ZERO.subtract(order.getOrderAmount()));
-                            }
+                        	if(channelType.equals("80")) {
+                        		boolean flug = appAccountBalanceService.doUpdateFrozenAmount(order.getAppUserId(), order.getOrderAmount());
+                        		if (flug) {
+                        			appAccountBalanceService.updateFund(order.getAppUserId(), BigDecimal.ZERO.subtract(order.getOrderAmount()));
+                        		}
+                        	}else {
+                        		AlipayRefundRequestParams requestParams = new AlipayRefundRequestParams();
+                            	
+                        		requestParams.setRefundAmount(String.format("%.2f", order.getOrderAmount()));
+                        		requestParams.setRefundReason("火车票购买失败退款");
+                        		requestParams.setOutTradeNo(order.getOrderNo());
+                        		//支付宝退款
+                        		AlipayTradeRefundResponse response = AlipayClientUtil.createTradeReturnOrderParams(requestParams);
+                        		if(response.isSuccess()) {
+                        			logger.error("该订单退款成功!orderNo="+requestParams.getOutTradeNo()+",退款金额为:"+requestParams.getRefundAmount());
+                        		}
+                        	}
                         }
                         order.setStatus(TicketConstants.OrderStateEnum.PAY_FAIL.getCode());
                     } else if ("7".equals(status)) {//有乘客退票成功
@@ -344,6 +367,8 @@ public class TicketOrderService extends BaseService {
         if (!TicketConstants.OrderStateEnum.SIT_DOWN.getCode().equals(order.getStatus())) {
             return ResultDTO.fail("订单状态不正常");
         }
+        String channelType = "06";//支付宝渠道
+        tradeWithdrawService.doAddForTicket(order,channelType);
         
         AlipayAppPayRequestParams requestParams = new AlipayAppPayRequestParams();
         requestParams.setBody("e789火车票购买");
@@ -374,7 +399,8 @@ public class TicketOrderService extends BaseService {
         if (!TicketConstants.OrderStateEnum.SIT_DOWN.getCode().equals(order.getStatus())) {
             return ResultDTO.fail("订单状态不正常");
         }
-        tradeWithdrawService.doAddForTicket(order);
+        String channelType = "80";//法奈昇余额渠道
+        tradeWithdrawService.doAddForTicket(order,channelType);
         //冻结余额
         boolean payResult = appAccountBalanceService.doFrozenBalance(order.getAppUserId(), order.getOrderAmount());
         if (!payResult) {

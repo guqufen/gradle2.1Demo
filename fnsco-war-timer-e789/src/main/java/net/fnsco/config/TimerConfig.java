@@ -19,6 +19,8 @@ import net.fnsco.trading.service.report.ReportStatService;
 import net.fnsco.trading.service.third.reCharge.PrepaidRefillService;
 import net.fnsco.trading.service.third.reCharge.RechargeOrderService;
 import net.fnsco.trading.service.third.reCharge.entity.RechargeOrderDO;
+import net.fnsco.trading.service.third.ticket.TicketOrderService;
+import net.fnsco.trading.service.third.ticket.entity.TicketOrderDO;
 
 @EnableScheduling
 public class TimerConfig {
@@ -36,7 +38,8 @@ public class TimerConfig {
 	private PrepaidRefillService prepaidRefillService;
 	@Autowired
 	private MerchantCoreService merchantCoreService;
-
+	@Autowired
+	private TicketOrderService   ticketOrderService;
 	/**
 	 * spring boot 定时任务
 	 */
@@ -112,5 +115,13 @@ public class TimerConfig {
     	logger.error("查询中信商户是否入件成功...结束...");
     }
 
-
+    /**
+	 * 每隔5min定时查询火车票购买的结果 时间取当前时间的前一天日期
+	 */
+	@Scheduled(cron = "0 0/5 * * * ?")
+	public void queryTicketOrderStatus() {
+		TicketOrderDO ticketOrder = new TicketOrderDO();
+		ticketOrderService.updateOrderStatus(ticketOrder,1,100);
+		logger.error(new Date()+"定时修改火车票订单状态");
+	}
 }

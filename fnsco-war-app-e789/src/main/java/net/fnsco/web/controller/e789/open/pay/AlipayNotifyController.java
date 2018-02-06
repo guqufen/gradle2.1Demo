@@ -138,7 +138,7 @@ public class AlipayNotifyController extends BaseController {
 		 */
 		Map<String, String> params = (Map<String, String>) rsaMap.get("params");
 		String orderNo = params.get("out_trade_no");
-		TradeWithdrawDO tradeWithdraw = tradeWithdrawService.getByOrderNo(orderNo);
+		TradeWithdrawDO tradeWithdraw = tradeWithdrawService.getByOrderNo(orderNo);// 通过订单号查找原交易
 		String tradeStatus = params.get("trade_status");
 
 		if (null == tradeWithdraw) {
@@ -164,30 +164,10 @@ public class AlipayNotifyController extends BaseController {
 			logger.error("该订单非完成支付状态，不处理!orderNo=" + params.get("out_trade_no"));
 			return "fail";
 		}
-		// 成功处理
-
-		ResultDTO result = ticketOrderService.payByZFBNotify(orderNo);
-		if (result.isSuccess()) {
-
-			return "success";
-		} else {
-			AlipayRefundRequestParams requestParams = new AlipayRefundRequestParams();
-
-			requestParams.setRefundAmount(String.format("%.2f", tradeWithdraw.getOrderAmount()));
-			requestParams.setRefundReason("火车票购买失败退款");
-			requestParams.setOutTradeNo(orderNo);
-			AlipayTradeRefundResponse response = AlipayClientUtil.createTradeReturnOrderParams(requestParams);
-			if (response.isSuccess()) {
-				logger.error("该订单退款成功!orderNo=" + requestParams.getOutTradeNo() + ",退款金额为:"
-						+ requestParams.getRefundAmount());
-			}
-		}
-
-		tradeWithdrawService.doAlipayRechangeNotify(params, true, tradeWithdraw);
+		//成功处理
+		ticketOrderService.payByZFBNotify(orderNo);
 		return "success";
-
-	}
-
+    }
 	/**
 	 * 支付宝回调接口,接收支付结果信息
 	 * 
