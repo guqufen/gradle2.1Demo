@@ -201,7 +201,7 @@ public class IDAuthenticationController extends BaseController {
     	cardId = idCardFaceFront.getId_card_number();
 		String pathBack = imagePathBack.substring(imagePathBack.indexOf("^") + 1);
 		//String imageUrlBack = OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), pathBack);
-		String fileURLBack = this.env.getProperty("fileUpload.url") + line + pathBack;
+		String fileURLBack = this.env.getProperty("cardFileUpload.url") + line + pathBack;
 		//IdCardDTO idCardBack = new IdCardDTO();
 		IdCardFaceDTO idCardFaceBack = new IdCardFaceDTO();
 		if(FileUtils.ifExist(fileURLBack)) {
