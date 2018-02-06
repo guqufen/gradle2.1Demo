@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alipay.api.domain.AlipayTradeRefundModel;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.response.AlipayTradeRefundResponse;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,8 +23,10 @@ import net.fnsco.core.alipay.AlipayClientUtil;
 import net.fnsco.core.alipay.AlipayRefundRequestParams;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.DateUtils;
 import net.fnsco.trading.comm.TradeConstants;
 import net.fnsco.trading.comm.TradeConstants.WithdrawStateEnum;
+import net.fnsco.trading.comm.TradeConstants.thrRechargeStateEnum;
 import net.fnsco.trading.service.third.reCharge.PrepaidRefillService;
 import net.fnsco.trading.service.third.reCharge.RechargeOrderService;
 import net.fnsco.trading.service.third.reCharge.dto.ChargeDTO;
@@ -164,10 +168,11 @@ public class AlipayNotifyController extends BaseController {
 			logger.error("该订单非完成支付状态，不处理!orderNo=" + params.get("out_trade_no"));
 			return "fail";
 		}
-		//成功处理
+		// 成功处理
 		ticketOrderService.payByZFBNotify(orderNo);
 		return "success";
-    }
+	}
+
 	/**
 	 * 支付宝回调接口,接收支付结果信息
 	 * 
@@ -191,9 +196,6 @@ public class AlipayNotifyController extends BaseController {
 		}
 		logger.info("手机充值-支付宝回调，数据源校验成功");
 
-		// 认证是支付宝发来的数据后，接下来处理业务，充值话费/流量
-		ChargeDTO chargeDTO = new ChargeDTO();
-		String payName = null;
 		Map<String, String> params = (Map<String, String>) rsaMap.get("params");
 		String orderNo = params.get("out_trade_no");
 		String status = params.get("trade_status");// 交易状态
@@ -210,141 +212,40 @@ public class AlipayNotifyController extends BaseController {
 			AlipayTradeRefundResponse alipayTradeRefundResponse = AlipayClientUtil
 					.createTradeReturnOrderParams(requestParams);
 
-			// 调用成功
-			if ("10000".equals(alipayTradeRefundResponse.getCode())) {
+			// 退款本次资金发生了变化
+			if ("Y".equals(alipayTradeRefundResponse.getFundChange()) && alipayTradeRefundResponse.isSuccess()) {
 
-				logger.error(payName + "退款成功,orderno=[" + orderNo + "]");
+				logger.error("手机充值-支付宝退款成功,orderno=[" + orderNo + "]");
 
-				// 调用失败
+				// 本次资金没有发生变化
 			} else {
 
-				logger.error(payName + "退款失败,orderno=[" + orderNo + "]");
+				logger.error("手机充值-退款失败,orderno=[" + orderNo + "]");
 			}
-
 			return "success";
+
 		}
 
-		// 避免订单重复获取，需要判断订单状态为空的才能继续进行后续步骤
-		if ( null != reChargeOrderDO.getStatus() ) {
+		// 避免订单重复获取，需要判断订单状态是否成功
+		if (thrRechargeStateEnum.SUCCESS.getCode() == reChargeOrderDO.getStatus()) {
 
 			logger.info("该笔订单已经充值成功过，故本次回调充值忽略，orderNo=[" + orderNo + "]");
 			return "success";
 		}
 
-		// 订单表查找订单号交易
-		TradeWithdrawDO tradeWithdrawDO = tradeWithdrawService.getByOrderNo(orderNo);// 通过订单号查找原交易
-		// 订单号流水表为空,则需要将recharge表数据复制给withdraw，然后插表
-		if (null == tradeWithdrawDO) {
-
-			logger.error("支付宝回调通知函数，订单号在表中找不到原交易，orderNo=[" + orderNo + "]");
-			tradeWithdrawDO.setOrderNo(orderNo);// 设置订单号
-			// tradeWithdrawDO.setOriginalOrderNo(orderId);// 设置原订单号(默认等于当前订单号)
-			tradeWithdrawDO.setAmount(new BigDecimal(reChargeOrderDO.getAmt()));// 设置交易金额，优惠金额
-			tradeWithdrawDO.setAppUserId(chargeDTO.getUserId());// 设置帐号ID
-			tradeWithdrawDO.setTradeType(2);// 交易类型:2-消费
-			if ("0" == reChargeOrderDO.getType()) {
-				tradeWithdrawDO.setTradeSubType(TradeConstants.TxnSubTypeEnum.BUY_HF.getCode());// 交易子类型:22话费充值
-				payName = "话费充值";
-			} else {
-				tradeWithdrawDO.setTradeSubType(TradeConstants.TxnSubTypeEnum.BUY_LT.getCode());// 交易子类型:23流量充值
-				payName = "流量充值";
-			}
-			tradeWithdrawDO.setStatus(WithdrawStateEnum.PROCESSING.getCode());// 设置交易状态，1-执行中
-			tradeWithdrawService.doAdd(tradeWithdrawDO);// 更新数据库表
-		}
-
-		chargeDTO.setType(Integer.parseInt(reChargeOrderDO.getType()));// 设置类型
-
-		// 支付回调返回交易失败，更新表,返回成功
-		if (!"TRADE_SUCCESS".equals(status) && !"TRADE_FINISHED".equals(status)) {
-
-			logger.error(payName + "-支付宝扣款交易失败");
-
-			TradeWithdrawDO tradeWithdraw1 = new TradeWithdrawDO();
-			tradeWithdraw1.setId(tradeWithdrawDO.getId());
-			tradeWithdraw1.setRespCode(TradeConstants.RespCodeEnum.FAIL.getCode());// 设置应答码
-			tradeWithdraw1.setRespMsg(payName + "-支付宝扣款交易失败");// 设置应答信息
-			tradeWithdraw1.setStatus(WithdrawStateEnum.FAIL.getCode());// 设置状态码
-			tradeWithdrawService.doUpdate(tradeWithdraw1);
-
-			RechargeOrderDO phoneChargeOrderDO1 = new RechargeOrderDO();
-			phoneChargeOrderDO1.setId(reChargeOrderDO.getId());// 设置ID
-			phoneChargeOrderDO1.setRespCode(TradeConstants.RespCodeEnum.FAIL.getCode());// 设置应答码
-			phoneChargeOrderDO1.setRespMsg(payName + "-支付宝扣款交易失败");// 设置应答信息
-			phoneChargeOrderDO1.setStatus(WithdrawStateEnum.FAIL.getCode());// 设置状态码
-			rechargeOrderService.doUpdate(phoneChargeOrderDO1);
-
+		// 交易超时未付款或关闭
+		if ("TRADE_CLOSED".equals(status)) {
+			prepaidRefillService.doAlipayThrChangeNotify(params, false, reChargeOrderDO);
 			return "success";
 		}
-		logger.info("手机充值-支付宝回调，支付成功，继续进行" + payName);
 
-		// 手机充值
-		chargeDTO.setPid(tradeWithdrawDO.getOriginalOrderNo());// 设置套餐ID
-		chargeDTO.setPhone(reChargeOrderDO.getMobile());// 充值手机号
-
-		RechargeOrderDO phoneChargeOrderDO1 = new RechargeOrderDO();
-		TradeWithdrawDO tradeWithdrawDO1 = new TradeWithdrawDO();
-		phoneChargeOrderDO1.setId(reChargeOrderDO.getId());
-		tradeWithdrawDO1.setId(tradeWithdrawDO.getId());
-
-		// 充值交易调用
-		JuheDTO juhe = prepaidRefillService.recharge(chargeDTO, orderNo);
-		if (juhe.getError_code() == 0) {
-
-			Map<String, Object> map = JSONObject.parseObject(juhe.getResult().toString(), Map.class);
-
-			phoneChargeOrderDO1.setPayOrderNo(map.get("sporder_id").toString());// 设置聚合订单号
-			phoneChargeOrderDO1.setRespCode(TradeConstants.RespCodeEnum.HANDLING.getCode());// 订单提交成功，等待充值
-			phoneChargeOrderDO1.setRespMsg(juhe.getReason());// 设置响应
-			tradeWithdrawDO1.setOriginalOrderNo(map.get("sporder_id").toString());// 设置渠道订单号
-			tradeWithdrawDO1.setRespCode(TradeConstants.RespCodeEnum.HANDLING.getCode());// 订单提交成功，等待充值需要再次调用订单查询接口进行查询
-			tradeWithdrawDO1.setUpdateTime(new Date());// 设置交易完成时间
-			tradeWithdrawDO1.setRespMsg(juhe.getReason());// 设置响应
-
-			// 系统内部异常(调用充值类业务时，请务必联系客服或通过订单查询接口检测订单，避免造成损失)
-		} else if (juhe.getError_code() == 10014) {
-
-			phoneChargeOrderDO1.setRespCode(TradeConstants.RespCodeEnum.HANDLING.getCode());// 交易进行中
-			phoneChargeOrderDO1.setRespMsg(juhe.getReason());// 设置响应
-			phoneChargeOrderDO1.setRespCode(TradeConstants.RespCodeEnum.HANDLING.getCode());// 订单提交成功，等待充值
-
-			tradeWithdrawDO1.setRespCode(TradeConstants.RespCodeEnum.HANDLING.getCode());// 交易进行中，需要再次调用订单查询接口进行查询
-			tradeWithdrawDO1.setRespMsg(juhe.getReason());// 设置响应
-			tradeWithdrawDO1.setUpdateTime(new Date());// 设置最后更新时间
-
-			// 充值失败
-		} else {
-
-			phoneChargeOrderDO1.setRespCode(TradeConstants.RespCodeEnum.FAIL.getCode());// 交易失败
-			phoneChargeOrderDO1.setRespMsg(juhe.getReason());// 设置响应
-			phoneChargeOrderDO1.setStatus(WithdrawStateEnum.FAIL.getCode());// 状态为2-失败
-
-			tradeWithdrawDO1.setRespCode(TradeConstants.RespCodeEnum.FAIL.getCode());// 交易进行中，需要再次调用订单查询接口进行查询
-			tradeWithdrawDO1.setStatus(WithdrawStateEnum.FAIL.getCode());// 状态为2-失败
-			tradeWithdrawDO1.setRespMsg(juhe.getReason());// 设置响应
-			tradeWithdrawDO1.setUpdateTime(new Date());// 设置最后更新时间
-
-			// 充值失败,退款
-			AlipayRefundRequestParams requestParams = new AlipayRefundRequestParams();
-			requestParams.setTradeNo(orderNo);// 设置订单号
-			AlipayTradeRefundResponse alipayTradeRefundResponse = AlipayClientUtil
-					.createTradeReturnOrderParams(requestParams);
-
-			// 调用成功
-			if ("10000".equals(alipayTradeRefundResponse.getCode())) {
-
-				logger.error(payName + "退款成功,orderno=[" + orderNo + "]");
-
-				// 调用失败
-			} else {
-
-				logger.error(payName + "退款失败,orderno=[" + orderNo + "]");
-			}
+		// 校验交易成功
+		boolean tradeStatusVali = AlipayClientUtil.checkTradeStatue(params);
+		if (!tradeStatusVali) {
+			logger.error("该订单非完成支付状态，不处理!orderNo=" + params.get("out_trade_no"));
+			return "fail";
 		}
-
-		// 更新数据
-		tradeWithdrawService.doUpdate(tradeWithdrawDO1);
-		rechargeOrderService.doUpdate(phoneChargeOrderDO1);
+		prepaidRefillService.doAlipayThrChangeNotify(params, true, reChargeOrderDO);
 
 		return "success";
 	}

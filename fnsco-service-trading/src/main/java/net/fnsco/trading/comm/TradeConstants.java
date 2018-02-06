@@ -526,4 +526,52 @@ public class TradeConstants extends CoreConstants {
         }
 
     }
+    
+    /**
+     * 手机充值状态表
+     * 
+     * @author sxf
+     * @version $Id: WithdrawPrepStateEnum.java, v 0.1 2017年3月21日 下午6:01:34 sxf
+     *          Exp $
+     */
+    public enum thrRechargeStateEnum {
+                                   // 状态 状态 0未执行1执行中2失败3成功
+                                  PROCESSING(0, "执行中"), SUCCESS(1, "成功"), FAIL(2, "失败");
+
+        private Integer code;
+        private String  name;
+
+        private thrRechargeStateEnum(Integer code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        public static String getTypeName(Integer code) {
+            for (thrRechargeStateEnum taskType : values()) {
+                if (taskType.getCode() == code) {
+                    return taskType.getName();
+                }
+            }
+            return "";
+        }
+
+        /**
+         * Getter method for property <tt>code</tt>.
+         * 
+         * @return property value of code
+         */
+        public Integer getCode() {
+            return code;
+        }
+
+        /**
+         * Getter method for property <tt>name</tt>.
+         * 
+         * @return property value of name
+         */
+        public String getName() {
+            return name;
+        }
+
+    }
 }
