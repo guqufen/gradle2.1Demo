@@ -48,10 +48,6 @@
 			<version>${mybatis-spring-boot}</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.springframework.boot</groupId>
-		    <artifactId>spring-boot-starter-data-redis</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>net.fnsco</groupId>
 			<artifactId>fnsco-framework</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
@@ -100,11 +96,12 @@
 			<artifactId>javase</artifactId>
 			<version>3.2.1</version>
 		</dependency>
-		<!-- session共享 <dependency> <groupId>org.springframework.boot</groupId> 
-			<artifactId>spring-boot-starter-redis</artifactId> <version>${redis.version}</version> 
-			</dependency> <dependency> <groupId>org.springframework.session</groupId> 
-			<artifactId>spring-session-data-redis</artifactId> <version>1.2.2.RELEASE</version> 
-			</dependency> -->
+		<!-- session共享 -->
+		<!-- <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-redis</artifactId>
+			<version>${redis.version}</version>
+		</dependency> -->
 		<!-- Junit -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
