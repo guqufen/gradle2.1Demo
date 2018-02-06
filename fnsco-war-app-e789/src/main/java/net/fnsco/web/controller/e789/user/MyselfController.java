@@ -145,7 +145,7 @@ public class MyselfController extends BaseController {
          // 上传文件原名
             MultipartFile file = entity.getValue();
             String fileName = file.getOriginalFilename();
-            String url = env.getProperty("headFileUpload");
+            String url = env.getProperty("headFileUpload.url");
             Map<String,String>  map =  CreateFileUtils.filePath(file,fileName,url);
             String fileURL = map.get("fileURL");
             String fileKey = map.get("fileKey");

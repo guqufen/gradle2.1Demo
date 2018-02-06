@@ -58,6 +58,8 @@ public class RechangeController extends BaseController {
     private TradeOrderResearchService tradeOrderResearchService;
     @Autowired
     private TradeWithdrawService      tradeWithdrawService;
+    
+    private static final String RECHANGE_NOTIFY_URL = "/trade/alipay/appPayNotify";//支付宝充值回调
 
     /**
      * 获取聚惠分url，不生成二维码，个人充值使用的是固定秘钥
@@ -134,38 +136,6 @@ public class RechangeController extends BaseController {
         return tradeOrderResearchService.updateResearchOrderInfo(order);
     }
 
-    private void get() {
-        //根据用户id获取绑定的分闪付商户信息
-        //        MerchantChannel merchantChannelJhf = merchantService.getMerChannelByMerChannelInnerCodeType(innerCode, "04");
-        //        if (null == merchantChannelJhf) {
-        //            return ResultDTO.fail(ApiConstant.E_PAY_NOT_EXIT_ERROR);
-        //        }
-        //        TradeOrderDO tradeOrder = new TradeOrderDO();
-        //        tradeOrder.setInnerCode(merchantChannelJhf.getInnerCode());
-        //        tradeOrder.setChannelMerId(merchantChannelJhf.getChannelMerId());
-        //        tradeOrder.setChannelType("04");
-        //        tradeOrder.setInstallmentNum(getQRUrlJO.getInstallmentNum());
-        //        tradeOrder.setEntityInnerCode(merchantChannelJhf.getEntityInnerCode());
-        //        tradeOrder.setCreateUserId(String.valueOf(getQRUrlJO.getUserId()));
-        //        BigDecimal amountB = new BigDecimal(getQRUrlJO.getPaymentAmount());
-        //        BigDecimal amountBs = amountB.multiply(new BigDecimal("100"));
-        //        tradeOrder.setTxnAmount(amountBs);
-        //        //支付方式00刷卡01二维码02分期付
-        //        tradeOrder.setPayType("02");
-        //        //交易子类型00刷卡01微信02支付宝03聚惠分
-        //        tradeOrder.setPaySubType("03");
-        //        //00pos机01app02台码
-        //        tradeOrder.setPayMedium(TradeConstants.PayMediumEnum.APP.getCode());
-        //        tradeOrder.setTxnType(1);
-        //        //交易子类型10购买消费11充值消费20购买撤销21充值撤销
-        //        tradeOrder.setTxnSubType(TradeConstants.TxnSubTypeEnum.INCOME_RESEARCH.getCode());
-        //        tradeOrder.setTxnSubType(11);//交易子类型10购买消费11充值消费20购买撤销21充值撤销
-        //        tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
-        //        tradeOrder.setSyncStatus(0);
-        //tradeOrderService.research(tradeOrder);
-
-    }
-    
     /**
      * alipayPayMent:(支付宝充值)
      *
@@ -191,7 +161,7 @@ public class RechangeController extends BaseController {
         /**
          * 保存订单情况
          */
-        String notifyUrl = env.getProperty("alipay.rechange.notify_url");
+        String notifyUrl = env.getProperty("app.base.url")+RECHANGE_NOTIFY_URL;
         TradeWithdrawDO tradeWithdraw = new TradeWithdrawDO();
         tradeWithdraw.setAppUserId(alipayRechargeJO.getUserId());
         tradeWithdraw.setAmount(amountBs);
@@ -200,6 +170,7 @@ public class RechangeController extends BaseController {
         tradeWithdraw.setStatus(WithdrawStateEnum.INIT.getCode());
         tradeWithdraw.setFee(BigDecimal.ZERO);
         tradeWithdraw.setBackUrl(notifyUrl);
+        tradeWithdraw.setChannelMerId(env.getProperty("alipay.appid"));
         tradeWithdraw.setChannelType(TradeConstants.ChannelTypeEnum.ALI_PAY.getCode());
         tradeWithdraw.setTradeSubType(TradeConstants.TxnSubTypeEnum.INCOME_RESEARCH.getCode());
         tradeWithdraw.setTradeType(TradeConstants.TradeTypeEnum.INCOME.getCode());
@@ -212,8 +183,8 @@ public class RechangeController extends BaseController {
          * 支付宝下单，将参数返回给app端
          */
         AlipayAppPayRequestParams requestParams = new AlipayAppPayRequestParams();
-        requestParams.setBody("e789帐号充值");
-        requestParams.setSubject("e789帐号充值");
+        requestParams.setBody("充值订单");
+        requestParams.setSubject("充值订单");
         requestParams.setTotalAmount(String.format("%.2f", amountB.doubleValue()));
         requestParams.setOutTradeNo(tradeWithdraw.getOrderNo());
         requestParams.setNotifyUrl(notifyUrl);

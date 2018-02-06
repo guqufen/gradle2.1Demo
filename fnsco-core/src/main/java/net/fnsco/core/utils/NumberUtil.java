@@ -2,6 +2,8 @@ package net.fnsco.core.utils;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.google.common.base.Strings;
 
@@ -71,4 +73,58 @@ public class NumberUtil {
         return df1.format(bd.doubleValue());
         
     }
+    
+    /**
+	 * formatYYYYMMDate:(获取这种格式的日期字符串yyyy-MM)
+	 *
+	 * @param  @param date
+	 * @param  @return    设定文件
+	 * @return String    DOM对象
+	 * @author tangliang
+	 * @date   2017年12月7日 下午1:59:41
+	 */
+	public static  String formatYYYYMMDate(Date date) {
+		if(null == date) {
+			return null;
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月");
+		return sdf.format(date);
+	}
+	
+	/**
+	 * formatRMBNumber:(改为保留两位小数 RMB显示)
+	 *
+	 * @param  @param str
+	 * @param  @return    设定文件
+	 * @return String    DOM对象
+	 * @author tangliang
+	 * @date   2017年12月7日 下午6:09:41
+	 */
+	public static  String formatRMBNumber(BigDecimal str) {
+		if(str == null) {
+			return String.format("%.2f", 0);
+		}else {
+			return String.format("%.2f", str.divide(new BigDecimal(100)).doubleValue());
+		}
+	}
+	
+	public static String formatRMBNumber(String str) {
+		if(str == null) {
+			return String.format("%.2f", 0);
+		}else {
+			return String.format("%.2f", new BigDecimal(str).divide(new BigDecimal(100)).doubleValue());
+		}
+	}
+	public static String addRMBNumber(String str,String str2) {
+		if(Strings.isNullOrEmpty(str)) {
+			str = "0";
+		}
+		if(Strings.isNullOrEmpty(str2)) {
+			str2 = "0";
+		}
+		
+		BigDecimal result  = new BigDecimal(str).add(new BigDecimal(str2));
+		
+		return String.format("%.2f", result.doubleValue());
+	}
 }

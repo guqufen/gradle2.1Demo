@@ -46,7 +46,11 @@ public interface TradeWithdrawDAO {
                @Result(column = "card_holder_rate", property = "cardHolderRate") })
     @Select("SELECT * FROM t_trade_withdraw WHERE order_no = #{orderNo}")
     public TradeWithdrawDO queryByOrderId(@Param("orderNo") String orderNo);
-
+    
+    @Results({ @Result(column = "channel_type", property = "channelType")})
+    @Select("SELECT channel_type FROM t_trade_withdraw WHERE original_order_no = #{originalOrderNo}")
+    public String queryByOriginalOrderNo(@Param("originalOrderNo") String originalOrderNo);
+    
     @Results({ @Result(column = "order_no", property = "orderNo"), @Result(column = "original_order_no", property = "originalOrderNo"), @Result(column = "app_user_id", property = "appUserId"),
                @Result(column = "settle_money", property = "settleMoney"), @Result(column = "trade_type", property = "tradeType"), @Result(column = "trade_sub_type", property = "tradeSubType"),
                @Result(column = "create_time", property = "createTime"), @Result(column = "update_time", property = "updateTime"), @Result(column = "resp_code", property = "respCode"),

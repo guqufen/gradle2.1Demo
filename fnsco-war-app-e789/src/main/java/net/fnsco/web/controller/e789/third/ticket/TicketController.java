@@ -28,6 +28,7 @@ import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.service.domain.AppUser;
 import net.fnsco.trading.constant.E789ApiConstant;
+import net.fnsco.trading.service.third.reCharge.dto.ChargeResultDTO;
 import net.fnsco.trading.service.third.ticket.TicketContactService;
 import net.fnsco.trading.service.third.ticket.TicketOrderService;
 import net.fnsco.trading.service.third.ticket.TicketService;
@@ -41,6 +42,7 @@ import net.fnsco.trading.service.third.ticket.entity.TicketSiteDO;
 import net.fnsco.trading.service.third.ticket.vo.TrainOrderListVO;
 import net.fnsco.web.controller.e789.jo.CommonJO;
 import net.fnsco.web.controller.e789.third.ticket.jo.CancelOrderJO;
+import net.fnsco.web.controller.e789.third.ticket.jo.DeletePassengerJO;
 import net.fnsco.web.controller.e789.third.ticket.jo.PassengerJO;
 import net.fnsco.web.controller.e789.third.ticket.jo.QueryOrderListJO;
 import net.fnsco.web.controller.e789.third.ticket.jo.SiteJO;
@@ -363,6 +365,19 @@ public class TicketController extends BaseController {
         ticketContactService.doAdd(ticketContact);
         return success(ticketContact);
     }
+    /**
+     * 删除乘客列表中的乘客
+     * @param passenger
+     * @return
+     */
+    @RequestMapping(value = "/deletePassenger")
+    @ApiOperation(value = "删除乘客")
+    public ResultDTO deletePassenger(@RequestBody DeletePassengerJO passenger) {
+        TicketContactDO ticketContact = new TicketContactDO();
+        ticketContact.setId(passenger.getPassengerId());
+        ticketContactService.doDelete(ticketContact);
+        return success();
+    }
 
     /**
      * queryTradeDataDetail:(查询乘客信息列表)
@@ -493,33 +508,35 @@ public class TicketController extends BaseController {
      */
     @RequestMapping(value = "/pay")
     @ApiOperation(value = "确认支付")
-    public ResultDTO pay(@RequestBody CancelOrderJO payOrderJO) {
-    	String payType = payOrderJO.getPayType();
-    	if (Strings.isNullOrEmpty(payType)) {
+    public ResultDTO<ChargeResultDTO> pay(@RequestBody CancelOrderJO payOrderJO) {
+    	Integer payType = payOrderJO.getPayType();
+    	if (payType==null) {
             return ResultDTO.fail("支付类型不能为空");
         }
-    	if (Strings.isNullOrEmpty(payOrderJO.getPayPassword())) {
-    		return ResultDTO.fail("支付密码不能为空");
-    	}
-    	String password = Md5Util.getInstance().md5(payOrderJO.getPayPassword());
-    	// 根据id查询用户是否存在获取原密码
     	AppUser mAppUser = appUserService.selectAppUserById(payOrderJO.getUserId());
     	if (null == mAppUser) {
     		logger.error("火车票支付时出错，用户Id未找到相关信息，appUserId=" + payOrderJO.getUserId());
     		return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
     	}
-    	// 查到的密码和原密码做比较
-    	if (!password.equals(mAppUser.getPayPassword())) {
-    		logger.error("支付密码错误，请核对后重新输入！！");
-    		return ResultDTO.fail(E789ApiConstant.E_APP_PAY_PASSWORD_ERROR);
-    	}
-        TicketOrderDO ticketOrder = new TicketOrderDO();
+    	TicketOrderDO ticketOrder = new TicketOrderDO();
         ticketOrder.setOrderNo(payOrderJO.getOrderNo());
         ticketOrder.setAppUserId(payOrderJO.getUserId());
-        if("01".equals(payType)) {
+    	if(payType==1) {
         	return	ticketOrderService.payByZFB(ticketOrder);
         }
-        return ticketOrderService.pay(ticketOrder);
+    	else {
+    		if (Strings.isNullOrEmpty(payOrderJO.getPayPassword())) {
+        		return ResultDTO.fail("支付密码不能为空");
+        	}
+        	String password = Md5Util.getInstance().md5(payOrderJO.getPayPassword());
+        	// 根据id查询用户是否存在获取原密码
+        	// 查到的密码和原密码做比较
+        	if (!password.equals(mAppUser.getPayPassword())) {
+        		logger.error("支付密码错误，请核对后重新输入！！");
+        		return ResultDTO.fail(E789ApiConstant.E_APP_PAY_PASSWORD_ERROR);
+        	}
+        	return ticketOrderService.pay(ticketOrder);
+        }
     }
 
     /**

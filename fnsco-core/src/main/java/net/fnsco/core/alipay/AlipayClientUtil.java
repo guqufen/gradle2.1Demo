@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
@@ -38,10 +39,14 @@ public class AlipayClientUtil {
 	private static String alipayAppPublicKey = "";
 
 	private static AlipayClient alipayClient = null;
+	
+	private static AlipayClient alipayReturnClient = null;
 
 	public static void initAlipayClient() {
 		alipayClient = new DefaultAlipayClient(AlipayConstants.SERVER_URL, appId, appPrivateKey, "json",
 				AlipayConstants.CHARSET, alipayPublicKey, "RSA2");
+		alipayReturnClient = new DefaultAlipayClient(AlipayConstants.SERVER_URL, appId, appPrivateKey, "json",
+				AlipayConstants.CHARSET, alipayAppPublicKey, "RSA2");
 	}
 
 	/**
@@ -70,9 +75,10 @@ public class AlipayClientUtil {
 		request.setNotifyUrl(requestParams.getNotifyUrl());
 		AlipayTradeAppPayResponse response = null;
 		try {
+			logger.error("支付宝支付请求参数:"+JSON.toJSONString(request));
 			// 这里和普通的接口调用不同，使用的是sdkExecute
 			response = alipayClient.sdkExecute(request);
-			logger.error(response.getBody());// 就是orderString 可以直接给客户端请求，无需再做处理。
+			logger.error("返回给APP支付宝支付的数据:"+response.getBody());// 就是orderString 可以直接给客户端请求，无需再做处理。
 		} catch (AlipayApiException e) {
 			logger.error("发起支付宝支付报错!", e);
 		}
@@ -99,7 +105,8 @@ public class AlipayClientUtil {
 		request.setBizModel(model);
 		AlipayTradeRefundResponse response = null;
 		try {
-			response = alipayClient.sdkExecute(request);
+			logger.error("发起退款业务，发送数据为:"+JSON.toJSONString(request));
+			response = alipayReturnClient.execute(request);
 		} catch (AlipayApiException e) {
 			logger.error("发起支付宝退款接口报错!", e);
 		}
