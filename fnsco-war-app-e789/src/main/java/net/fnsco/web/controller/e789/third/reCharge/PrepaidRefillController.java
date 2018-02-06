@@ -77,15 +77,11 @@ public class PrepaidRefillController extends BaseController {
 	@ApiOperation(value = "话费/流量充值url")
 	public ResultDTO<ChargeResultDTO> prepaidCharge(@RequestBody ChargeDTO chargeDTO) {
 
-		// ChargeDTO chargeDTO = fl.getChargeDTO();
-
 		// 判断APP用户ID是否合法
-//		Integer id = getUserId();
-		String userId = this.request.getHeader("userId");//从头部获取userId
-//		logger.info(">>>>>>:" + userId + ",<<<<<<<<<<<<<<<<" + chargeDTO.getUserId()+",==========="+id);
+		String userId = this.request.getHeader("userId");// 从头部获取userId
 		if (null == userId || Integer.parseInt(userId) != chargeDTO.getUserId()) {
 			logger.error("用户登录状态非法。");
-			return ResultDTO.fail("用户登录状态非法。head->userId="+userId+",param->userId="+chargeDTO.getUserId());
+			return ResultDTO.fail("用户登录状态非法。head->userId=" + userId + ",param->userId=" + chargeDTO.getUserId());
 		}
 
 		// 判断手机号长度是否合法
@@ -119,6 +115,7 @@ public class PrepaidRefillController extends BaseController {
 			if (!isEnough) {
 
 				logger.error("手机充值-帐户余额不足，请充值！！appUserId=" + chargeDTO.getUserId());
+
 				return ResultDTO.fail(ApiConstant.E_ACCOUNT_BALANCE_NULL);
 			}
 
@@ -130,7 +127,7 @@ public class PrepaidRefillController extends BaseController {
 			return prepaidRefillService.aliPayRecharge(chargeDTO);
 		}
 
-//		logger.error("手机充值-支付方式非法，暂时只支持帐户余额充值方式，请重新选择！！");
+		// logger.error("手机充值-支付方式非法，暂时只支持帐户余额充值方式，请重新选择！！");
 		return ResultDTO.fail();
 	}
 
