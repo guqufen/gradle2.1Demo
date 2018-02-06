@@ -41,6 +41,7 @@ import net.fnsco.trading.service.third.ticket.entity.TicketSiteDO;
 import net.fnsco.trading.service.third.ticket.vo.TrainOrderListVO;
 import net.fnsco.web.controller.e789.jo.CommonJO;
 import net.fnsco.web.controller.e789.third.ticket.jo.CancelOrderJO;
+import net.fnsco.web.controller.e789.third.ticket.jo.DeletePassengerJO;
 import net.fnsco.web.controller.e789.third.ticket.jo.PassengerJO;
 import net.fnsco.web.controller.e789.third.ticket.jo.QueryOrderListJO;
 import net.fnsco.web.controller.e789.third.ticket.jo.SiteJO;
@@ -363,19 +364,19 @@ public class TicketController extends BaseController {
         ticketContactService.doAdd(ticketContact);
         return success(ticketContact);
     }
-    
-    /*@RequestMapping(value = "/deletePassenger")
+    /**
+     * 删除乘客列表中的乘客
+     * @param passenger
+     * @return
+     */
+    @RequestMapping(value = "/deletePassenger")
     @ApiOperation(value = "删除乘客")
-    public ResultDTO<TicketContactDO> deletePassenger(@RequestBody PassengerJO passengerJO) {
+    public ResultDTO deletePassenger(@RequestBody DeletePassengerJO passenger) {
         TicketContactDO ticketContact = new TicketContactDO();
-        ticketContact.setAppUserId(passengerJO.getUserId());
-        ticketContact.setCardNum(passengerJO.getCardNum());
-        ticketContact.setCardType(passengerJO.getCardType());
-        ticketContact.setName(passengerJO.getName());
-        ticketContact.setTicketType(passengerJO.getTicketType());
-        ticketContactService.doAdd(ticketContact);
-        return success(ticketContact);
-    }*/
+        ticketContact.setId(passenger.getPassengerId());
+        ticketContactService.doDelete(ticketContact);
+        return success();
+    }
 
     /**
      * queryTradeDataDetail:(查询乘客信息列表)
@@ -507,8 +508,8 @@ public class TicketController extends BaseController {
     @RequestMapping(value = "/pay")
     @ApiOperation(value = "确认支付")
     public ResultDTO pay(@RequestBody CancelOrderJO payOrderJO) {
-    	String payType = payOrderJO.getPayType();
-    	if (Strings.isNullOrEmpty(payType)) {
+    	Integer payType = payOrderJO.getPayType();
+    	if (payType==null) {
             return ResultDTO.fail("支付类型不能为空");
         }
     	if (Strings.isNullOrEmpty(payOrderJO.getPayPassword())) {
@@ -529,7 +530,7 @@ public class TicketController extends BaseController {
         TicketOrderDO ticketOrder = new TicketOrderDO();
         ticketOrder.setOrderNo(payOrderJO.getOrderNo());
         ticketOrder.setAppUserId(payOrderJO.getUserId());
-        if("01".equals(payType)) {
+        if(payType==1) {
         	return	ticketOrderService.payByZFB(ticketOrder);
         }else {
         	return ticketOrderService.pay(ticketOrder);
