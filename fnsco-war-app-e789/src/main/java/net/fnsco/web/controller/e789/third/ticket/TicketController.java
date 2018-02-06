@@ -363,6 +363,19 @@ public class TicketController extends BaseController {
         ticketContactService.doAdd(ticketContact);
         return success(ticketContact);
     }
+    
+    /*@RequestMapping(value = "/deletePassenger")
+    @ApiOperation(value = "删除乘客")
+    public ResultDTO<TicketContactDO> deletePassenger(@RequestBody PassengerJO passengerJO) {
+        TicketContactDO ticketContact = new TicketContactDO();
+        ticketContact.setAppUserId(passengerJO.getUserId());
+        ticketContact.setCardNum(passengerJO.getCardNum());
+        ticketContact.setCardType(passengerJO.getCardType());
+        ticketContact.setName(passengerJO.getName());
+        ticketContact.setTicketType(passengerJO.getTicketType());
+        ticketContactService.doAdd(ticketContact);
+        return success(ticketContact);
+    }*/
 
     /**
      * queryTradeDataDetail:(查询乘客信息列表)
@@ -518,8 +531,9 @@ public class TicketController extends BaseController {
         ticketOrder.setAppUserId(payOrderJO.getUserId());
         if("01".equals(payType)) {
         	return	ticketOrderService.payByZFB(ticketOrder);
+        }else {
+        	return ticketOrderService.pay(ticketOrder);
         }
-        return ticketOrderService.pay(ticketOrder);
     }
 
     /**

@@ -39,10 +39,14 @@ public class AlipayClientUtil {
 	private static String alipayAppPublicKey = "";
 
 	private static AlipayClient alipayClient = null;
+	
+	private static AlipayClient alipayReturnClient = null;
 
 	public static void initAlipayClient() {
 		alipayClient = new DefaultAlipayClient(AlipayConstants.SERVER_URL, appId, appPrivateKey, "json",
 				AlipayConstants.CHARSET, alipayPublicKey, "RSA2");
+		alipayReturnClient = new DefaultAlipayClient(AlipayConstants.SERVER_URL, appId, appPrivateKey, "json",
+				AlipayConstants.CHARSET, alipayAppPublicKey, "RSA2");
 	}
 
 	/**
@@ -101,7 +105,8 @@ public class AlipayClientUtil {
 		request.setBizModel(model);
 		AlipayTradeRefundResponse response = null;
 		try {
-			response = alipayClient.sdkExecute(request);
+			logger.error("发起退款业务，发送数据为:"+JSON.toJSONString(request));
+			response = alipayReturnClient.execute(request);
 		} catch (AlipayApiException e) {
 			logger.error("发起支付宝退款接口报错!", e);
 		}
