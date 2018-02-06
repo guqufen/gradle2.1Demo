@@ -32,6 +32,7 @@ import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.SmsUtil;
 import net.fnsco.trading.comm.TradeConstants;
 import net.fnsco.trading.service.account.AppAccountBalanceService;
+import net.fnsco.trading.service.third.reCharge.dto.ChargeResultDTO;
 import net.fnsco.trading.service.third.ticket.comm.TicketConstants;
 import net.fnsco.trading.service.third.ticket.dao.TicketOrderDAO;
 import net.fnsco.trading.service.third.ticket.dao.TicketOrderPassengerDAO;
@@ -378,7 +379,9 @@ public class TicketOrderService extends BaseService {
         String url= env.getProperty("app.base.url") + RECHANGE_NOTIFY_URL;
         requestParams.setNotifyUrl(url);
         String body =  AlipayClientUtil.createPayOrderParams(requestParams);
-        return ResultDTO.success(body);
+        ChargeResultDTO chargeResultDTO = new ChargeResultDTO();
+        chargeResultDTO.setBody(body);
+        return ResultDTO.success(chargeResultDTO);
     }
     /**
      * 
