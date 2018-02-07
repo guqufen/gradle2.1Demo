@@ -341,15 +341,15 @@ public class TicketOrderService extends BaseService {
      * @return
      */
     @Transactional
-    public ResultDTO payByZFBNotify(String orderNo) {
-    	TicketOrderDO order = this.ticketOrderDAO.getByUserIdOrderNo(orderNo);
+    public ResultDTO payByAlipay(String orderNo) {
+    	TradeWithdrawDO tradeWithdraw = tradeWithdrawDAO.getByOrderNo(orderNo);
+    	TicketOrderDO order = ticketOrderDAO.getByUserIdOrderNo(orderNo);
     	order.setStatus(TicketConstants.OrderStateEnum.PAYING.getCode());
         order.setLastModifyTime(new Date());
         ticketOrderDAO.update(order);
         JSONObject obj = TrainTicketsUtil.pay(order.getPayOrderNo());
         String error_code = obj.getString("error_code");
         //判断是否调用成功，只有error_code=0的时候表示返回成功
-        TradeWithdrawDO tradeWithdraw = tradeWithdrawDAO.queryByOriginalOrderNo(orderNo);
         if (!"0".equals(error_code)) {
             String reason = obj.getString("reason");
             order.setStatus(TicketConstants.OrderStateEnum.SIT_DOWN.getCode());

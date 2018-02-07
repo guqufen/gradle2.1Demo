@@ -165,7 +165,7 @@ public class AlipayNotifyController extends BaseController {
 			return "fail";
 		}
 		// 成功处理
-		ticketOrderService.payByZFBNotify(order.getOrderNo());
+		ticketOrderService.payByAlipay(orderNo);
 		return "success";
 	}
 
