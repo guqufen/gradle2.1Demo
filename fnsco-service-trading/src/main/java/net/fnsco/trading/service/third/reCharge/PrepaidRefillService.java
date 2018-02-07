@@ -968,6 +968,22 @@ public class PrepaidRefillService extends BaseService {
 
 					logger.error(payName + "退款失败,orderno=[" + orderNo + "]");
 				}
+
+				RechargeOrderDO phoneChargeOrderDO1 = new RechargeOrderDO();
+				phoneChargeOrderDO1.setId(reChargeOrderDO.getId());// 设置ID
+				phoneChargeOrderDO1.setRespCode(TradeConstants.RespCodeEnum.FAIL.getCode());// 设置应答码
+				phoneChargeOrderDO1.setRespMsg(payName + "-充值pid为空");// 设置应答信息
+				phoneChargeOrderDO1.setStatus(ThrRechargeStateEnum.FAIL.getCode());// 设置状态码
+				rechargeOrderService.doUpdate(phoneChargeOrderDO1);
+
+				TradeWithdrawDO tradeWithdraw1 = new TradeWithdrawDO();
+				tradeWithdraw1.setId(tradeWithdrawDO.getId());
+				tradeWithdraw1.setRespCode(TradeConstants.RespCodeEnum.FAIL.getCode());// 设置应答码
+				tradeWithdraw1.setRespMsg(payName + "-充值pid为空");// 设置应答信息
+				tradeWithdraw1.setStatus(WithdrawStateEnum.FAIL.getCode());// 设置状态码
+				tradeWithdrawService.doUpdate(tradeWithdraw1);
+
+				return;
 			}
 
 			Date gmtPayment = DateUtils.toParseYmdhms(params.get("gmt_payment"));
