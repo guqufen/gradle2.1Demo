@@ -15,7 +15,7 @@ public class InitConfig {
     @Autowired
     private Environment env;
 
-    //@Bean
+    @Bean
     public int ossConf() {
         OssUtil.setEndpoint(env.getProperty("aliyun.oss.endpoint"));
         OssUtil.setAccessKeyId(env.getProperty("aliyun.oss.accessKeyId"));
