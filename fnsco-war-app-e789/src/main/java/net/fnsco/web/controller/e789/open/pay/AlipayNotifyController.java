@@ -209,7 +209,8 @@ public class AlipayNotifyController extends BaseController {
 
 			// 退款
 			AlipayRefundRequestParams requestParams = new AlipayRefundRequestParams();
-			requestParams.setTradeNo(orderNo);// 设置订单号
+			requestParams.setOutTradeNo(orderNo);// 设置商户订单号
+			requestParams.setRefundAmount(params.get("receipt_amount"));// 设置退款金额为实收金额
 			AlipayTradeRefundResponse alipayTradeRefundResponse = AlipayClientUtil
 					.createTradeReturnOrderParams(requestParams);
 

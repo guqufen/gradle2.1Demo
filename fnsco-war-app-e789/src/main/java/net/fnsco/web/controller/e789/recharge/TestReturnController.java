@@ -27,7 +27,10 @@ public class TestReturnController {
 		requestParams.setRefundReason("正常退款");
 		requestParams.setTradeNo("2018020121001004880591005160");
 		AlipayTradeRefundResponse params = AlipayClientUtil.createTradeReturnOrderParams(requestParams);
-		if(params.getFundChange().equals("Y")) {
+		
+		
+		
+		if(params.getFundChange().equals("Y") && params.isSuccess()) {
 			//正真退款
 		}else {
 			//已经退款

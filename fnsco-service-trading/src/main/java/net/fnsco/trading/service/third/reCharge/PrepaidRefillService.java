@@ -1121,7 +1121,7 @@ public class PrepaidRefillService extends BaseService {
 		ChargeDTO chargeDTO = new ChargeDTO();
 		String payName = null;
 		String orderNo = params.get("out_trade_no");
-//		String status = params.get("trade_status");// 交易状态
+		// String status = params.get("trade_status");// 交易状态
 
 		// 订单表查找订单号交易
 		TradeWithdrawDO tradeWithdrawDO = tradeWithdrawService.getByOrderNo(orderNo);// 通过订单号查找原交易
@@ -1176,7 +1176,8 @@ public class PrepaidRefillService extends BaseService {
 
 				// 回调超时,退款
 				AlipayRefundRequestParams requestParams = new AlipayRefundRequestParams();
-				requestParams.setTradeNo(orderNo);// 设置订单号
+				requestParams.setOutTradeNo(orderNo);// 设置商户订单号
+				requestParams.setRefundAmount(params.get("receipt_amount"));// 设置退款金额为实收金额
 				AlipayTradeRefundResponse alipayTradeRefundResponse = AlipayClientUtil
 						.createTradeReturnOrderParams(requestParams);
 
@@ -1260,7 +1261,8 @@ public class PrepaidRefillService extends BaseService {
 
 				// 充值失败,退款
 				AlipayRefundRequestParams requestParams = new AlipayRefundRequestParams();
-				requestParams.setTradeNo(orderNo);// 设置订单号
+				requestParams.setOutTradeNo(orderNo);// 设置商户订单号
+				requestParams.setRefundAmount(params.get("receipt_amount"));// 设置退款金额为实收金额
 				AlipayTradeRefundResponse alipayTradeRefundResponse = AlipayClientUtil
 						.createTradeReturnOrderParams(requestParams);
 
