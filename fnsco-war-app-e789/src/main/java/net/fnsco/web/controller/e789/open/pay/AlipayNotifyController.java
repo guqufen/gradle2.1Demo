@@ -34,6 +34,8 @@ import net.fnsco.trading.service.third.reCharge.dto.ChargeResultDTO;
 import net.fnsco.trading.service.third.reCharge.dto.JuheDTO;
 import net.fnsco.trading.service.third.reCharge.entity.RechargeOrderDO;
 import net.fnsco.trading.service.third.ticket.TicketOrderService;
+import net.fnsco.trading.service.third.ticket.comm.TicketConstants;
+import net.fnsco.trading.service.third.ticket.entity.TicketOrderDO;
 import net.fnsco.trading.service.withdraw.TradeWithdrawService;
 import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
 
@@ -144,23 +146,16 @@ public class AlipayNotifyController extends BaseController {
 		Map<String, String> params = (Map<String, String>) rsaMap.get("params");
 		String orderNo = params.get("out_trade_no");
 		TradeWithdrawDO tradeWithdraw = tradeWithdrawService.getByOrderNo(orderNo);// 通过订单号查找原交易
+		TicketOrderDO order = ticketOrderService.doQueryByOrderNo(tradeWithdraw.getOriginalOrderNo());
 		String tradeStatus = params.get("trade_status");
 
-		if (null == tradeWithdraw) {
-			logger.error("该订单已经不存在，不处理!orderNo=" + orderNo);
-			return "success";
-		}
-
-		/**
-		 * 处理完成的订单，不处理
-		 */
-		if (tradeWithdraw.getStatus() == WithdrawStateEnum.SUCCESS.getCode()) {
-			logger.error("该订单已经处理过，不处理!orderNo=" + orderNo);
-			return "success";
-		}
 		// 交易超时未付款或关闭
 		if ("TRADE_CLOSED".equals(tradeStatus)) {
-			tradeWithdrawService.doAlipayRechangeNotify(params, false, tradeWithdraw);
+			order.setStatus(TicketConstants.OrderStateEnum.CANCEL.getCode());
+			order.setLastModifyTime(new Date());
+			ticketOrderService.doUpdate(order);
+            tradeWithdraw.setStatus(2);
+        	tradeWithdrawService.doUpdate(tradeWithdraw);
 			return "success";
 		}
 
@@ -170,7 +165,7 @@ public class AlipayNotifyController extends BaseController {
 			return "fail";
 		}
 		// 成功处理
-		ticketOrderService.payByZFBNotify(orderNo);
+		ticketOrderService.payByZFBNotify(order.getOrderNo());
 		return "success";
 	}
 

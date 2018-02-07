@@ -74,7 +74,7 @@ public interface TradeWithdrawDAO {
                @Result(column = "card_holder_rate", property = "cardHolderRate") })
     @Select("SELECT * FROM t_trade_withdraw WHERE original_order_no = #{originalOrderNo}")
     public TradeWithdrawDO getByOriginalOrderNo(@Param("originalOrderNo") String originalOrderNo);
-
+    
     @Insert("INSERT into t_trade_withdraw(id,order_no,original_order_no,app_user_id,amount,fee,settle_money,fund,trade_type,trade_sub_type,status,create_time,update_time,resp_code,resp_msg,payment_date,succ_time,back_url,bank_account_type,bank_account_no,bank_account_name,bank_account_card_id,bank_sub_bank_name,bank_open_bank,bank_open_bank_num,bank_account_phone,channel_mer_id,channel_type,installment_num,order_amount,each_money,card_holder_rate) VALUES (#{id},#{orderNo},#{originalOrderNo},#{appUserId},#{amount},#{fee},#{settleMoney},#{fund},#{tradeType},#{tradeSubType},#{status},#{createTime},#{updateTime},#{respCode},#{respMsg},#{paymentDate},#{succTime},#{backUrl},#{bankAccountType},#{bankAccountNo},#{bankAccountName},#{bankAccountCardId},#{bankSubBankName},#{bankOpenBank},#{bankOpenBankNum},#{bankAccountPhone},#{channelMerId},#{channelType},#{installmentNum},#{orderAmount},#{eachMoney},#{cardHolderRate})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(TradeWithdrawDO tradeWithdraw);
