@@ -185,13 +185,13 @@ public class PrepaidRefillService extends BaseService {
 
 				Map<String, Object> map = JSONObject.parseObject(str, Map.class);
 				logger.info(map.toString());
-				phChargePackageDTO.setCompany(map.get("company").toString());
-				phChargePackageDTO.setType(map.get("type").toString());
+				
+				//获取流量资费列表
 				List<Map<String, String>> lists = JSONObject.parseObject(map.get("flows").toString(), List.class);
 				for (Map<String, String> map2 : lists) {
 
-					// 通过pid查找实际售价金额
-					if (map.get("pid").equals(pid.trim())) {
+					// 通过id查找实际售价金额，并返回
+					if (map2.get("id").equals(pid.trim())) {
 
 						return new BigDecimal(map2.get("inprice")).setScale(2, BigDecimal.ROUND_HALF_UP).toString();
 					}
