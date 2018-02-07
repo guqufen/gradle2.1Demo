@@ -532,7 +532,14 @@ public class TicketOrderService extends BaseService {
                 ticketOrderDAO.update(order);
                 return ResultDTO.fail(reason);
             } else {
-                String msg = obj.getString("msg");
+            	String msg = null;
+            	try {
+            		msg = obj.getString("msg");
+				} catch (Exception e) {
+					logger.error("调用退票程序出错", e);
+					msg = obj.toString();
+				}
+                
                 order.setRespMsg(msg);
                 order.setLastModifyTime(new Date());
                 ticketOrderDAO.update(order);
