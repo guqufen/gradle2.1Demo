@@ -576,12 +576,12 @@ public class TicketController extends BaseController {
                     //邱您已购买1月20日G1362次4车12B号，长沙南站13：25开 。【E789】
                     AppUser mAppUser = appUserService.selectAppUserById(order.getAppUserId());
                     String mobile = mAppUser.getMobile();
-                    String name = mAppUser.getUserName();
+                    String name = mAppUser.getRealName();
                     String trainDate = order.getTrainDate();
                     String trainCode = order.getTrainCode();
                     String fromStationName = order.getFromStationName();
                     String startTime = order.getStartTime();
-                    String desc = name + "您已购买" + DateUtils.strToChina(trainDate) + trainCode + "次车票" + "," + fromStationName + "站" + startTime + "开。";
+                    String desc = DateUtils.strToChina(trainDate) + trainCode + "次车票" + "," + fromStationName + "站" + startTime + "开。";
                     try {
                         String callback = SmsUtil.e789TicketPay(mobile, name, desc);
                         JSONObject callbackJson = (JSONObject) JSONObject.parse(callback);
