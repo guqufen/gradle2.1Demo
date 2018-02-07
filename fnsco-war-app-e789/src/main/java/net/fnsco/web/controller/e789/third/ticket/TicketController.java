@@ -356,7 +356,11 @@ public class TicketController extends BaseController {
     @RequestMapping(value = "/addPassenger")
     @ApiOperation(value = "添加乘客")
     public ResultDTO<TicketContactDO> addPassenger(@RequestBody PassengerJO passengerJO) {
-        TicketContactDO ticketContact = new TicketContactDO();
+    	TicketContactDO ticket = ticketContactService.doQueryIsRepeat(passengerJO.getUserId(),passengerJO.getCardType(),passengerJO.getCardNum());
+        if(ticket!=null) {
+        	return fail("该乘客已添加");
+        }
+    	TicketContactDO ticketContact = new TicketContactDO();
         ticketContact.setAppUserId(passengerJO.getUserId());
         ticketContact.setCardNum(passengerJO.getCardNum());
         ticketContact.setCardType(passengerJO.getCardType());
@@ -523,8 +527,7 @@ public class TicketController extends BaseController {
         ticketOrder.setAppUserId(payOrderJO.getUserId());
     	if(payType==1) {
         	return	ticketOrderService.payByZFB(ticketOrder);
-        }
-    	else {
+        } else {
     		if (Strings.isNullOrEmpty(payOrderJO.getPayPassword())) {
         		return ResultDTO.fail("支付密码不能为空");
         	}

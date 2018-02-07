@@ -54,4 +54,10 @@ public class TicketContactService extends BaseService {
         TicketContactDO obj = this.ticketContactDAO.getById(id);
         return obj;
     }
+    
+    // 查询新增乘客是否重复
+    public TicketContactDO doQueryIsRepeat(Integer appUserId,String cardType,String cardNum) {
+        TicketContactDO obj = this.ticketContactDAO.doQueryIsRepeat(appUserId,cardType,cardNum);
+        return obj;
+    }
 }
