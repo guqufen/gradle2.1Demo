@@ -356,7 +356,11 @@ public class TicketController extends BaseController {
     @RequestMapping(value = "/addPassenger")
     @ApiOperation(value = "添加乘客")
     public ResultDTO<TicketContactDO> addPassenger(@RequestBody PassengerJO passengerJO) {
-        TicketContactDO ticketContact = new TicketContactDO();
+    	TicketContactDO ticket = ticketContactService.doQueryIsRepeat(passengerJO.getUserId(),passengerJO.getCardType(),passengerJO.getCardNum());
+        if(ticket!=null) {
+        	return fail("该乘客已添加");
+        }
+    	TicketContactDO ticketContact = new TicketContactDO();
         ticketContact.setAppUserId(passengerJO.getUserId());
         ticketContact.setCardNum(passengerJO.getCardNum());
         ticketContact.setCardType(passengerJO.getCardType());
@@ -523,8 +527,7 @@ public class TicketController extends BaseController {
         ticketOrder.setAppUserId(payOrderJO.getUserId());
     	if(payType==1) {
         	return	ticketOrderService.payByZFB(ticketOrder);
-        }
-    	else {
+        } else {
     		if (Strings.isNullOrEmpty(payOrderJO.getPayPassword())) {
         		return ResultDTO.fail("支付密码不能为空");
         	}
@@ -573,12 +576,12 @@ public class TicketController extends BaseController {
                     //邱您已购买1月20日G1362次4车12B号，长沙南站13：25开 。【E789】
                     AppUser mAppUser = appUserService.selectAppUserById(order.getAppUserId());
                     String mobile = mAppUser.getMobile();
-                    String name = mAppUser.getUserName();
+                    String name = mAppUser.getRealName();
                     String trainDate = order.getTrainDate();
                     String trainCode = order.getTrainCode();
                     String fromStationName = order.getFromStationName();
                     String startTime = order.getStartTime();
-                    String desc = name + "您已购买" + DateUtils.strToChina(trainDate) + trainCode + "次车票" + "," + fromStationName + "站" + startTime + "开。";
+                    String desc = DateUtils.strToChina(trainDate) + trainCode + "次车票" + "," + fromStationName + "站" + startTime + "开。";
                     try {
                         String callback = SmsUtil.e789TicketPay(mobile, name, desc);
                         JSONObject callbackJson = (JSONObject) JSONObject.parse(callback);

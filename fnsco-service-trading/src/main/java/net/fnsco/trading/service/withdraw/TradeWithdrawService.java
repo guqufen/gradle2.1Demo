@@ -210,7 +210,7 @@ public class TradeWithdrawService extends BaseService {
         return tradeWithdrawDAO.queryOngoing(start, type);
     }
 
-    public void doAddForTicket(TicketOrderDO order ,String channelType) {
+    public TradeWithdrawDO doAddForTicket(TicketOrderDO order ,String channelType) {
         AppAccountBalanceDO appAccountBalance = appAccountBalanceService.doQueryByAppUserId(order.getAppUserId());
         TradeWithdrawDO tradeWithdraw = new TradeWithdrawDO();
         tradeWithdraw.setAmount(order.getOrderAmount());
@@ -226,6 +226,7 @@ public class TradeWithdrawService extends BaseService {
         tradeWithdraw.setRespCode(TradeConstants.RespCodeEnum.HANDLING.getCode());
         // tradeWithdraw.setRespMsg(respMsg);
         doAdd(tradeWithdraw);
+        return tradeWithdraw;
     }
 
     public void doRefundForTicket(TicketOrderDO order) {

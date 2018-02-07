@@ -47,9 +47,19 @@ public interface TradeWithdrawDAO {
     @Select("SELECT * FROM t_trade_withdraw WHERE order_no = #{orderNo}")
     public TradeWithdrawDO queryByOrderId(@Param("orderNo") String orderNo);
     
-    @Results({ @Result(column = "channel_type", property = "channelType")})
-    @Select("SELECT channel_type FROM t_trade_withdraw WHERE original_order_no = #{originalOrderNo}")
-    public String queryByOriginalOrderNo(@Param("originalOrderNo") String originalOrderNo);
+    @Results({ @Result(column = "order_no", property = "orderNo"), @Result(column = "original_order_no", property = "originalOrderNo"), @Result(column = "app_user_id", property = "appUserId"),
+        @Result(column = "settle_money", property = "settleMoney"), @Result(column = "trade_type", property = "tradeType"), @Result(column = "trade_sub_type", property = "tradeSubType"),
+        @Result(column = "create_time", property = "createTime"), @Result(column = "update_time", property = "updateTime"), @Result(column = "resp_code", property = "respCode"),
+        @Result(column = "resp_msg", property = "respMsg"), @Result(column = "payment_date", property = "paymentDate"), @Result(column = "succ_time", property = "succTime"),
+        @Result(column = "back_url", property = "backUrl"), @Result(column = "bank_account_type", property = "bankAccountType"), @Result(column = "bank_account_no", property = "bankAccountNo"),
+        @Result(column = "bank_account_name", property = "bankAccountName"), @Result(column = "bank_account_card_id", property = "bankAccountCardId"),
+        @Result(column = "bank_sub_bank_name", property = "bankSubBankName"), @Result(column = "bank_open_bank", property = "bankOpenBank"),
+        @Result(column = "bank_open_bank_num", property = "bankOpenBankNum"), @Result(column = "bank_account_phone", property = "bankAccountPhone"),
+        @Result(column = "channel_mer_id", property = "channelMerId"), @Result(column = "channel_type", property = "channelType"),
+        @Result(column = "installment_num", property = "installmentNum"), @Result(column = "order_amount", property = "orderAmount"), @Result(column = "each_money", property = "eachMoney"),
+        @Result(column = "card_holder_rate", property = "cardHolderRate")})
+    @Select("SELECT * FROM t_trade_withdraw WHERE original_order_no = #{originalOrderNo} AND status = 1 ORDER BY id DESC LIMIT 1")
+    public TradeWithdrawDO queryByOriginalOrderNo(@Param("originalOrderNo") String originalOrderNo);
     
     @Results({ @Result(column = "order_no", property = "orderNo"), @Result(column = "original_order_no", property = "originalOrderNo"), @Result(column = "app_user_id", property = "appUserId"),
                @Result(column = "settle_money", property = "settleMoney"), @Result(column = "trade_type", property = "tradeType"), @Result(column = "trade_sub_type", property = "tradeSubType"),
@@ -64,7 +74,7 @@ public interface TradeWithdrawDAO {
                @Result(column = "card_holder_rate", property = "cardHolderRate") })
     @Select("SELECT * FROM t_trade_withdraw WHERE original_order_no = #{originalOrderNo}")
     public TradeWithdrawDO getByOriginalOrderNo(@Param("originalOrderNo") String originalOrderNo);
-
+    
     @Insert("INSERT into t_trade_withdraw(id,order_no,original_order_no,app_user_id,amount,fee,settle_money,fund,trade_type,trade_sub_type,status,create_time,update_time,resp_code,resp_msg,payment_date,succ_time,back_url,bank_account_type,bank_account_no,bank_account_name,bank_account_card_id,bank_sub_bank_name,bank_open_bank,bank_open_bank_num,bank_account_phone,channel_mer_id,channel_type,installment_num,order_amount,each_money,card_holder_rate) VALUES (#{id},#{orderNo},#{originalOrderNo},#{appUserId},#{amount},#{fee},#{settleMoney},#{fund},#{tradeType},#{tradeSubType},#{status},#{createTime},#{updateTime},#{respCode},#{respMsg},#{paymentDate},#{succTime},#{backUrl},#{bankAccountType},#{bankAccountNo},#{bankAccountName},#{bankAccountCardId},#{bankSubBankName},#{bankOpenBank},#{bankOpenBankNum},#{bankAccountPhone},#{channelMerId},#{channelType},#{installmentNum},#{orderAmount},#{eachMoney},#{cardHolderRate})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(TradeWithdrawDO tradeWithdraw);

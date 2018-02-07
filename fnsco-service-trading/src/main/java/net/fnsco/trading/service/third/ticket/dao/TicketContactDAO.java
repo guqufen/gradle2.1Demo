@@ -19,6 +19,10 @@ public interface TicketContactDAO {
     @Results({@Result( column = "app_user_id",property = "appUserId"),@Result( column = "card_type",property = "cardType"),@Result( column = "card_num",property = "cardNum"),@Result( column = "ticket_type",property = "ticketType") })
     @Select("SELECT * FROM thr_ticket_contact WHERE id = #{id}")
     public TicketContactDO getById(@Param("id") int id);
+    
+    @Results({@Result( column = "app_user_id",property = "appUserId"),@Result( column = "card_type",property = "cardType"),@Result( column = "card_num",property = "cardNum"),@Result( column = "ticket_type",property = "ticketType") })
+    @Select("SELECT * FROM thr_ticket_contact WHERE app_user_id = #{appUserId} AND card_type = #{cardType} AND card_num = #{cardNum}")
+    public TicketContactDO doQueryIsRepeat(@Param("appUserId") int appUserId,@Param("cardType") String cardType,@Param("cardNum") String cardNum);
 
     @Insert("INSERT into thr_ticket_contact(id,app_user_id,name,mobile,card_type,card_num,ticket_type) VALUES (#{id},#{appUserId},#{name},#{mobile},#{cardType},#{cardNum},#{ticketType})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
