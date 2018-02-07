@@ -534,10 +534,11 @@ public class TicketOrderService extends BaseService {
             } else {
             	String msg = null;
             	try {
-            		msg = obj.getString("msg");
+            		JSONObject result = obj.getJSONObject("result"); 
+            		msg = result.getString("msg");
 				} catch (Exception e) {
 					logger.error("调用退票程序出错", e);
-					msg = obj.toString();
+					msg = "调用退票程序出错";
 				}
                 
                 order.setRespMsg(msg);
