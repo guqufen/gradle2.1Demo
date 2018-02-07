@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.base.Strings;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
@@ -91,8 +93,14 @@ public class PrepaidRefillController extends BaseController {
 			return ResultDTO.fail(ApiConstant.E_APP_PHONE_ERROR);
 		}
 
-		logger.info("类型0-话费充值;1-流量充值,type="+chargeDTO.getType());
-		logger.info("套餐ID="+chargeDTO.getPid());
+		if (Strings.isNullOrEmpty(chargeDTO.getPid()) || Strings.isNullOrEmpty(chargeDTO.getInprice())) {
+			logger.error("手机充值-pid或金额为空");
+			return ResultDTO.fail("手机充值-pid或金额为空");
+		}
+
+		logger.info("类型0-话费充值;1-流量充值,type=" + chargeDTO.getType());
+		logger.info("套餐ID=" + chargeDTO.getPid());
+
 		// 帐户余额支付
 		if ("0".equals(chargeDTO.getPayType())) {
 

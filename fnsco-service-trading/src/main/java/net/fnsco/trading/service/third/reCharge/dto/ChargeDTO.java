@@ -14,7 +14,7 @@ public class ChargeDTO extends DTO {
 	private String inprice;
 	@ApiModelProperty(value = "登录用户id", example = "登录用户id")
 	private Integer userId;
-	@ApiModelProperty(value = "类型0-话费充值;1-流量充值", example = "类型0-话费充值;1-话费==流量充值")
+	@ApiModelProperty(value = "类型0-话费充值;1-流量充值", example = "类型0-话费充值;1-流量充值")
 	private Integer type;
 	@ApiModelProperty(value = "充值名称:取资费查询返回的name字段", example = "充值名称:取资费查询返回的name字段")
 	private String name;

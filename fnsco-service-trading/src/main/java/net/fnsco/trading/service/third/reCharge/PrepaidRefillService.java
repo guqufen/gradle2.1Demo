@@ -14,6 +14,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.response.AlipayTradeRefundResponse;
+import com.google.common.base.Strings;
 
 import net.fnsco.bigdata.comm.ServiceConstant.TradeStateEnum;
 import net.fnsco.bigdata.comm.ServiceConstant.TradeTypeEnum;
@@ -188,7 +189,6 @@ public class PrepaidRefillService extends BaseService {
 				phChargePackageDTO.setType(map.get("type").toString());
 				List<Map<String, String>> lists = JSONObject.parseObject(map.get("flows").toString(), List.class);
 				for (Map<String, String> map2 : lists) {
-					map2.get("");
 
 					// 通过pid查找实际售价金额
 					if (map.get("pid").equals(pid.trim())) {
@@ -844,7 +844,7 @@ public class PrepaidRefillService extends BaseService {
 			reChargeOrderDO.setAmt(tradeWithdrawDO.getAmount().toString());// 设置交易金额
 			tradeWithdrawDO.setTradeSubType(TradeConstants.TxnSubTypeEnum.BUY_HF.getCode());// 交易子类型:22话费充值
 			requestParams.setSubject("话费充值订单");// 商品的标题/交易标题/订单标题/订单关键字等。示例值:大乐透
-			requestParams.setBody(chargeDTO.getName());// 对一笔交易的具体描述信息。如果是多种商品，请将商品描述字符串累加传给body。示例值:Iphone6
+			requestParams.setBody(chargeDTO.getPid());// 对一笔交易的具体描述信息。如果是多种商品，请将商品描述字符串累加传给body。示例值:Iphone6，传pid
 		} else {
 
 			// 先通过pid查询实际售价
@@ -872,7 +872,7 @@ public class PrepaidRefillService extends BaseService {
 			reChargeOrderDO.setAmt(tradeWithdrawDO.getAmount().toString());// 设置交易金额
 			tradeWithdrawDO.setTradeSubType(TradeConstants.TxnSubTypeEnum.BUY_LT.getCode());// 交易子类型:23流量充值
 			requestParams.setSubject("流量充值订单");// 商品的标题/交易标题/订单标题/订单关键字等。示例值:大乐透
-			requestParams.setBody(chargeDTO.getName());// 对一笔交易的具体描述信息。如果是多种商品，请将商品描述字符串累加传给body。示例值:Iphone6
+			requestParams.setBody(chargeDTO.getPid());// 对一笔交易的具体描述信息。如果是多种商品，请将商品描述字符串累加传给body。示例值:Iphone6
 		}
 
 		tradeWithdrawService.doAdd(tradeWithdrawDO);// 新增
@@ -946,6 +946,29 @@ public class PrepaidRefillService extends BaseService {
 			tradeWithdrawService.doUpdate(tradeWithdraw1);
 
 		} else {
+
+			// 判断pid是否为空
+			if (Strings.isNullOrEmpty(tradeWithdrawDO.getOriginalOrderNo())) {
+
+				logger.error("充值pid为空,orderNo=" + orderNo);
+				// 充值失败,退款
+				AlipayRefundRequestParams requestParams = new AlipayRefundRequestParams();
+				requestParams.setOutTradeNo(orderNo);// 设置商户订单号
+				requestParams.setRefundAmount(params.get("receipt_amount"));// 设置退款金额为实收金额
+				AlipayTradeRefundResponse alipayTradeRefundResponse = AlipayClientUtil
+						.createTradeReturnOrderParams(requestParams);
+
+				// 退款成功且金额发生变动
+				if ("Y".equals(alipayTradeRefundResponse.getFundChange()) && alipayTradeRefundResponse.isSuccess()) {
+
+					logger.error(payName + "退款成功,orderno=[" + orderNo + "]");
+
+					// 调用失败
+				} else {
+
+					logger.error(payName + "退款失败,orderno=[" + orderNo + "]");
+				}
+			}
 
 			Date gmtPayment = DateUtils.toParseYmdhms(params.get("gmt_payment"));
 			Date notifyTime = DateUtils.toParseYmdhms(params.get("notify_time"));
