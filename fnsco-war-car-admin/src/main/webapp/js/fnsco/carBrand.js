@@ -197,7 +197,8 @@ function getMenuTree(id) {
 						data.data);
 
 				// 清空所有节点勾选
-				dd_ztree.checkAllNodes(false);
+				// dd_ztree.checkAllNodes(false);
+				dd_ztree.cancelSelectedNode();
 
 				// id不等于空，表示修改
 				if (id != null) {
@@ -205,12 +206,15 @@ function getMenuTree(id) {
 					var node = dd_ztree.getNodeByParam("id", id);
 					if (node != null) {
 						dd_ztree.selectNode(node, true);// 指定选中ID的节点
-						// dd_ztree.expandNode(node, true, true);// 指定选中ID节点展开
+						dd_ztree.expandNode(node, true, true);// 指定选中ID节点展开
+
+						// findParent(dd_ztree,node);
 					}
+				} else {
+					// 展开所有节点
+					dd_ztree.expandAll(false);
 				}
 
-				// 展开所有节点
-				dd_ztree.expandAll(true);
 			} else if (!data.success) {
 				layer.msg(data.message);
 			}
@@ -221,46 +225,21 @@ function getMenuTree(id) {
 	});
 }
 
-// 点击一级菜单，弹出非按钮菜单树
-function MenuTreeGet() {
+function chooseTree() {
 
-	// 获取菜单树操作对象
-	var add_deptTree = $.fn.zTree.getZTreeObj('upMenuTree');
-	add_deptTree.expandAll(false);
+	$('#keyword').val(null);
 
-	layer.open({
-		type : 1,
-		offset : '50px',
-		skin : 'layui-layer-molv',
-		title : "选择上级汽车品牌名称",
-		area : [ '300px', '450px' ],
-		shade : 0,
-		shadeClose : false,
-		content : jQuery('#upMenuLayer'),
-		btn : [ '确定', '取消' ],
-		btn1 : function(index) {
+	// 如果父菜单ID不为空
+	if ($('#parentId').val() != '') {
+		var supperId = $('#parentId').val();
+		getMenuTree(supperId);
+	} else {
+		getMenuTree(null);
+	}
 
-			// 获取选中的上级部门的ID和名称，并赋值给相应的ID，以便后续读取使用
-			var node = add_deptTree.getSelectedNodes();
-			if (node.length != 0) {
-				$('#parentName').val(node[0].name);
-				$('#parentId').val(node[0].id);
-				$('#level').val(node[0].level + 1);
-
-				layer.close(index);
-
-				if ($('#level').val() > 1) {
-					$('#isHotDiv').hide();
-				} else if ($('#level').val() == 1) {
-					$('#isHotDiv').show();
-				}
-
-			} else {
-				layer.msg('请选择父菜单!');
-			}
-		}
-	});
+	closeAll();
 }
+
 /** *** 新增add ****** */
 // 点击增加按钮事件
 $('#btn_add').click(function() {
@@ -268,7 +247,6 @@ $('#btn_add').click(function() {
 	$('.fileinput-remove').click();
 
 	$('h4').html('新增菜单');
-
 	// 先清掉相关数据，设置menuType默认选中,并展示相应菜单
 	clearInput();
 
@@ -276,7 +254,7 @@ $('#btn_add').click(function() {
 	$('#id').val(null);
 
 	// 获取菜单树形结构(传空表示新增，不带父节点ID)
-	getMenuTree(null);
+	// getMenuTree(null);
 })
 
 /** ***** 修改edit****** */
@@ -298,10 +276,11 @@ $('#btn_edit').click(
 				$('h4').html('修改菜单');
 
 				// 获取table选中数据的父菜单ID
-				var supperId = selectContent[0].supperId;
+				$('#parentId').val(selectContent[0].supperId);
+				$('#parentName').val(selectContent[0].supperName);
 
 				// 获取树形结构，传入当前选中的父菜单ID，便于在菜单树形结构展示选中点
-				getMenuTree(supperId);
+				// getMenuTree(supperId);
 
 				// 给当前菜单ID赋值,表示当前使用功能是修改
 				$('#id').val(selectContent[0].id);
@@ -441,15 +420,6 @@ $('#btn_delete').click(function() {
 		btn : [ '确定', '取消' ]
 	}, function() {
 
-		// 获取table选中数据的菜单ID和菜单类型
-		// var id = selectContent[0].id;
-		// var type = selectContent[0].level;
-		//
-		// var param = {
-		// 'id' : id,
-		// 'level' : type
-		// }
-
 		// 组包发给后台
 		$.ajax({
 			type : 'POST',
@@ -552,3 +522,126 @@ var FileInput = function() {
 	}
 	return oFile;
 };
+
+// 模糊查询
+var nodeList = [];
+// input框变化时查询节点
+document.getElementById("keyword").addEventListener("input", test, false);
+function test() {
+	var treeObj = $.fn.zTree.getZTreeObj("upMenuTree");
+	var keywords = $("#keyword").val();
+
+	// 清空搜索条件，则将全部隐藏的数据展示出来
+	if ('' == keywords) {
+		var nodes = treeObj.getNodesByParam("isHidden", true);
+		treeObj.showNodes(nodes);
+	}
+}
+
+/**
+ * 收起树：只展开根节点下的一级节点
+ * 
+ * @param treeId
+ */
+function close_ztree(treeId) {
+	var treeObj = $.fn.zTree.getZTreeObj(treeId);
+	var nodes = treeObj.transformToArray(treeObj.getNodes());
+	var nodeLength = nodes.length;
+	for (var i = 0; i < nodeLength; i++) {
+		if (nodes[i].id == '0') {
+			// 根节点：展开
+			treeObj.expandNode(nodes[i], true, true, false);
+		} else {
+			// 非根节点：收起
+			treeObj.expandNode(nodes[i], false, true, false);
+		}
+	}
+}
+/**
+ * 关闭所有节点，打开根节点
+ */
+function closeAll() {
+	var zTree = $.fn.zTree.getZTreeObj("upMenuTree");
+	zTree.expandAll(false); // 关闭所有节点
+	var nodes = zTree.getNodes();
+	zTree.expandNode(nodes[0], true, false, true); // 打开根节点
+}
+
+/**
+ * 查找父节点
+ * 
+ * @param zTree:树对象
+ * @param node:节点对象
+ */
+function findParent(zTree, node) {
+	zTree.expandNode(node, true, false, false);
+	var pNode = node.getParentNode();
+	if (pNode != null) {
+		nodeList.push(pNode);
+		findParent(zTree, pNode);
+	}
+}
+
+/**
+ * 搜索节点数据
+ * 
+ * @param e
+ */
+function searchNode(e) {
+	var zTree = $.fn.zTree.getZTreeObj("upMenuTree");
+	var value = $('#keyword').val();
+	var keyType = "name";
+	if (value === "") {
+		closeAll();
+		return;
+	}
+	nodeList = zTree.getNodesByParamFuzzy(keyType, value);
+	/**
+	 * 不查询父级 for(var x = 0 ; x<nodeList.length ; x++){
+	 * if(nodeList[x].isParent){ nodeList.splice(x--,1); } }
+	 */
+	// zTree.cancelSelectedNode();
+	nodeList = zTree.transformToArray(nodeList);
+	updateNodes(true, value, keyType);
+}
+
+/**
+ * 更新全部节点，只展示查找出的一级节点
+ */
+function updateNodes(highlight, value, keyType) {
+	var zTree = $.fn.zTree.getZTreeObj("upMenuTree");
+	var allNode = zTree.transformToArray(zTree.getNodes());
+	zTree.hideNodes(allNode);
+
+	for ( var n in nodeList) {
+		findParent(zTree, nodeList[n]);
+	}
+
+	zTree.showNodes(nodeList);
+	closeAll();
+	nodeList = zTree.getNodesByParamFuzzy(keyType, value);
+}
+
+function saveBrand() {
+
+	// 获取菜单树操作对象
+	var add_deptTree = $.fn.zTree.getZTreeObj('upMenuTree');
+
+	var node = add_deptTree.getSelectedNodes();
+	if (node.length < 1) {
+
+		layer.msg('请选择父菜单!');
+	} else {
+		$('#parentName').val(node[0].name);
+		$('#parentId').val(node[0].id);
+		$('#level').val(node[0].level + 1);
+		$('#ztreeModal').modal("hide");
+		$("body").removeClass("modal-open");
+	}
+
+	if ($('#level').val() > 1) {
+		$('#isHotDiv').hide();
+	} else if ($('#level').val() == 1) {
+		$('#isHotDiv').show();
+	}
+}

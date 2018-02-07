@@ -534,20 +534,20 @@ public class TradeConstants extends CoreConstants {
      * @version $Id: WithdrawPrepStateEnum.java, v 0.1 2017年3月21日 下午6:01:34 sxf
      *          Exp $
      */
-    public enum thrRechargeStateEnum {
+    public enum ThrRechargeStateEnum {
                                    // 状态 状态 0未执行1执行中2失败3成功
-                                  PROCESSING(0, "执行中"), SUCCESS(1, "成功"), FAIL(2, "失败");
+                                  PROCESSING(0, "执行中"), SUCCESS(1, "成功"), FAIL(2, "失败"), INGOING(3, "待支付");
 
         private Integer code;
         private String  name;
 
-        private thrRechargeStateEnum(Integer code, String name) {
+        private ThrRechargeStateEnum(Integer code, String name) {
             this.code = code;
             this.name = name;
         }
 
         public static String getTypeName(Integer code) {
-            for (thrRechargeStateEnum taskType : values()) {
+            for (ThrRechargeStateEnum taskType : values()) {
                 if (taskType.getCode() == code) {
                     return taskType.getName();
                 }

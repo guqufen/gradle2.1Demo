@@ -91,6 +91,8 @@ public class PrepaidRefillController extends BaseController {
 			return ResultDTO.fail(ApiConstant.E_APP_PHONE_ERROR);
 		}
 
+		logger.info("类型0-话费充值;1-流量充值,type="+chargeDTO.getType());
+		logger.info("套餐ID="+chargeDTO.getPid());
 		// 帐户余额支付
 		if ("0".equals(chargeDTO.getPayType())) {
 

@@ -1,7 +1,5 @@
 package net.fnsco.web.controller.e789.open.pay;
 
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,27 +9,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alipay.api.domain.AlipayTradeRefundModel;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.response.AlipayTradeRefundResponse;
-import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.alipay.AlipayClientUtil;
 import net.fnsco.core.alipay.AlipayRefundRequestParams;
 import net.fnsco.core.base.BaseController;
-import net.fnsco.core.base.ResultDTO;
-import net.fnsco.core.utils.DateUtils;
-import net.fnsco.trading.comm.TradeConstants;
+import net.fnsco.trading.comm.TradeConstants.ThrRechargeStateEnum;
 import net.fnsco.trading.comm.TradeConstants.WithdrawStateEnum;
-import net.fnsco.trading.comm.TradeConstants.thrRechargeStateEnum;
 import net.fnsco.trading.service.third.reCharge.PrepaidRefillService;
 import net.fnsco.trading.service.third.reCharge.RechargeOrderService;
-import net.fnsco.trading.service.third.reCharge.dto.ChargeDTO;
-import net.fnsco.trading.service.third.reCharge.dto.ChargeResultDTO;
-import net.fnsco.trading.service.third.reCharge.dto.JuheDTO;
 import net.fnsco.trading.service.third.reCharge.entity.RechargeOrderDO;
 import net.fnsco.trading.service.third.ticket.TicketOrderService;
 import net.fnsco.trading.service.withdraw.TradeWithdrawService;
@@ -228,7 +216,7 @@ public class AlipayNotifyController extends BaseController {
 		}
 
 		// 避免订单重复获取，需要判断订单状态是否成功
-		if (thrRechargeStateEnum.SUCCESS.getCode() == reChargeOrderDO.getStatus()) {
+		if (ThrRechargeStateEnum.SUCCESS.getCode() == reChargeOrderDO.getStatus()) {
 
 			logger.info("该笔订单已经充值成功过，故本次回调充值忽略，orderNo=[" + orderNo + "]");
 			return "success";

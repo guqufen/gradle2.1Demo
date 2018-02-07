@@ -10,13 +10,16 @@
 <meta name="keywords" content="中融汽车管理后台">
 <meta name="description" content="中融汽车管理后台">
 <link rel="shortcut icon" href="favicon.ico">
- <link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
-    <link href="css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
-    <link href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
-    <link href="css/style.min.css" rel="stylesheet">
-    <link href="css/custom.css" rel="stylesheet">
-    <link href="css/plugins/bootstrap/fileinput.css" rel="stylesheet">
+<link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
+<link href="css/plugins/bootstrap-table/bootstrap-table.min.css"
+	rel="stylesheet">
+<link
+	href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css"
+	rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="css/custom.css" rel="stylesheet">
+<link href="css/plugins/bootstrap/fileinput.css" rel="stylesheet">
 
 <link rel="stylesheet" href="js/viewer/viewer.min.css">
 <link href="js/ztree/metroStyle/metroStyle.css" rel="stylesheet">
@@ -24,34 +27,39 @@
 textarea {
 	resize: none;
 }
-
 </style>
 </head>
 <body class="gray-bg">
 	<div class="panel-body animated fadeInRight">
 		<div class="panel panel-default">
-		<!-- 搜索条件 -->
-     <form id="formSearch" class="form-horizontal">
-            <div class="form-group" style="margin-top:15px">
-                <div class="row col-sm-10">
-                    <div class="col-sm-4">
-                        <label class="control-label" for="nameSerch">汽车品牌名称：</label>
-                        <input type="text" class="form-control" id="nameSerch" />
-                    </div>
-                    <div class="col-sm-2"></div>
-                    <div class="col-sm-4">
-                   	 	<label class="control-label" for="supperNameSerch">上级品牌名称：</label>
-                        <input type="text" class="form-control" id="supperNameSerch" />
-                       <!--  <label class="control-label" for="supperNameSerch">上级汽车品牌名称：</label>
+			<!-- 搜索条件 -->
+			<form id="formSearch" class="form-horizontal">
+				<div class="form-group" style="margin-top: 15px">
+					<div class="row col-sm-10">
+						<div class="col-sm-4">
+							<label class="control-label" for="nameSerch">汽车品牌名称：</label> <input
+								type="text" class="form-control" id="nameSerch" />
+						</div>
+						<div class="col-sm-2"></div>
+						<div class="col-sm-4">
+							<label class="control-label" for="supperNameSerch">上级品牌名称：</label>
+							<input type="text" class="form-control" id="supperNameSerch" />
+							<!--  <label class="control-label" for="supperNameSerch">上级汽车品牌名称：</label>
                         <input type="text" class="form-control" id="supperNameSerch" /> -->
-                    </div>
-                </div>
-                <div class="col-sm-2" style="text-align: right;">
-                    <button type="button" id="btn_query" class="btn btn-primary" onclick="javascript:queryEvent('table');"><span class="glyphicon glyphicon-search"></span>查询</button>
-                    <button type="button" id="btn_reset" class="btn btn-default" onclick="javascript:resetEvent('formSearch','table');"><span class="glyphicon glyphicon-refresh"></span>重置</button>
-                </div>
-            </div>
-        </form>
+						</div>
+					</div>
+					<div class="col-sm-2" style="text-align: right;">
+						<button type="button" id="btn_query" class="btn btn-primary"
+							onclick="javascript:queryEvent('table');">
+							<span class="glyphicon glyphicon-search"></span>查询
+						</button>
+						<button type="button" id="btn_reset" class="btn btn-default"
+							onclick="javascript:resetEvent('formSearch','table');">
+							<span class="glyphicon glyphicon-refresh"></span>重置
+						</button>
+					</div>
+				</div>
+			</form>
 			<!-- start -->
 			<div class="ibox float-e-margins">
 				<div class="ibox-content">
@@ -96,7 +104,7 @@ textarea {
 								<div role="tabpanel" class="tab-pane active" id="home">
 									<form class="form-horizontal">
 										<div class="form-group">
-										<div class="col-sm-2 control-label" id="level"></div>
+											<div class="col-sm-2 control-label" id="level"></div>
 											<!-- <div class="col-sm-2 control-label" id="oType">级别</div>
 											<input id="contentType" value="1" name="team" type="radio" />一级汽车品牌
 											<input id="menuType" value="2" name="team" type="radio" />二级汽车品牌
@@ -118,18 +126,21 @@ textarea {
 											<div class="col-sm-10">
 												<input type="text" class="form-control"
 													style="cursor: pointer;" name="parentName" id="parentName"
-													onclick="javascript:MenuTreeGet()" readonly="readonly"
+													data-toggle="modal" data-target="#ztreeModal"
+													onclick="javascript:chooseTree()" readonly="readonly"
 													placeholder="上级汽车品牌" />
+												<!-- onclick="javascript:MenuTreeGet()" -->
 											</div>
 										</div>
 
 										<div class="form-group" id="iconImgPathDiv">
 											<div class="col-sm-2 control-label">图标地址URL</div>
 											<div class="col-sm-10">
-											<input type="text" class="form-control" name="iconImgPath"
-													id="iconImgPath" disabled="disabled" />
-											<input type="file" name="excel_file_risk_inf" id="excel_file_risk_inf" multiple class="file-loading" />
-											<!-- <code style="margin-top:4px;display: block;">选择图片之后不要忘了点击上传按钮</code> -->
+												<input type="text" class="form-control" name="iconImgPath"
+													id="iconImgPath" disabled="disabled" /> <input type="file"
+													name="excel_file_risk_inf" id="excel_file_risk_inf"
+													multiple class="file-loading" />
+												<!-- <code style="margin-top:4px;display: block;">选择图片之后不要忘了点击上传按钮</code> -->
 											</div>
 											<!-- <div class="col-sm-10">
 												<button type="button" id="btn_import" class="btn btn-info"
@@ -174,50 +185,64 @@ textarea {
 			</div>
 			<!-- model end -->
 
-			<!-- 导入 -->
-			<!-- <div class="modal fade" id="importModal" tabindex="-1" role="dialog"
-				aria-labelledby="importModalLabel" data-backdrop="static"
+			<div class="modal fade" id="ztreeModal" tabindex="-1" role="dialog"
+				aria-labelledby="ztreeModalLabel" data-backdrop="static"
 				data-keyboard="false">
-				<div class="modal-dialog" role="document">
+				<div class="modal-dialog modal-sm" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal"
 								aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
-							<h4 class="modal-title" id="importModalLabel">请选择Excel文件</h4>
+							<h5 class="modal-title" id="ztreeModalLabel">汽车品牌选择</h5>
 						</div>
+
 						<div class="modal-body">
 							<div class="tab-content">
-								<div class="modal-header">
+								<div role="tabpanel" class="tab-pane active" id="home">
+									<form class="form-horizontal">
+										<div class="form-inline clearfix"
+											style="margin-top: 10px; margin-left: 26px;">
+											<div class="form-group col-sm-16">
+												汽车品牌：<input id="keyword" type="text" placeholder="请输入品牌名称" />
+												<input id="search" class="btn btn-primary" type="button"
+													value="查询" readonly onclick="searchNode()" />
+												<div class="col-sm-10">
+													<ul id="upMenuTree" class="ztree"></ul>
+												</div>
+											</div>
+										</div>
+
+										<a class="saveBtn" id="btn_save1" onclick="saveBrand()">确定</a>
+									</form>
 								</div>
-								<input type="file" name="excel_file_risk_inf"
-									id="excel_file_risk_inf" multiple class="file-loading" />
 							</div>
 						</div>
 					</div>
 				</div>
-			</div> -->
+			</div>
 		</div>
 	</div>
 
-	<!-- 选择上级菜单 -->
-	<div id="upMenuLayer" style="display: none;padding:10px;">
-	<ul id="upMenuTree" class="ztree"></ul>
-</div>
-<script src="js/bootstrap/jquery.min.js"></script>
-<script src="js/bootstrap/js/bootstrap.min.js"></script>
-<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
-<script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
-<script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
-<script src="js/layer/layer.js"></script>
-<script src="js/plugins/bootstrap/fileinput.js"></script>
-<script src="js/plugins/bootstrap/zh.js"></script>
-<script src="js/uploadify-v3.1/jquery.uploadify.js"></script>
-<script type="text/javascript" src="js/fnsco/common.js"></script>
-<script src="js/ztree/jquery.ztree.all.min.js"></script>
-<script type="text/javascript" src="js/fnsco/carBrand.js"></script>
-<!-- <script type="text/javascript">
+
+	<script src="js/bootstrap/jquery.min.js"></script>
+	<script src="js/bootstrap/js/bootstrap.min.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+	<script
+		src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+	<script src="js/layer/layer.js"></script>
+	<script src="js/plugins/bootstrap/fileinput.js"></script>
+	<script src="js/plugins/bootstrap/zh.js"></script>
+	<script src="js/uploadify-v3.1/jquery.uploadify.js"></script>
+	<script type="text/javascript" src="js/fnsco/common.js"></script>
+	<script src="js/ztree/jquery.ztree.all.min.js"></script>
+	<script src="js/ztree/jquery.ztree.core.min.js"></script>
+	<script src="js/ztree/jquery.ztree.exhide.min.js"></script>
+	<script src="js/ztree/jquery.ztree.exhide.js"></script>
+	<script type="text/javascript" src="js/fnsco/carBrand.js"></script>
+	<!-- <script type="text/javascript">
 //在页面加载完成之后动态加载，避免因为缓存问题导致数据展示不对(在不人工清理缓存情况下)
 loadJSRandom(document, "js/fnsco/carBrand.js");
 </script> -->
