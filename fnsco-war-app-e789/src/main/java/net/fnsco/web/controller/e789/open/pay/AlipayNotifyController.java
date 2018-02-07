@@ -127,6 +127,7 @@ public class AlipayNotifyController extends BaseController {
 	@ApiOperation(value = "支付宝APP火车票支付异步通知接口，仅支付宝方调用")
 	@ResponseBody
 	public String ticketPayNotify() {
+		logger.error("进入火车票购买回调!");
 		Map<String, Object> rsaMap = AlipayClientUtil.rsaCheckV1(request);
 		boolean flag = (boolean) rsaMap.get("signature");
 		/**

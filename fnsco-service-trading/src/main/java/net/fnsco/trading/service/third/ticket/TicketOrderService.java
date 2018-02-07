@@ -64,7 +64,7 @@ public class TicketOrderService extends BaseService {
     @Autowired
     private TradeWithdrawDAO         tradeWithdrawDAO;
     
-    private static final String RECHANGE_NOTIFY_URL = "trade/alipay/ticketPayNotify";//支付宝充值回调
+    private static final String RECHANGE_NOTIFY_URL = "/trade/alipay/ticketPayNotify";//支付宝充值回调
     // 分页
     public ResultPageDTO<TicketOrderDO> page(TicketOrderDO ticketOrder, Integer pageNum, Integer pageSize) {
         logger.info("开始分页查询TicketOrderService.page, ticketOrder=" + ticketOrder.toString());
@@ -85,8 +85,11 @@ public class TicketOrderService extends BaseService {
                 continue;
             }
             //根据火车票订单号去查询渠道类型
-            String channelType = tradeWithdrawDAO.queryByOriginalOrderNo(order.getOrderNo());
-            
+            TradeWithdrawDO trade = tradeWithdrawDAO.queryByOriginalOrderNo(order.getOrderNo());
+            String channelType = null;
+            if(trade!=null) {
+            	channelType = trade.getChannelType();
+            }
             JSONObject obj = TrainTicketsUtil.getOrderStatus(order.getPayOrderNo());
             if (null != obj) {
                 //0未占座1占座中2已占座3占座失败4支付中5支付完成6取消订单7退票中8退票完成'
@@ -340,12 +343,18 @@ public class TicketOrderService extends BaseService {
         JSONObject obj = TrainTicketsUtil.pay(order.getPayOrderNo());
         String error_code = obj.getString("error_code");
         //判断是否调用成功，只有error_code=0的时候表示返回成功
+        TradeWithdrawDO tradeWithdraw = tradeWithdrawDAO.queryByOriginalOrderNo(orderNo);
         if (!"0".equals(error_code)) {
             String reason = obj.getString("reason");
             order.setStatus(TicketConstants.OrderStateEnum.SIT_DOWN.getCode());
             order.setLastModifyTime(new Date());
             ticketOrderDAO.update(order);
+            tradeWithdraw.setStatus(2);
+        	tradeWithdrawService.doUpdate(tradeWithdraw);
             return ResultDTO.fail(reason);
+        }else {
+        	tradeWithdraw.setStatus(1);
+        	tradeWithdrawService.doUpdate(tradeWithdraw);
         }
         return ResultDTO.success();
     }
@@ -360,7 +369,6 @@ public class TicketOrderService extends BaseService {
      */
     @Transactional
     public ResultDTO payByZFB(TicketOrderDO ticketOrder) {
-    	String notifyUrl = env.getProperty("app.base.url")+RECHANGE_NOTIFY_URL;
         TicketOrderDO order = this.ticketOrderDAO.getByUserIdOrderNo(ticketOrder.getOrderNo());
         if (null == order) {
             return ResultDTO.fail("订单不存在");
@@ -369,15 +377,15 @@ public class TicketOrderService extends BaseService {
             return ResultDTO.fail("订单状态不正常");
         }
         String channelType = "06";//支付宝渠道
-        tradeWithdrawService.doAddForTicket(order,channelType);
-        
+    	tradeWithdrawService.doAddForTicket(order,channelType);
         AlipayAppPayRequestParams requestParams = new AlipayAppPayRequestParams();
         requestParams.setBody("e789火车票购买");
         requestParams.setSubject("火车票购买");
-        requestParams.setTotalAmount(String.format("%.2f", order.getOrderAmount()));
+        BigDecimal amount = (order.getOrderAmount()).divide(new BigDecimal(100));
+        requestParams.setTotalAmount(String.format("%.2f", amount ));
         requestParams.setOutTradeNo(order.getOrderNo());	
-        String url= env.getProperty("app.base.url") + RECHANGE_NOTIFY_URL;
-        requestParams.setNotifyUrl(url);
+        String notifyUrl= env.getProperty("app.base.url") + RECHANGE_NOTIFY_URL;
+        requestParams.setNotifyUrl(notifyUrl);
         String body =  AlipayClientUtil.createPayOrderParams(requestParams);
         ChargeResultDTO chargeResultDTO = new ChargeResultDTO();
         chargeResultDTO.setBody(body);
@@ -403,10 +411,12 @@ public class TicketOrderService extends BaseService {
             return ResultDTO.fail("订单状态不正常");
         }
         String channelType = "80";//法奈昇余额渠道
-        tradeWithdrawService.doAddForTicket(order,channelType);
+        TradeWithdrawDO  tradeWithdraw = tradeWithdrawService.doAddForTicket(order,channelType);
         //冻结余额
         boolean payResult = appAccountBalanceService.doFrozenBalance(order.getAppUserId(), order.getOrderAmount());
         if (!payResult) {
+        	tradeWithdraw.setStatus(2);
+        	tradeWithdrawService.doUpdate(tradeWithdraw);
             return ResultDTO.fail("账户余额不足，请充值");
         }
         order.setStatus(TicketConstants.OrderStateEnum.PAYING.getCode());
@@ -421,7 +431,12 @@ public class TicketOrderService extends BaseService {
             order.setStatus(TicketConstants.OrderStateEnum.SIT_DOWN.getCode());
             order.setLastModifyTime(new Date());
             ticketOrderDAO.update(order);
+            tradeWithdraw.setStatus(2);
+        	tradeWithdrawService.doUpdate(tradeWithdraw);
             return ResultDTO.fail(reason);
+        }else {
+        	tradeWithdraw.setStatus(1);
+        	tradeWithdrawService.doUpdate(tradeWithdraw);
         }
         return ResultDTO.success();
     }
