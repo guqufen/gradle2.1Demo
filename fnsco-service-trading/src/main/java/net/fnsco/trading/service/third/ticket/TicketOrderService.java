@@ -232,9 +232,11 @@ public class TicketOrderService extends BaseService {
                                 }
                             }
                         }
-                        if (TicketConstants.OrderStateEnum.REFUND.getCode().equals(order.getStatus())) {
-                            //增加退款的钱
-                            appAccountBalanceService.updateFund(order.getAppUserId(), BigDecimal.ZERO.subtract(totalAmount));
+                        if(channelType.equals("80")) {
+                            if (TicketConstants.OrderStateEnum.REFUND.getCode().equals(order.getStatus())) {
+                                //增加退款的钱
+                                appAccountBalanceService.updateFund(order.getAppUserId(), BigDecimal.ZERO.subtract(totalAmount));
+                            }
                         }
                         TradeWithdrawDO tradeWithdraw = tradeWithdrawService.getUndoByOrderNo(order.getOrderNo());
                         tradeWithdraw.setRespCode(TradeConstants.RespCodeEnum.SUCCESS.getCode());
