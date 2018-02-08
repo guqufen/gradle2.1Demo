@@ -186,7 +186,7 @@ public class TicketOrderService extends BaseService {
                         		if (flug) {
                         			appAccountBalanceService.updateFund(order.getAppUserId(), BigDecimal.ZERO.subtract(order.getOrderAmount()));
                         		}
-                        	}else {
+                        	}else if(channelType.equals("06")){
                         		AlipayRefundRequestParams requestParams = new AlipayRefundRequestParams();
                             	
                         		requestParams.setRefundAmount(String.format("%.2f", order.getOrderAmount()));
