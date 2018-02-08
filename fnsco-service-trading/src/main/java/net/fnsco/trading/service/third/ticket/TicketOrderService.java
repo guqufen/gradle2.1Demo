@@ -343,7 +343,7 @@ public class TicketOrderService extends BaseService {
     @Transactional
     public ResultDTO payByAlipay(String orderNo) {
     	TradeWithdrawDO tradeWithdraw = tradeWithdrawDAO.getByOrderNo(orderNo);
-    	TicketOrderDO order = ticketOrderDAO.getByUserIdOrderNo(orderNo);
+    	TicketOrderDO order = ticketOrderDAO.getByUserIdOrderNo(tradeWithdraw.getOriginalOrderNo());
     	order.setStatus(TicketConstants.OrderStateEnum.PAYING.getCode());
         order.setLastModifyTime(new Date());
         ticketOrderDAO.update(order);
