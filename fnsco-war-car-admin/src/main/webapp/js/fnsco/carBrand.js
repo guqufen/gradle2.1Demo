@@ -205,8 +205,9 @@ function getMenuTree(id) {
 					// 指定节点id选中
 					var node = dd_ztree.getNodeByParam("id", id);
 					if (node != null) {
+						
+						dd_ztree.expandNode(node, true, true, true);// 指定选中ID节点展开
 						dd_ztree.selectNode(node, true);// 指定选中ID的节点
-						dd_ztree.expandNode(node, true, true);// 指定选中ID节点展开
 
 						// findParent(dd_ztree,node);
 					}
@@ -227,11 +228,12 @@ function getMenuTree(id) {
 
 function chooseTree() {
 
-	$('#keyword').val(null);
-
+	//给输入框加入上次搜索的名称/修改时为原名称
+	$('#keyword').val($('#parentName').val());
+	var supperId = $('#parentId').val();
+	
 	// 如果父菜单ID不为空
-	if ($('#parentId').val() != '') {
-		var supperId = $('#parentId').val();
+	if (supperId != '') {
 		getMenuTree(supperId);
 	} else {
 		getMenuTree(null);
@@ -596,10 +598,26 @@ function searchNode(e) {
 		return;
 	}
 	nodeList = zTree.getNodesByParamFuzzy(keyType, value);
-	/**
-	 * 不查询父级 for(var x = 0 ; x<nodeList.length ; x++){
-	 * if(nodeList[x].isParent){ nodeList.splice(x--,1); } }
-	 */
+
+	
+	for (var x = 0; x < nodeList.length; x++) {
+		// 不查询父级,splice去掉
+//		if (nodeList[x].isParent) {
+//			nodeList.splice(x--, 1);
+//		}
+		
+		console.log($('#menuLevel option:selected').val());
+		var menuLevel = $('#menuLevel option:selected').val();
+		if( 0 != parseInt(menuLevel)){
+			
+			//根据菜单等级过滤数据，去掉非此等级数据
+			if (parseInt(menuLevel) != nodeList[x].level) {
+				nodeList.splice(x--, 1);
+			}
+		}
+		
+	}
+
 	// zTree.cancelSelectedNode();
 	nodeList = zTree.transformToArray(nodeList);
 	updateNodes(true, value, keyType);
