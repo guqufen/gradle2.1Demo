@@ -166,7 +166,7 @@ public class TicketOrderService extends BaseService {
                         order.setPayTime(DateUtils.toParseYmdhms(payTime));
                         //减去冻结金额
                         if (TicketConstants.OrderStateEnum.PAYING.getCode().equals(order.getStatus())) {
-                        	 if(channelType.equals("80")) {
+                        	 if("80".equals(channelType)) {
                         		 appAccountBalanceService.doUpdateFrozenAmount(order.getAppUserId(), order.getOrderAmount());
                              }
                             order.setStatus(TicketConstants.OrderStateEnum.SUCCESS.getCode());
@@ -181,12 +181,12 @@ public class TicketOrderService extends BaseService {
                         tradeWithdrawService.doUpdate(tradeWithdraw);
                     } else if ("5".equals(status)) {//出票失败
                         if (!TicketConstants.OrderStateEnum.PAY_FAIL.getCode().equals(order.getStatus())) {
-                        	if(channelType.equals("80")) {
+                        	if("80".equals(channelType)) {
                         		boolean flug = appAccountBalanceService.doUpdateFrozenAmount(order.getAppUserId(), order.getOrderAmount());
                         		if (flug) {
                         			appAccountBalanceService.updateFund(order.getAppUserId(), BigDecimal.ZERO.subtract(order.getOrderAmount()));
                         		}
-                        	}else {
+                        	}else if("06".equals(channelType)){
                         		AlipayRefundRequestParams requestParams = new AlipayRefundRequestParams();
                             	
                         		requestParams.setRefundAmount(String.format("%.2f", order.getOrderAmount()));
@@ -232,9 +232,11 @@ public class TicketOrderService extends BaseService {
                                 }
                             }
                         }
-                        if (TicketConstants.OrderStateEnum.REFUND.getCode().equals(order.getStatus())) {
-                            //增加退款的钱
-                            appAccountBalanceService.updateFund(order.getAppUserId(), BigDecimal.ZERO.subtract(totalAmount));
+                        if(channelType.equals("80")) {
+                            if (TicketConstants.OrderStateEnum.REFUND.getCode().equals(order.getStatus())) {
+                                //增加退款的钱
+                                appAccountBalanceService.updateFund(order.getAppUserId(), BigDecimal.ZERO.subtract(totalAmount));
+                            }
                         }
                         TradeWithdrawDO tradeWithdraw = tradeWithdrawService.getUndoByOrderNo(order.getOrderNo());
                         tradeWithdraw.setRespCode(TradeConstants.RespCodeEnum.SUCCESS.getCode());
