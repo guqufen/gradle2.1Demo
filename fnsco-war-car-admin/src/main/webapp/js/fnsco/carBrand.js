@@ -534,6 +534,7 @@ $(function() {
 	// input框变化时查询节点
 	document.getElementById("keyword").addEventListener("input", test, false);
 });
+
 function test() {
 	var treeObj = $.fn.zTree.getZTreeObj("upMenuTree");
 	var keywords = $("#keyword").val();
