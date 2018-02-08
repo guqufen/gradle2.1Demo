@@ -181,12 +181,12 @@ public class TicketOrderService extends BaseService {
                         tradeWithdrawService.doUpdate(tradeWithdraw);
                     } else if ("5".equals(status)) {//出票失败
                         if (!TicketConstants.OrderStateEnum.PAY_FAIL.getCode().equals(order.getStatus())) {
-                        	if(channelType.equals("80")) {
+                        	if("80".equals(channelType)) {
                         		boolean flug = appAccountBalanceService.doUpdateFrozenAmount(order.getAppUserId(), order.getOrderAmount());
                         		if (flug) {
                         			appAccountBalanceService.updateFund(order.getAppUserId(), BigDecimal.ZERO.subtract(order.getOrderAmount()));
                         		}
-                        	}else if(channelType.equals("06")){
+                        	}else if("06".equals(channelType)){
                         		AlipayRefundRequestParams requestParams = new AlipayRefundRequestParams();
                             	
                         		requestParams.setRefundAmount(String.format("%.2f", order.getOrderAmount()));
