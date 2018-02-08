@@ -75,7 +75,7 @@ public class CarBrandService extends BaseService {
 		}
 
 		// 如果上级菜单id发生变化，则通过supperId=id去查找该id是否下挂下级菜单
-		if ( !carBrandDO2.getSupperId().equals(carBrandDO.getSupperId()) ) {
+		if (!carBrandDO2.getSupperId().equals(carBrandDO.getSupperId())) {
 			CarBrandDO carBrandDO3 = new CarBrandDO();
 
 			// 设置supperId，查询是否含有下级id
@@ -107,7 +107,7 @@ public class CarBrandService extends BaseService {
 			// 如果下级菜单等于1，且父ID等于当前ID，则可以直接删除
 			if (list.size() > 0) {
 
-				return ResultDTO.fail("汽车名称["+list.get(0).getSupperName()+"]有下级菜单，请先处理好下级菜单再删除");
+				return ResultDTO.fail("汽车名称[" + list.get(0).getSupperName() + "]有下级菜单，请先处理好下级菜单再删除");
 			}
 
 			CarBrandDO carBrandDO = new CarBrandDO();
@@ -143,18 +143,23 @@ public class CarBrandService extends BaseService {
 	 * @param carBrandDO
 	 * @return
 	 */
-	public ResultDTO selectMenuTree() {
+	public ResultDTO selectMenuTree(CarBrandDO carBrandDO) {
 
-		CarBrandDO carBrandDO = new CarBrandDO();
-		List<CarBrandDO> list = carBrandDAO.selectByCondition(carBrandDO, null);
+		CarBrandDO carBrandDO2 = new CarBrandDO();
 
-		// 添加顶级菜单
-		CarBrandDO root = new CarBrandDO();
-		root.setId(0);
-		root.setName("总菜单");
-		root.setSupperId(-1);
-		root.setLevel(-1);
-		list.add(root);
+		carBrandDO2.setLevel(carBrandDO.getLevel());
+		carBrandDO2.setSupperName(carBrandDO.getSupperName());
+		List<CarBrandDO> list = carBrandDAO.selectByCondition(carBrandDO2, null);
+
+		if (null == carBrandDO.getLevel()) {
+			// 添加顶级菜单
+			CarBrandDO root = new CarBrandDO();
+			root.setId(0);
+			root.setName("总菜单");
+			root.setSupperId(-1);
+			root.setLevel(-1);
+			list.add(root);
+		}
 
 		return ResultDTO.success(list);
 	}
