@@ -131,8 +131,11 @@ function formatModel(value, row, index) {
 }
 
 function formatSupperName(value, row, index) {
+
 	if (row.level == 1) {
 		return '总菜单';
+	} else if (value == null) {
+		return '<span style="color:red">此菜单无上级菜单，请核查</span>';
 	} else {
 		return value;
 	}
@@ -170,9 +173,10 @@ function clearInput() {
 }
 
 // 菜单数树
-function getMenuTree(id) {
+function getMenuTree(id, supperName, level) {
 
 	var m_setting = {
+
 		data : {
 			simpleData : {
 				enable : true,
@@ -185,11 +189,16 @@ function getMenuTree(id) {
 			}
 		}
 	};
+	var param = {
+		'supperName' : supperName,
+		'level' : level
+	}
 
 	// 组包发给后台
 	$.ajax({
-		type : 'POST',
+		type : 'get',
 		url : PROJECT_NAME + '/web/carBrand/selectMenuTree',
+		data : param,
 		async : false,// 同步加载
 		success : function(data) {
 			if (data.success) {
@@ -205,17 +214,18 @@ function getMenuTree(id) {
 					// 指定节点id选中
 					var node = dd_ztree.getNodeByParam("id", id);
 					if (node != null) {
-						
+
 						dd_ztree.expandNode(node, true, true, true);// 指定选中ID节点展开
 						dd_ztree.selectNode(node, true);// 指定选中ID的节点
 
 						// findParent(dd_ztree,node);
 					}
-				} else {
-					// 展开所有节点
-					dd_ztree.expandAll(false);
 				}
-
+				// else {
+				// // 展开所有节点
+				// // dd_ztree.expandAll(false);
+				// }
+				closeAll();
 			} else if (!data.success) {
 				layer.msg(data.message);
 			}
@@ -228,18 +238,10 @@ function getMenuTree(id) {
 
 function chooseTree() {
 
-	//给输入框加入上次搜索的名称/修改时为原名称
+	// 给输入框加入上次搜索的名称/修改时为原名称
 	$('#keyword').val($('#parentName').val());
-	var supperId = $('#parentId').val();
-	
-	// 如果父菜单ID不为空
-	if (supperId != '') {
-		getMenuTree(supperId);
-	} else {
-		getMenuTree(null);
-	}
 
-	closeAll();
+	// closeAll();
 }
 
 /** *** 新增add ****** */
@@ -256,7 +258,7 @@ $('#btn_add').click(function() {
 	$('#id').val(null);
 
 	// 获取菜单树形结构(传空表示新增，不带父节点ID)
-	// getMenuTree(null);
+	getMenuTree(null, null, null);
 })
 
 /** ***** 修改edit****** */
@@ -282,7 +284,7 @@ $('#btn_edit').click(
 				$('#parentName').val(selectContent[0].supperName);
 
 				// 获取树形结构，传入当前选中的父菜单ID，便于在菜单树形结构展示选中点
-				// getMenuTree(supperId);
+				getMenuTree(supperId, null, null);
 
 				// 给当前菜单ID赋值,表示当前使用功能是修改
 				$('#id').val(selectContent[0].id);
@@ -528,7 +530,10 @@ var FileInput = function() {
 // 模糊查询
 var nodeList = [];
 // input框变化时查询节点
-document.getElementById("keyword").addEventListener("input", test, false);
+$(function() {
+	// input框变化时查询节点
+	document.getElementById("keyword").addEventListener("input", test, false);
+});
 function test() {
 	var treeObj = $.fn.zTree.getZTreeObj("upMenuTree");
 	var keywords = $("#keyword").val();
@@ -537,28 +542,11 @@ function test() {
 	if ('' == keywords) {
 		var nodes = treeObj.getNodesByParam("isHidden", true);
 		treeObj.showNodes(nodes);
+
+		getMenuTree(null, null, null);
 	}
 }
 
-/**
- * 收起树：只展开根节点下的一级节点
- * 
- * @param treeId
- */
-function close_ztree(treeId) {
-	var treeObj = $.fn.zTree.getZTreeObj(treeId);
-	var nodes = treeObj.transformToArray(treeObj.getNodes());
-	var nodeLength = nodes.length;
-	for (var i = 0; i < nodeLength; i++) {
-		if (nodes[i].id == '0') {
-			// 根节点：展开
-			treeObj.expandNode(nodes[i], true, true, false);
-		} else {
-			// 非根节点：收起
-			treeObj.expandNode(nodes[i], false, true, false);
-		}
-	}
-}
 /**
  * 关闭所有节点，打开根节点
  */
@@ -567,21 +555,6 @@ function closeAll() {
 	zTree.expandAll(false); // 关闭所有节点
 	var nodes = zTree.getNodes();
 	zTree.expandNode(nodes[0], true, false, true); // 打开根节点
-}
-
-/**
- * 查找父节点
- * 
- * @param zTree:树对象
- * @param node:节点对象
- */
-function findParent(zTree, node) {
-	zTree.expandNode(node, true, false, false);
-	var pNode = node.getParentNode();
-	if (pNode != null) {
-		nodeList.push(pNode);
-		findParent(zTree, pNode);
-	}
 }
 
 /**
@@ -594,50 +567,9 @@ function searchNode(e) {
 	var value = $('#keyword').val();
 	var keyType = "name";
 	if (value === "") {
-		closeAll();
 		return;
 	}
-	nodeList = zTree.getNodesByParamFuzzy(keyType, value);
-
-	
-	for (var x = 0; x < nodeList.length; x++) {
-		// 不查询父级,splice去掉
-//		if (nodeList[x].isParent) {
-//			nodeList.splice(x--, 1);
-//		}
-		
-		console.log($('#menuLevel option:selected').val());
-		var menuLevel = $('#menuLevel option:selected').val();
-		if( 0 != parseInt(menuLevel)){
-			
-			//根据菜单等级过滤数据，去掉非此等级数据
-			if (parseInt(menuLevel) != nodeList[x].level) {
-				nodeList.splice(x--, 1);
-			}
-		}
-		
-	}
-
-	// zTree.cancelSelectedNode();
-	nodeList = zTree.transformToArray(nodeList);
-	updateNodes(true, value, keyType);
-}
-
-/**
- * 更新全部节点，只展示查找出的一级节点
- */
-function updateNodes(highlight, value, keyType) {
-	var zTree = $.fn.zTree.getZTreeObj("upMenuTree");
-	var allNode = zTree.transformToArray(zTree.getNodes());
-	zTree.hideNodes(allNode);
-
-	for ( var n in nodeList) {
-		findParent(zTree, nodeList[n]);
-	}
-
-	zTree.showNodes(nodeList);
-	closeAll();
-	nodeList = zTree.getNodesByParamFuzzy(keyType, value);
+	getMenuTree(null, value, $('#menuLevel option:selected').val());
 }
 
 function saveBrand() {

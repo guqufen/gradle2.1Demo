@@ -40,8 +40,8 @@ public class carBrandController extends BaseController{
 	}
 	
 	@RequestMapping(value = "/selectMenuTree")
-	public ResultDTO<CarBrandDO> selectMenuTree(){
-		ResultDTO<CarBrandDO> pager = carBrandService.selectMenuTree();
+	public ResultDTO<CarBrandDO> selectMenuTree(CarBrandDO carBrandDO){
+		ResultDTO<CarBrandDO> pager = carBrandService.selectMenuTree(carBrandDO);
 		return pager;
 	}
 	
