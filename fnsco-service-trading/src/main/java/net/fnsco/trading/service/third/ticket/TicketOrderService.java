@@ -166,7 +166,7 @@ public class TicketOrderService extends BaseService {
                         order.setPayTime(DateUtils.toParseYmdhms(payTime));
                         //减去冻结金额
                         if (TicketConstants.OrderStateEnum.PAYING.getCode().equals(order.getStatus())) {
-                        	 if(channelType.equals("80")) {
+                        	 if("80".equals(channelType)) {
                         		 appAccountBalanceService.doUpdateFrozenAmount(order.getAppUserId(), order.getOrderAmount());
                              }
                             order.setStatus(TicketConstants.OrderStateEnum.SUCCESS.getCode());
