@@ -533,6 +533,13 @@ var nodeList = [];
 $(function() {
 	// input框变化时查询节点
 	document.getElementById("keyword").addEventListener("input", test, false);
+
+	// 优化，避免按ENTER键框体消失
+	$('#ztreeModal').keydown(function() {
+		if (event.keyCode == "13") {
+			return false;
+		}
+	});
 });
 
 function test() {
