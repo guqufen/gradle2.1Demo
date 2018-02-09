@@ -234,11 +234,12 @@ public class TradeWithdrawService extends BaseService {
         TradeWithdrawDO tradeWithdraw = new TradeWithdrawDO();
         tradeWithdraw.setAmount(order.getOrderAmount());
         tradeWithdraw.setAppUserId(order.getAppUserId());
+        tradeWithdraw.setOrderNo(order.getOrderNo());
         // tradeWithdraw.setChannelMerId(channelMerId);
         // tradeWithdraw.setFee(fee);
         tradeWithdraw.setFund(appAccountBalance.getFund());
-        tradeWithdraw.setTradeType(TradeConstants.TxnSubTypeEnum.REFUND_HCP.getCode());
-        tradeWithdraw.setTradeSubType(TradeConstants.TradeTypeEnum.INCOME.getCode());
+        tradeWithdraw.setTradeType(TradeConstants.TradeTypeEnum.INCOME.getCode());
+        tradeWithdraw.setTradeSubType(TradeConstants.TxnSubTypeEnum.REFUND_HCP.getCode());
         tradeWithdraw.setRespCode(TradeConstants.RespCodeEnum.HANDLING.getCode());
         tradeWithdraw.setStatus(0);
         doAdd(tradeWithdraw);
