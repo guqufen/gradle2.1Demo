@@ -230,11 +230,13 @@ public class TradeWithdrawService extends BaseService {
     }
 
     public void doRefundForTicket(TicketOrderDO order) {
+        TradeWithdrawDO trade = tradeWithdrawDAO.queryByOriginalOrderNo(order.getOrderNo());
         AppAccountBalanceDO appAccountBalance = appAccountBalanceService.doQueryByAppUserId(order.getAppUserId());
         TradeWithdrawDO tradeWithdraw = new TradeWithdrawDO();
         tradeWithdraw.setAmount(order.getOrderAmount());
         tradeWithdraw.setAppUserId(order.getAppUserId());
         tradeWithdraw.setOriginalOrderNo(order.getOrderNo());
+        tradeWithdraw.setChannelType(trade.getChannelType());
         // tradeWithdraw.setChannelMerId(channelMerId);
         // tradeWithdraw.setFee(fee);
         tradeWithdraw.setFund(appAccountBalance.getFund());

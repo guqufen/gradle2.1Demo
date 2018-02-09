@@ -98,6 +98,7 @@ public class TicketOrderService extends BaseService {
                 if (result != null) {
                     JSONObject obj1 = JSONObject.fromObject(result);
                     String status = obj1.getString("status");
+                    order.setRespMsg(obj1.getString("msg"));
                     if ("0".equals(status)) {
                         order.setStatus(TicketConstants.OrderStateEnum.PROCESSING.getCode());
                     } else if ("1".equals(status)) {
