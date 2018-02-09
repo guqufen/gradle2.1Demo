@@ -234,7 +234,7 @@ public class TradeWithdrawService extends BaseService {
         TradeWithdrawDO tradeWithdraw = new TradeWithdrawDO();
         tradeWithdraw.setAmount(order.getOrderAmount());
         tradeWithdraw.setAppUserId(order.getAppUserId());
-        tradeWithdraw.setOrderNo(order.getOrderNo());
+        tradeWithdraw.setOriginalOrderNo(order.getOrderNo());
         // tradeWithdraw.setChannelMerId(channelMerId);
         // tradeWithdraw.setFee(fee);
         tradeWithdraw.setFund(appAccountBalance.getFund());
