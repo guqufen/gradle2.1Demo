@@ -233,7 +233,7 @@ public class TicketOrderService extends BaseService {
                                 }
                             }
                         }
-                        if (channelType.equals("80")) {
+                        if("80".equals(channelType)) {
                             if (TicketConstants.OrderStateEnum.REFUND.getCode().equals(order.getStatus())) {
                                 //增加退款的钱
                                 appAccountBalanceService.updateFund(order.getAppUserId(), BigDecimal.ZERO.subtract(totalAmount));
