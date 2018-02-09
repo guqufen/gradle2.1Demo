@@ -203,6 +203,7 @@ public class TicketOrderService extends BaseService {
                         order.setStatus(TicketConstants.OrderStateEnum.PAY_FAIL.getCode());
                     } else if ("7".equals(status)) {//有乘客退票成功
                         String passengers = obj1.getString("passengers");
+                        order.setRespMsg(obj1.getString("msg"));
                         JSONArray objArray2 = JSONArray.fromObject(passengers);
                         BigDecimal totalAmount = BigDecimal.ZERO;
                         for (int j = 0; j < objArray2.size(); j++) {
@@ -226,7 +227,7 @@ public class TicketOrderService extends BaseService {
                                     pass.setLastModifyTime(new Date());
                                     passengerDAO.update(pass);
                                     if ("true".equals(returnsuccess)) {
-                                        totalAmount.add(amountBs);
+                                        totalAmount = totalAmount.add(amountBs);
                                         order.setStatus(TicketConstants.OrderStateEnum.REFUND.getCode());
                                     }
                                     //appAccountBalanceService.updateFund(order.getAppUserId(), BigDecimal.ZERO.subtract(amountBs));
@@ -244,6 +245,7 @@ public class TicketOrderService extends BaseService {
                             tradeWithdraw.setRespCode(TradeConstants.RespCodeEnum.SUCCESS.getCode());
                             tradeWithdraw.setStatus(3);
                             tradeWithdraw.setAmount(totalAmount);
+                            tradeWithdraw.setChannelType(channelType);
                             tradeWithdrawService.doUpdate(tradeWithdraw);
                         }
                     } else if ("8".equals(status)) {//有乘客退票失败
