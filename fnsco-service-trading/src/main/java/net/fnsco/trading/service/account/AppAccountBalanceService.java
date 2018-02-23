@@ -72,13 +72,13 @@ public class AppAccountBalanceService extends BaseService {
 	public AppAccountBalanceDO doQueryByAppUserId(Integer appUserId) {
 		AppAccountBalanceDO accountBalance = this.appAccountBalanceDAO.getByAppUserId(appUserId);
 		if(null == accountBalance) {
-            AppAccountBalanceDO appAccountBalance = new AppAccountBalanceDO();
-            appAccountBalance.setAppUserId(appUserId);
-            appAccountBalance.setCreateTime(new Date());
-            appAccountBalance.setFreezeAmount(new BigDecimal(0));
-            appAccountBalance.setFund(new BigDecimal(0));
-            appAccountBalance.setUpdateTime(new Date());
-            accountBalance = this.doAdd(appAccountBalance, 0);
+            accountBalance = new AppAccountBalanceDO();
+            accountBalance.setAppUserId(appUserId);
+            accountBalance.setCreateTime(new Date());
+            accountBalance.setFreezeAmount(new BigDecimal(0));
+            accountBalance.setFund(new BigDecimal(0));
+            accountBalance.setUpdateTime(new Date());
+            accountBalance = this.doAdd(accountBalance, 0);
         }
 		return accountBalance;
 	}
