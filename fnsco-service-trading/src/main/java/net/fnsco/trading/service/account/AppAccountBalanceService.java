@@ -78,7 +78,7 @@ public class AppAccountBalanceService extends BaseService {
             appAccountBalance.setFreezeAmount(new BigDecimal(0));
             appAccountBalance.setFund(new BigDecimal(0));
             appAccountBalance.setUpdateTime(new Date());
-            appAccountBalance = this.doAdd(appAccountBalance, 0);
+            accountBalance = this.doAdd(appAccountBalance, 0);
         }
 		return accountBalance;
 	}
