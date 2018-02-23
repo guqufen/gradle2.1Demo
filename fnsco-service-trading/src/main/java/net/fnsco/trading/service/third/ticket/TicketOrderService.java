@@ -430,7 +430,7 @@ public class TicketOrderService extends BaseService {
         String channelType = "80";//法奈昇余额渠道
         TradeWithdrawDO tradeWithdraw = tradeWithdrawService.doAddForTicket(order, channelType);
         //先查询余额
-        appAccountBalanceService.doQueryByAppUserId(order.getAppUserId());
+        //appAccountBalanceService.doQueryByAppUserId(order.getAppUserId());
         //冻结余额
         boolean payResult = appAccountBalanceService.doFrozenBalance(order.getAppUserId(), order.getOrderAmount());
         if (!payResult) {
