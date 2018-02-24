@@ -32,18 +32,19 @@ public class PassivePayController extends BaseController {
 	@ApiOperation(value = "扫一扫-支付交易接口url")
 	public ResultDTO<PassivePayResultDTO> zxyhPassivePay(@RequestBody PassivePayReqDTO passivePayReqDTO) {
 
-//		PassivePayDTO passivePayDTO = new PassivePayDTO();
-//		passivePayDTO.setStdtranamt(passivePayJO.getAmt());// 交易金额
-//		passivePayDTO.setStd400memo("扫码支付");// 商品描述
-//		passivePayDTO.setStdauthid(passivePayJO.getAuthId());// 授权码
-//		
-//		
-//		return PaymentService.PassivePay(passivePayJO.getUserId(), passivePayDTO);
+		// PassivePayDTO passivePayDTO = new PassivePayDTO();
+		// passivePayDTO.setStdtranamt(passivePayJO.getAmt());// 交易金额
+		// passivePayDTO.setStd400memo("扫码支付");// 商品描述
+		// passivePayDTO.setStdauthid(passivePayJO.getAuthId());// 授权码
+		//
+		//
+		// return PaymentService.PassivePay(passivePayJO.getUserId(),
+		// passivePayDTO);
 
-		//判断APP用户ID是否合法
+		// 判断APP用户ID是否合法
 		Integer id = Integer.parseInt(this.request.getHeader("userId"));// 从头部获取userId
-		if (null == id || id != passivePayReqDTO.getUserId()) {
-			logger.error("用户登录状态非法。");
+		if (null == id || id.intValue() != passivePayReqDTO.getUserId().intValue()) {
+			logger.error("用户登录状态非法。头部获取的id=" + id + ",参数ID" + passivePayReqDTO.getUserId());
 			return ResultDTO.fail("用户登录状态非法。");
 		}
 

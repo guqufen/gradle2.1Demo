@@ -708,7 +708,6 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         	if(headImagePath.indexOf("^")!=-1) {
         		String path = headImagePath.substring(headImagePath.indexOf("^") + 1);
         		dto.setHeadImagePath(OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), path));
-               // map.put("headImagePath", OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
         	}else {
         		String prefix = env.getProperty("app.base.url");
         		dto.setHeadImagePath(prefix+headImagePath);
