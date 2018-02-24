@@ -72,13 +72,13 @@ public class AppAccountBalanceService extends BaseService {
 	public AppAccountBalanceDO doQueryByAppUserId(Integer appUserId) {
 		AppAccountBalanceDO accountBalance = this.appAccountBalanceDAO.getByAppUserId(appUserId);
 		if(null == accountBalance) {
-            AppAccountBalanceDO appAccountBalance = new AppAccountBalanceDO();
-            appAccountBalance.setAppUserId(appUserId);
-            appAccountBalance.setCreateTime(new Date());
-            appAccountBalance.setFreezeAmount(new BigDecimal(0));
-            appAccountBalance.setFund(new BigDecimal(0));
-            appAccountBalance.setUpdateTime(new Date());
-            appAccountBalance = this.doAdd(appAccountBalance, 0);
+            accountBalance = new AppAccountBalanceDO();
+            accountBalance.setAppUserId(appUserId);
+            accountBalance.setCreateTime(new Date());
+            accountBalance.setFreezeAmount(new BigDecimal(0));
+            accountBalance.setFund(new BigDecimal(0));
+            accountBalance.setUpdateTime(new Date());
+            accountBalance = this.doAdd(accountBalance, 0);
         }
 		return accountBalance;
 	}
@@ -113,11 +113,13 @@ public class AppAccountBalanceService extends BaseService {
 	 * @date   2017年12月19日 上午10:13:53
 	 */
 	public boolean doFrozenBalance(Integer appUserId,BigDecimal fund) {
+	    logger.error("更新余额和对应的冻结金额："+fund);
 		int result = appAccountBalanceDAO.updateFrozenBalance(fund, appUserId,new Date());
 		if(result >0) {
+		    logger.error("更新余额和对应的冻结金额成功"+fund);
 			return true;
 		}
-		
+		logger.error("更新余额和对应的冻结金额失败"+fund);
 		return false;
 	}
 	/**
@@ -131,11 +133,13 @@ public class AppAccountBalanceService extends BaseService {
 	 * @date   2017年12月21日 下午1:36:47
 	 */
 	public boolean doUpdateFrozenAmount(Integer appUserId,BigDecimal fund) {
+	    logger.error("更新冻结金额,不更新余额："+fund);
 		int result = appAccountBalanceDAO.updateFrozenAmount(fund, appUserId,new Date());
 		if(result >0) {
+		    logger.error("更新冻结金额,不更新余额成功"+fund);
 			return true;
 		}
-		
+		logger.error("更新冻结金额,不更新余额失败"+fund);
 		return false;
 	}
 	/**
@@ -149,10 +153,13 @@ public class AppAccountBalanceService extends BaseService {
 	 * @date   2017年12月21日 下午1:37:10
 	 */
 	public boolean updateFund(Integer appUserId,BigDecimal fund) {
+	    logger.error("更新余额："+fund);
         int result = appAccountBalanceDAO.updateFund(fund, appUserId,new Date());
         if(result >0) {
+            logger.error("更新余额成功："+fund);
             return true;
         }
+        logger.error("更新余额失败："+fund);
         return false;
     }
 	

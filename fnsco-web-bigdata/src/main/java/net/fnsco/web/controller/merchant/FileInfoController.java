@@ -40,7 +40,6 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.constants.CoreMapConstants;
 import net.fnsco.core.file.FileService;
 import net.fnsco.core.utils.OssLoaclUtil;
-import net.fnsco.core.utils.OssUtil;
 
 /**
  * @desc 文件上传控制器
@@ -241,7 +240,7 @@ public class FileInfoController extends BaseController {
 	@ResponseBody
 	public String deleteOssFile(String url) {
 		String fileKey = url.substring(url.lastIndexOf("^") + 1);
-		OssUtil.deleteFile(OssLoaclUtil.getHeadBucketName(), fileKey);
+		OssLoaclUtil.deleteFile(OssLoaclUtil.getHeadBucketName(), fileKey);
 		return null;
 	}
 

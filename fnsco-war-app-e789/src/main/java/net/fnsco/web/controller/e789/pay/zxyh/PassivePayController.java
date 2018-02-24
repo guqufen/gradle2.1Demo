@@ -41,7 +41,7 @@ public class PassivePayController extends BaseController {
 //		return PaymentService.PassivePay(passivePayJO.getUserId(), passivePayDTO);
 
 		//判断APP用户ID是否合法
-		Integer id = getUserId();
+		Integer id = Integer.parseInt(this.request.getHeader("userId"));// 从头部获取userId
 		if (null == id || id != passivePayReqDTO.getUserId()) {
 			logger.error("用户登录状态非法。");
 			return ResultDTO.fail("用户登录状态非法。");
