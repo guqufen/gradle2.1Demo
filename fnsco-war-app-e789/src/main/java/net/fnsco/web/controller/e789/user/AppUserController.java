@@ -21,7 +21,8 @@ import net.fnsco.order.service.domain.AppUser;
 import net.fnsco.trading.comm.HeadImageEnum;
 import net.fnsco.trading.service.bank.AppUserBankService;
 import net.fnsco.trading.service.bank.entity.AppUserBankDO;
-import net.fnsco.trading.service.merchant.AppUserMerchantService;
+import net.fnsco.trading.service.merchantentity.AppUserMerchantEntityService;
+import net.fnsco.trading.service.merchantentity.entity.AppUserMerchantEntityDO;
 import net.fnsco.web.controller.e789.jo.CommonJO;
 import net.fnsco.web.controller.e789.jo.FindPasswordJO;
 import net.fnsco.web.controller.e789.jo.GetValidateCodeJO;
@@ -46,7 +47,7 @@ public class AppUserController extends BaseController {
     @Autowired
     private AppUserBankService    appUserBankService;
     @Autowired
-    private AppUserMerchantService appUserMerchantService;
+    private AppUserMerchantEntityService appUserMerchantService;
     @RequestMapping(value = "/validateCode")
     @ApiOperation(value = "注册页-用户注册校验验证码" ,notes="作者：何金庭")
     @ResponseBody
@@ -90,8 +91,8 @@ public class AppUserController extends BaseController {
         }
         
         //查询用户绑定商户数量 根据用户id查询数量
-        int num  = appUserMerchantService.queryMerchantByUserId(appUserLoginInfoDTO.getUserId());
-        if(num==0) {
+        AppUserMerchantEntityDO merchant  = appUserMerchantService.queryAppUserMerInfoByUserId(appUserLoginInfoDTO.getUserId());
+        if(merchant==null) {
         	loginVO.setIsMerchant(false);
         }else {
         	loginVO.setIsMerchant(true);
@@ -169,8 +170,8 @@ public class AppUserController extends BaseController {
         }
 
       //查询用户绑定商户数量 根据用户id查询数量
-        int num  = appUserMerchantService.queryMerchantByUserId(appUserLoginInfoDTO.getUserId());
-        if(num==0) {
+        AppUserMerchantEntityDO merchant  = appUserMerchantService.queryAppUserMerInfoByUserId(appUserLoginInfoDTO.getUserId());
+        if(merchant==null) {
         	loginVO.setIsMerchant(false);
         }else {
         	loginVO.setIsMerchant(true);
@@ -220,8 +221,8 @@ public class AppUserController extends BaseController {
         }
 
         //查询用户绑定商户数量 根据用户id查询数量
-        int num  = appUserMerchantService.queryMerchantByUserId(appUserLoginInfoDTO.getUserId());
-        if(num==0) {
+        AppUserMerchantEntityDO merchant  = appUserMerchantService.queryAppUserMerInfoByUserId(appUserLoginInfoDTO.getUserId());
+        if(merchant==null) {
         	loginVO.setIsMerchant(false);
         }else {
         	loginVO.setIsMerchant(true);

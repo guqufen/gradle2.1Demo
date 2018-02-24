@@ -5,8 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
-import net.fnsco.core.utils.OssLoaclUtil;
-import net.fnsco.core.utils.OssUtil;
 import net.fnsco.trading.service.pay.channel.zxyh.util.ZxyhPayMD5Util;
 
 @Configuration

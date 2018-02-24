@@ -577,7 +577,7 @@ public class TicketController extends BaseController {
                     AppUser mAppUser = appUserService.selectAppUserById(order.getAppUserId());
                     String mobile = mAppUser.getMobile();
                     String name = mAppUser.getRealName();
-                    if("".equals(name)) {
+                    if(Strings.isNullOrEmpty(name)) {
                     	name = mAppUser.getUserName();
                     }
                     String trainDate = order.getTrainDate();

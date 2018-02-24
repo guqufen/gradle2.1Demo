@@ -64,9 +64,11 @@ public class AppUserMerchantEntityService extends BaseService {
 		AppUserMerchantEntityDO obj = this.appUserMerchantEntityDAO.getById(id);
 		return obj;
 	}
-
-	public MerchantEntity queryMerInfoByUserId(Integer appUserId) {
-		return merchantEntityDao.selectByAppUserId(appUserId);
+    public MerchantEntity queryMerInfoByUserId(Integer appUserId) {
+       return merchantEntityDao.selectByAppUserId(appUserId);
+    }
+    
+	public AppUserMerchantEntityDO queryAppUserMerInfoByUserId(Integer appUserId) {
+		return appUserMerchantEntityDAO.selectByEntityInnerCode(appUserId);
 	}
-
 }
