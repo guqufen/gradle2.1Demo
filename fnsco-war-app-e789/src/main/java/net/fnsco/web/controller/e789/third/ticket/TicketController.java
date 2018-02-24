@@ -577,6 +577,9 @@ public class TicketController extends BaseController {
                     AppUser mAppUser = appUserService.selectAppUserById(order.getAppUserId());
                     String mobile = mAppUser.getMobile();
                     String name = mAppUser.getRealName();
+                    if(Strings.isNullOrEmpty(name)) {
+                    	name = mAppUser.getUserName();
+                    }
                     String trainDate = order.getTrainDate();
                     String trainCode = order.getTrainCode();
                     String fromStationName = order.getFromStationName();
@@ -596,7 +599,7 @@ public class TicketController extends BaseController {
                         logger.error("短信发送异常 ", e);
                     }
                 }
-            }
+            }	
         }).start();
     }
 

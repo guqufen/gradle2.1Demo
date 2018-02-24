@@ -48,7 +48,7 @@ public class AdController extends BaseController {
 	@ApiOperation(value = "查询广告资讯")
 	public ResultDTO<AppAdVO> queryAdList(@RequestBody AppAdJO appAdJO) {
 		logger.error("设备类型="+request.getHeader("type"));
-		if (appAdJO.getType() == null || appAdJO.getUserId() == null ||StringUtils.isNullOrEmpty( request.getHeader("type"))) {
+		if (appAdJO.getType() == null ||StringUtils.isNullOrEmpty( request.getHeader("type"))) {
 			return ResultDTO.fail(E789ApiConstant.E_PARAMETER_NOT_NULL);
 		}
 		String type =  request.getHeader("type");
