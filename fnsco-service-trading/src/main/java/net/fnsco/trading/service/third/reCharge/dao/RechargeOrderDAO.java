@@ -73,7 +73,7 @@ public interface RechargeOrderDAO {
     	@Result( column = "resp_msg",property = "respMsg"),
     	@Result( column = "create_time",property = "createTime"),
     	@Result( column = "update_time",property = "updateTime") })
-    @Select("select * from thr_recharge_order where status=0 and create_time >= #{startDate}")
+    @Select("select * from thr_recharge_order where status=0 and create_time >= #{startDate} and order_no like 'ACCT%'")
     public List<RechargeOrderDO> queryPhoneCharge(@Param("startDate") Date startDate);
 
     @Results({@Result( column = "app_user_id",property = "appUserId"),
