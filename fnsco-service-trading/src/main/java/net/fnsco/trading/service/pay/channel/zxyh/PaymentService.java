@@ -604,6 +604,7 @@ public class PaymentService extends BaseService  {
 
 			tradeOrderDO1.setRespCode("1000");// 设置响应应答码
 			tradeOrderDO1.setCompleteTime(new Date());
+			tradeOrderDO1.setPayOrderNo(passDTO1.getStdrefnum());// 支付订单号(平台流水号，供后续退货或者撤销或对账使用)
 			logger.error("扫一扫-交易结果未知，respCode=[" + passDTO1.getStd400mgid() + "],respMsg=[" + passDTO1.getStdrtninfo()
 					+ "]");
 
@@ -621,7 +622,7 @@ public class PaymentService extends BaseService  {
 
 		passivePayResultDTO.setRespCode(tradeOrderDO1.getRespCode());// 应答码
 		passivePayResultDTO.setRespMsg(tradeOrderDO1.getRespMsg());// 应答信息
-		passivePayResultDTO.setOrderNo(tradeOrderDO1.getOrderNo());// 商户订单号
+		passivePayResultDTO.setOrderNo(tradeOrderDO.getOrderNo());// 商户订单号
 		passivePayResultDTO.setBegTime(passDTO.getStdbegtime());// 交易起始时间
 		passivePayResultDTO.setEndTime(passDTO1.getEndTime());// 支付结束时间
 		passivePayResultDTO.setAmt(passivePayReqDTO.getAmt());// 交易金额

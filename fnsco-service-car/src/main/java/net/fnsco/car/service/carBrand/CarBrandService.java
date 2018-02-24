@@ -210,17 +210,23 @@ public class CarBrandService extends BaseService {
 		return ResultDTO.success(carList);
 	}
 
-	public ResultDTO selectAllFirstLevel(){
-		
+	public ResultDTO selectAllFirstLevel() {
+
 		List<CarBrandDO> list = carBrandDAO.selectAllFirstLevel();
+		CarBrandDO root = new CarBrandDO();
+		root.setId(0);
+		root.setName("总菜单");
+		root.setSupperId(-1);
+		root.setLevel(-1);
+		list.add(root);
 		return ResultDTO.success(list);
 	}
-	
-	public ResultDTO selectChildById(Integer id){
+
+	public ResultDTO selectChildById(Integer id) {
 		List<CarBrandDO> list = carBrandDAO.selectChildById(id);
 		return ResultDTO.success(list);
 	}
-	
+
 	public ResultDTO selectChild(Integer id) {
 
 		// 通过父id查找关联的子Id(二级子id和三级子id和四级id)
