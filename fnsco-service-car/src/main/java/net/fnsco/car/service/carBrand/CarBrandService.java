@@ -210,6 +210,17 @@ public class CarBrandService extends BaseService {
 		return ResultDTO.success(carList);
 	}
 
+	public ResultDTO selectAllFirstLevel(){
+		
+		List<CarBrandDO> list = carBrandDAO.selectAllFirstLevel();
+		return ResultDTO.success(list);
+	}
+	
+	public ResultDTO selectChildById(Integer id){
+		List<CarBrandDO> list = carBrandDAO.selectChildById(id);
+		return ResultDTO.success(list);
+	}
+	
 	public ResultDTO selectChild(Integer id) {
 
 		// 通过父id查找关联的子Id(二级子id和三级子id和四级id)
