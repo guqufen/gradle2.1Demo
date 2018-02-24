@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,10 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.alibaba.fastjson.JSONArray;
 import com.google.common.base.Strings;
 
-import ch.qos.logback.core.CoreConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.car.comm.CarConstant;
@@ -45,10 +42,8 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.MessageUtils;
 import net.fnsco.core.utils.OssLoaclUtil;
-import net.fnsco.core.utils.dto.MessageValidateDTO;
-import net.fnsco.freamwork.comm.FrameworkConstant;
+import net.fnsco.web.controller.dto.MessageValidateDTO;
 import net.fnsco.web.controller.jo.LoanJO;
-import net.fnsco.web.controller.jo.LoanJO2;
 import net.fnsco.web.controller.vo.LoanVO;
 
 @RestController
@@ -90,8 +85,7 @@ public class LoanApplyController extends BaseController {
 		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(type+mobile);
 		
 		// 校验验证码是否正确
-		MessageUtils utils = new MessageUtils();
-		ResultDTO<Object> rt = utils.validateCode2(code, mobile, mDTO);
+		ResultDTO<Object> rt = MessageUtils.validateCode2(code, mobile, mDTO.getCode(),mDTO.getTime());
 		if (!rt.isSuccess()) {
 			return ResultDTO.fail(rt.getMessage());
 		}

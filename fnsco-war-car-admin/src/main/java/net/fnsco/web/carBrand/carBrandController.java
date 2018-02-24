@@ -45,6 +45,28 @@ public class carBrandController extends BaseController{
 		return pager;
 	}
 	
+	/**
+	 * 查找所有第一级菜单
+	 * @return
+	 */
+	@RequestMapping(value = "/selectAllFirstLevel")
+	public ResultDTO selectAllFirstLevel(){
+		ResultDTO<CarBrandDO> pager = carBrandService.selectAllFirstLevel();
+		return pager;
+	}
+	
+	@RequestMapping(value = "/selectChildById")
+	public ResultDTO selectChildById(Integer id){
+		ResultDTO<CarBrandDO> pager = carBrandService.selectChildById(id);
+		return pager;
+	}
+	
+	@RequestMapping(value = "/selectChild")
+	public ResultDTO selectChild(Integer id){
+		ResultDTO<CarBrandDO> pager = carBrandService.selectChild(id);
+		return pager;
+	}
+	
 	@RequestMapping(value = "/doAdd")
 	public ResultDTO doAdd(CarBrandDO carBrandDO) {
 

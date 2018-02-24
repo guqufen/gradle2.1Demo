@@ -1,6 +1,5 @@
 package net.fnsco.web.controller.open;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +17,7 @@ import net.fnsco.car.service.finance.entity.OrderFinanceDO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.MessageUtils;
-import net.fnsco.core.utils.dto.MessageValidateDTO;
+import net.fnsco.web.controller.dto.MessageValidateDTO;
 import net.fnsco.web.controller.jo.SaveFinanceJO;
 
 /**
@@ -46,8 +45,7 @@ public class MoneyManageController extends BaseController {
 		//获取session中验证码信息
 		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(type+mobile);
 		//校验验证码是否正确
-		MessageUtils utils = new MessageUtils();
-		ResultDTO<Object> rt = utils.validateCode2(code, mobile,mDTO);
+		ResultDTO<Object> rt = MessageUtils.validateCode2(code, mobile,mDTO.getCode(),mDTO.getTime());
 		if(!rt.isSuccess()){
 			return ResultDTO.fail(rt.getMessage());
 		}

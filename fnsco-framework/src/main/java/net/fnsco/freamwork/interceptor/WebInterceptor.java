@@ -1,5 +1,7 @@
 package net.fnsco.freamwork.interceptor;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -27,11 +29,11 @@ import net.fnsco.freamwork.comm.FrameworkConstant;
  */
 @Component
 public class WebInterceptor implements HandlerInterceptor {
-    private Logger             logger   = LoggerFactory.getLogger(WebInterceptor.class);
+    private Logger      logger = LoggerFactory.getLogger(WebInterceptor.class);
     @Autowired
-    private Environment        env;
+    private Environment env;
     @Autowired(required = false)
-    private WebService        userService;
+    private WebService  userService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -40,7 +42,6 @@ public class WebInterceptor implements HandlerInterceptor {
             return true;
         }
         String requestUrl = request.getRequestURL().toString();
-        String contextPath = request.getContextPath();
         // 从配置文件中获取浙付通接口模块,不需要被拦截
         String appModules = env.getProperty("web.ignore.url");
         if (!Strings.isNullOrEmpty(appModules)) {
@@ -52,25 +53,28 @@ public class WebInterceptor implements HandlerInterceptor {
             }
         }
         HttpSession session = request.getSession(false);
-        boolean flag = true;
-        if (null != session) {
-            Object obj = session.getAttribute(FrameworkConstant.SESSION_USER_KEY);
-            if (obj != null) {
-                flag = false;
-            }
+        if (null == session) {
+            return noSessionHander(request, response);
         }
-        if (flag) {
-            logger.warn("未登录转入登录页面");
-            String requestType = request.getHeader("X-Requested-With");
-            if (Strings.isNullOrEmpty(requestType)) {
-                response.sendRedirect(contextPath+"/idx");
-                return false;
-            }
-            WebUserDTO user = userService.getCookieUser(request);
-            if (null == user) {
-                OutWriterUtil.outJson(response, FrameworkConstant.E_NOT_LOGIN);
-                return false;
-            }
+        Object obj = session.getAttribute(FrameworkConstant.SESSION_USER_KEY);
+        if (obj == null) {
+            return noSessionHander(request, response);
+        }
+        return true;
+    }
+
+    private boolean noSessionHander(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        logger.warn("未登录转入登录页面");
+        String contextPath = request.getContextPath();
+        String requestType = request.getHeader("X-Requested-With");
+        if (Strings.isNullOrEmpty(requestType)) {
+            response.sendRedirect(contextPath + "/idx");
+            return false;
+        }
+        WebUserDTO result = userService.getCookieUser(request);
+        if (result == null) {
+            OutWriterUtil.outJson(response, FrameworkConstant.E_NOT_LOGIN);
+            return false;
         }
         return true;
     }
