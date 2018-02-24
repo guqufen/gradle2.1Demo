@@ -36,6 +36,7 @@ import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.OssLoaclUtil;
+import net.fnsco.core.utils.OssUtil;
 import net.fnsco.core.utils.SmsUtil;
 import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.order.api.appuser.AppUserService;
@@ -708,8 +709,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         if (!Strings.isNullOrEmpty(headImagePath)) {
         	if(headImagePath.indexOf("^")!=-1) {
         		String path = headImagePath.substring(headImagePath.indexOf("^") + 1);
-        		dto.setHeadImagePath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
-               // map.put("headImagePath", OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+        		dto.setHeadImagePath(OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), path));
         	}else {
         		String prefix = env.getProperty("app.base.url");
         		dto.setHeadImagePath(prefix+headImagePath);

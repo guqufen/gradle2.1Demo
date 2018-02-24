@@ -15,10 +15,12 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 
 import net.fnsco.core.utils.dto.IdCardDTO;
+import net.fnsco.core.utils.dto.IdCardFaceDTO;
 import sun.misc.BASE64Encoder;
 
 /**
@@ -27,19 +29,11 @@ import sun.misc.BASE64Encoder;
  * @version 
  * @Date 2017年12月12日 下午4:11:30
  */
-public class JuheDemoUtil {
-	
-	protected static Logger              logger = LoggerFactory.getLogger(JuheDemoUtil.class.getClass());
-	
-	//配置您申请的身份证识别KEY
-	public static final String IMAGE_APPKEY ="541432479017131ffa89cd68a5ed561c";
-	
-	//配置您申请的身份证实名认证KEY
-	public static final String CARD_APPKEY ="d3abde4405b87887b184956b69a7c7b3";
+public class IdCardUtil {
+	protected static Logger              logger = LoggerFactory.getLogger(IdCardUtil.class.getClass());
 		
-    //身份证识别的http地址
-    private static String  URI_ID_IMAGE     = "http://apis.juhe.cn/idimage/verify";
-    
+	//身份证识别的http地址
+	private static String  URI_ID_IMAGE     = "https://api-cn.faceplusplus.com/cardpp/v1/ocridcard";
     //身份证实名认证的http地址
     private static String  URI_ID_CARD      = "http://op.juhe.cn/idcard/query";
     
@@ -53,32 +47,88 @@ public class JuheDemoUtil {
      * @param side
      * @return
      */
-    public static IdCardDTO valiIdImage(String filePath, String side) {
-    	IdCardDTO idCard = new IdCardDTO();
+    public static IdCardFaceDTO valiIdImage(String filePath,String IMAGE_APPKEY,String IMAGE_APPSECRET) {
     	Map<String,String> params = Maps.newHashMap();
-    	params.put("key", IMAGE_APPKEY);
+    	params.put("api_key", IMAGE_APPKEY);
+    	params.put("api_secret", IMAGE_APPSECRET);
     	String  imgFile = getImageStr(filePath) ;
-    	params.put("image", imgFile);
-    	params.put("side", side);
+    	params.put("image_base64", imgFile);
+    	logger.error(filePath + "调用图片识别接口！");
     	String resule = HttpClientUtil.doPost(URI_ID_IMAGE, params);
-    	 JSONObject json = JSONObject.parseObject(resule);
-    	 String reason = json.getString("reason");
-    	 JSONObject obj = json.getJSONObject("result");
-    	 idCard.setReason(reason);
-    	 if("front".equals(side)) {
-    		 String realname = obj.getString("realname");
-    		 String idcard = obj.getString("idcard");
-    		 int errorCode = json.getInteger("error_code");
-    		 idCard.setRealname(realname);
-    		 idCard.setIdcard(idcard);
-    		 idCard.setErrorCode(errorCode);
-    	 }else if("back".equals(side)){
-    		 String end = obj.getString("end");
-    		 int errorCode = json.getInteger("error_code");
-    		 idCard.setErrorCode(errorCode);
-    		 idCard.setEnd(end);
+    	logger.error( "返回参数：" + resule.toString());
+    	JSONObject json = JSONObject.parseObject(resule);
+    	return parsingImageJson(json);
+    }
+    /**
+     * 图片识别返回参数处理
+     * @param firstKey
+     * @param side
+     * @return
+     */
+    public static IdCardFaceDTO parsingImageJson(JSONObject json) {
+    	IdCardFaceDTO idCardFace = new IdCardFaceDTO();
+    	 String error_message = json.getString("error_message");
+    	 int time_used = json.getIntValue("time_used");
+    	 JSONArray cards = json.getJSONArray("cards");
+    	 if(cards==null) {
+    		 idCardFace.setErrorMessage("2100033");
+        	 idCardFace.setTimeUsed(time_used);
+        	return idCardFace;
     	 }
-    	return idCard;
+    	 if(cards.size()==0) {
+    		 idCardFace.setErrorMessage("2100033");
+        	 idCardFace.setTimeUsed(time_used);
+        	return idCardFace;
+    	 }
+    		//取出数组第一个元素  
+    	    JSONObject reason = cards.getJSONObject(0);  
+    	    String side = reason.getString("side");
+    	    idCardFace.setSide(side);
+    	    if("front".equals(side)) {
+    	    	String gender = reason.getString("gender");
+    	    	String name= reason.getString("name");
+    	    	String id_card_number = reason.getString("id_card_number");
+    	    	String birthday = reason.getString("birthday");
+    	    	String race = reason.getString("race");
+    	    	String address = reason.getString("address");
+    	    	int type = reason.getInteger("type");
+    	    	idCardFace.setAddress(address);
+    	    	idCardFace.setBirthday(birthday);
+    	    	idCardFace.setGender(gender);
+    	    	idCardFace.setId_card_number(id_card_number);
+    	    	idCardFace.setName(name);
+    	    	idCardFace.setType(type);
+    	    	idCardFace.setRace(race);
+    	    }else if("back".equals(side)) {
+    	    	String issued_by = reason.getString("issued_by");
+    	    	String valid_date = reason.getString("valid_date");
+    	    	idCardFace.setIssuedBy(issued_by);
+    	    	idCardFace.setValidDate(valid_date);
+    	    }
+    	 
+    	 idCardFace.setErrorMessage(error_message);
+    	 idCardFace.setTimeUsed(time_used);
+    	return idCardFace;
+    }
+    /**
+     * BASE64转换
+     * @param firstKey
+     * @return
+     */
+    public static String getImageStr(String filePath) {
+        InputStream inputStream = null;
+        byte[] data =null;
+        try {
+        	inputStream = new FileInputStream(filePath);
+            data = new byte[inputStream.available()];
+            inputStream.read(data);
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // 加密
+        BASE64Encoder encoder = new BASE64Encoder();
+        return encoder.encode(data);
     }
     /**
      * 实名认证
@@ -86,17 +136,10 @@ public class JuheDemoUtil {
      * @param realname
      * @return
      */
-    public static IdCardDTO valiIdCard(String idcard,String realname) {
-    	IdCardDTO idCard = new IdCardDTO();
+    public static IdCardDTO valiIdCard(String idcard,String realname,String CARD_APPKEY) {
     	Map<String,String> params = Maps.newHashMap();
     	params.put("key", CARD_APPKEY);
     	params.put("idcard", idcard );
-    	/*try {
-    		realname = URLEncoder.encode(realname,"UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			logger.info("URLEncoder编码失败");
-			e.printStackTrace();
-		}*/
     	params.put("realname", realname);
     	String resule = null;
     	logger.info("实名认证参数："+params.toString());
@@ -107,9 +150,17 @@ public class JuheDemoUtil {
 			logger.info("实名认证验证失败");
 			e.printStackTrace();
 		}
-    	//String resule = HttpUtils.get(URI_ID_CARD, params);
-    	//String resule = HttpClientUtil.doPost(URI_ID_CARD, params);
-    	 JSONObject json = JSONObject.parseObject(resule);
+		JSONObject json = JSONObject.parseObject(resule);
+    	return parsingCardJson(json);
+    }
+    /**
+     * 实名认证返回参数处理
+     * @param idcard
+     * @param realname
+     * @return
+     */
+    public static IdCardDTO parsingCardJson(JSONObject json) {
+    	IdCardDTO idCard = new IdCardDTO();
     	 int errorCode = json.getInteger("error_code");
     	 String reason = json.getString("reason");
     	 JSONObject obj = json.getJSONObject("result");
@@ -125,34 +176,6 @@ public class JuheDemoUtil {
     	 idCard.setReason(reason);
     	return idCard;
     }
-    /**
-     * BASE64转换
-     * @param firstKey
-     * @return
-     */
-    public static String getImageStr(String filePath) {
-    	//filePath = OssLoaclUtil.getFileToLocal(OssLoaclUtil.getHeadBucketName(), firstKey ,filePath);
-        InputStream inputStream = null;
-        //byte[] data = new byte[1024];
-        byte[] data =null;
-        try {
-        	inputStream = new FileInputStream(filePath);
-            //inputStream = OssLoaclUtil.getFileInputStream(OssLoaclUtil.getHeadBucketName(), firstKey);
-           /* for (int n = 0; n != -1; ) {
-                n = inputStream.read(data, 0, data.length);
-            }*/
-            data = new byte[inputStream.available()];
-            inputStream.read(data);
-            inputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // 加密
-        BASE64Encoder encoder = new BASE64Encoder();
-        return encoder.encode(data);
-    }
-    
-    
     /**
     *
     * @param strUrl 请求地址

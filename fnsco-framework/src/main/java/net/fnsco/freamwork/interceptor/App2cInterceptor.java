@@ -65,8 +65,8 @@ public class App2cInterceptor implements HandlerInterceptor {
         String temp = env.getProperty("app.token.md5") + identifier;
         String trueTokenId = Md5Util.getInstance().md5(temp);
         if (!trueTokenId.equals(tokenId)) {
-        	logger.error("获取到的TokenId:"+tokenId+" ,identifier="+identifier+" , temp="+temp);
-            logger.error("TokenId不对"+ "传入id为" + tokenId + "生成后的id为" + trueTokenId);
+            logger.error("获取到的TokenId:" + tokenId + " ,identifier=" + identifier + " , temp=" + temp);
+            logger.error("TokenId不对" + "传入id为" + tokenId + "生成后的id为" + trueTokenId);
             OutWriterUtil.outJson(response, FrameworkConstant.E_TOKEN_ERROR);
             return false;
         }
@@ -74,24 +74,35 @@ public class App2cInterceptor implements HandlerInterceptor {
         String userId = request.getHeader("userId");
         String deviceId = request.getHeader("deviceId");
         logger.error("进入强制退出前判断" + userId);
-        if (!Strings.isNullOrEmpty(userId)) {
-            logger.error("进入强制退出判断" + userId);
-            AppUser1DTO userDto = userService.getUserInfo(userId);
-            if (userDto != null) {
-                if (userDto.getForcedLoginOut() != null && userDto.getForcedLoginOut().compareTo(1) == 0) {
-                    OutWriterUtil.outJson(response, FrameworkConstant.E_FORCED_LOGIN_OUT);
-                    logger.error("强制退出" + userId);
-                    return false;
-                } else {
-                    logger.error("不用强制退出" + userId);
-                }
-                if (!Strings.isNullOrEmpty(userDto.getDeviceId())) {
-                    if (!userDto.getDeviceId().equals(deviceId)) {
-                        OutWriterUtil.outJson(response, FrameworkConstant.E_FORCED_LOGIN_OUT);
-                        logger.error("强制退出，另一台机器已经登录" + userId);
-                        return false;
-                    }
-                }
+        if (Strings.isNullOrEmpty(userId)) {
+            OutWriterUtil.outJson(response, FrameworkConstant.E_FORCED_LOGIN_OUT);
+            logger.error("强制退出，用户id为空" + userId);
+            return false;
+        }
+        logger.error("进入强制退出判断" + userId);
+        AppUser1DTO userDto = null;
+        try {
+            userDto = userService.getUserInfo(userId);
+        } catch (Exception ex) {
+            logger.error("App2cInterceptor登录权限检查出现异常", ex);
+        }
+        if (userDto == null) {
+            OutWriterUtil.outJson(response, FrameworkConstant.E_FORCED_LOGIN_OUT);
+            logger.error("强制退出,用户信息不存在" + userId);
+            return false;
+        }
+        if (userDto.getForcedLoginOut() != null && userDto.getForcedLoginOut().compareTo(1) == 0) {
+            OutWriterUtil.outJson(response, FrameworkConstant.E_FORCED_LOGIN_OUT);
+            logger.error("强制退出" + userId);
+            return false;
+        } else {
+            logger.error("不用强制退出" + userId);
+        }
+        if (!Strings.isNullOrEmpty(userDto.getDeviceId())) {
+            if (!userDto.getDeviceId().equals(deviceId)) {
+                OutWriterUtil.outJson(response, FrameworkConstant.E_FORCED_LOGIN_OUT);
+                logger.error("强制退出，另一台机器已经登录" + userId);
+                return false;
             }
         }
         return true;
