@@ -648,7 +648,7 @@ public class PrepaidRefillService extends BaseService {
 		phoneChargeOrderDO.setMobile(chargeDTO.getPhone());// 设置充值手机号
 		phoneChargeOrderDO.setName(chargeDTO.getName());// 设置充值名称:xx元
 		phoneChargeOrderDO.setAmt(chargeDTO.getInprice().replace(".", ""));// 设置交易金额
-		phoneChargeOrderDO.setStatus(ThrRechargeStateEnum.INGOING.getCode());// 设置交易状态3-待支付
+		phoneChargeOrderDO.setStatus(ThrRechargeStateEnum.PROCESSING.getCode());// 设置交易状态3-待支付
 
 		tradeWithdrawDO.setOrderNo(orderid);// 设置订单号
 		tradeWithdrawDO.setOriginalOrderNo(orderid);// 设置原订单号(默认等于当前订单号)
