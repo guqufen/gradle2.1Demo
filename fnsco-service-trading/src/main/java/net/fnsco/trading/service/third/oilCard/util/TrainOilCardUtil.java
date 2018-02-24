@@ -27,7 +27,7 @@ public class TrainOilCardUtil {
     	params.put("account_no", accountNo);
     	String data = HttpUtils.get(shelfURL,params);
         if (data == null) {
-            logger.error("调用火车票查询余票接口返回空");
+            logger.error("调用油卡充值接口返回空");
             return null;
         }
         JSONObject jSONObject = JSONObject.fromObject(data);
