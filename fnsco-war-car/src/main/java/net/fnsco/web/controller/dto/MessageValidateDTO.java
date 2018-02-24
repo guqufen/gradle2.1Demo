@@ -1,4 +1,4 @@
-package net.fnsco.core.utils.dto;
+package net.fnsco.web.controller.dto;
 
 public class MessageValidateDTO {
 	public MessageValidateDTO(String code, long time) {
