@@ -16,7 +16,7 @@ import com.google.common.collect.Lists;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.core.utils.OssLoaclUtil;
+import net.fnsco.core.utils.OssUtil;
 import net.fnsco.order.api.sysuser.SysUserService;
 import net.fnsco.order.service.ad.dao.AdDAO;
 import net.fnsco.order.service.ad.entity.AdDO;
@@ -107,7 +107,7 @@ public class AdService extends BaseService {
 				AdDTO adDTO = new AdDTO();
 				// 获取图片路径
 				String str2 = img_path.substring(img_path.indexOf("^")+1, img_path.length());
-				String url = OssLoaclUtil.getFileUrl( OssLoaclUtil.getHeadBucketName(),str2);
+				String url = OssUtil.getFileUrl( OssUtil.getHeadBucketName(),str2);
 				if (!Strings.isNullOrEmpty(url)) {
 					adDTO.setImgPath(url);
 				}
@@ -131,7 +131,7 @@ public class AdService extends BaseService {
 			AdDTO adDTO = new AdDTO();
 			// 获取图片路径
 			String str2 = img_path.substring(img_path.indexOf("^")+1, img_path.length());
-			String url = OssLoaclUtil.getFileUrl(OssLoaclUtil.getHeadBucketName(), str2);
+			String url = OssUtil.getFileUrl(OssUtil.getHeadBucketName(), str2);
 			if (!Strings.isNullOrEmpty(url)) {
 				adDTO.setImgPath(url);
 			}
