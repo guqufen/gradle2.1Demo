@@ -29,13 +29,11 @@ import net.fnsco.bigdata.api.merchant.MerchantPosService;
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
 import net.fnsco.bigdata.service.dao.master.MerchantEntityDao;
 import net.fnsco.bigdata.service.domain.MerchantCore;
-import net.fnsco.bigdata.service.domain.MerchantEntity;
 import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.core.utils.OssUtil;
 import net.fnsco.core.utils.SmsUtil;
 import net.fnsco.freamwork.comm.Md5Util;
@@ -406,7 +404,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         String headImagePath = appUser.getHeadImagePath();
         if (!Strings.isNullOrEmpty(headImagePath)) {
             String path = headImagePath.substring(headImagePath.indexOf("^") + 1);
-            map.put("headImagePath", OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+            map.put("headImagePath", OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), path));
         } else {
             map.put("headImagePath", "");
         }
@@ -629,7 +627,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         if (!Strings.isNullOrEmpty(headImagePath)) {
         	if(headImagePath.indexOf("^")!=-1) {
         		String path = headImagePath.substring(headImagePath.indexOf("^") + 1);
-                appUserLoginInfoDTO.setHeadImagePath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+                appUserLoginInfoDTO.setHeadImagePath(OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), path));
                // map.put("headImagePath", OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
         	}else {
         		String prefix = env.getProperty("app.base.url");
@@ -917,7 +915,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         String headImagePath = appUser.getHeadImagePath();
         if (!Strings.isNullOrEmpty(headImagePath)) {
             String path = headImagePath.substring(headImagePath.indexOf("^") + 1);
-            dto.setHeadImagePath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+            dto.setHeadImagePath(OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), path));
         }
         dto.setMoblie(appUser.getMobile());
         dto.setRealName(appUser.getRealName());

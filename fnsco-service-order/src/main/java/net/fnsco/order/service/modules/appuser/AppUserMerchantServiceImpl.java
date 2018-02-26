@@ -16,7 +16,7 @@ import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
 import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.core.utils.OssLoaclUtil;
+import net.fnsco.core.utils.OssUtil;
 import net.fnsco.order.api.appuser.AppUserMerchantService;
 import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.api.dto.AppUserMerchantOutDTO;
@@ -120,7 +120,7 @@ public class AppUserMerchantServiceImpl extends BaseService implements AppUserMe
                         String headImagePath = user.getHeadImagePath();
                         if(!Strings.isNullOrEmpty(headImagePath)){
                             String path = headImagePath.substring(headImagePath.indexOf("^")+1);
-                            bandList.setHeadImagePath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+                            bandList.setHeadImagePath(OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), path));
                         }
                         if(li.getRoleId().equals(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode())){
                             bandList.setIsDelete("2");
@@ -155,7 +155,7 @@ public class AppUserMerchantServiceImpl extends BaseService implements AppUserMe
                         String headImagePath = user.getHeadImagePath();
                         if(!Strings.isNullOrEmpty(headImagePath)){
                             String path = headImagePath.substring(headImagePath.indexOf("^")+1);
-                            bandList.setHeadImagePath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+                            bandList.setHeadImagePath(OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), path));
                         }
                         listDto.add(bandList);
                     }else{

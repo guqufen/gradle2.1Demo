@@ -20,7 +20,7 @@ import net.fnsco.car.service.carBrand.entity.CarBrandDO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.core.utils.OssLoaclUtil;
+import net.fnsco.core.utils.OssUtil;
 
 @RestController
 @RequestMapping(value="/web/carBrand")
@@ -153,8 +153,8 @@ public class carBrandController extends BaseController{
 				stream.close();
 
 				// 上传阿里云OSS文件服务器
-				OssLoaclUtil.uploadFile(fileURL, fileKey);
-				String newUrl = OssLoaclUtil.getHeadBucketName() + "^" + fileKey;
+				OssUtil.uploadFile(fileURL, fileKey);
+				String newUrl = OssUtil.getHeadBucketName() + "^" + fileKey;
 
 				return ResultDTO.success(newUrl);
 			} catch (Exception e) {

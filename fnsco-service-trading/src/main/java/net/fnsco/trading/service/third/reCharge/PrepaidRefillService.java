@@ -361,16 +361,21 @@ public class PrepaidRefillService extends BaseService {
 					String amtStr = new BigDecimal(map.get("uordercash")).setScale(2, BigDecimal.ROUND_HALF_UP)
 							.multiply(new BigDecimal(100)).setScale(0, BigDecimal.ROUND_HALF_UP).toString();
 
-					// 更新冻结金额(减掉本次冻结的金额)
-					Boolean flag = appAccountBalanceService.doUpdateFrozenAmount(tradeWithdrawDO.getAppUserId(),
-							new BigDecimal(amtStr));
-					// 更新冻结金额失败，则记录日志，以便于后续对账
-					if (!flag) {
-						logger.error(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-						logger.error("流量充值-查询结果:充值成功，但是更新冻结金额出错，orderNo=" + tradeWithdrawDO.getOrderNo());
-						logger.error("流量充值-查询结果:充值成功，但是更新冻结金额出错，appUserId=" + tradeWithdrawDO.getAppUserId());
-						logger.error("流量充值-查询结果:充值成功，但是更新冻结金额出错，amt=" + amtStr);
-						logger.error(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+					// 以ACCT开头的订单号为帐户余额充值，需要操作账户金额
+					if (rechargeOrderDO.getOrderNo().startsWith("ACCT")) {
+						// 更新冻结金额(减掉本次冻结的金额)
+						Boolean flag = appAccountBalanceService.doUpdateFrozenAmount(tradeWithdrawDO.getAppUserId(),
+								new BigDecimal(amtStr));
+						// 更新冻结金额失败，则记录日志，以便于后续对账
+						if (!flag) {
+							logger.error(
+									">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+							logger.error("流量充值-查询结果:充值成功，但是更新冻结金额出错，orderNo=" + tradeWithdrawDO.getOrderNo());
+							logger.error("流量充值-查询结果:充值成功，但是更新冻结金额出错，appUserId=" + tradeWithdrawDO.getAppUserId());
+							logger.error("流量充值-查询结果:充值成功，但是更新冻结金额出错，amt=" + amtStr);
+							logger.error(
+									">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+						}
 					}
 
 					rechargeOrderDO.setAmt(amtStr);// 设置实际消费金额
@@ -392,18 +397,22 @@ public class PrepaidRefillService extends BaseService {
 
 				} else if ("9".equals(map.get("game_state"))) {// 失败
 
-					logger.info("流量充值-查询结果:充值失败，需要将原用户账户资金还原");
-					// 还原APP账户余额
-					Boolean flag = appAccountBalanceService.doFrozenBalance(tradeWithdrawDO.getAppUserId(),
-							new BigDecimal(0).subtract(tradeWithdrawDO.getAmount()));
-					if (!flag) {
-						logger.error(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-						logger.error("手机充值-查询结果:充值失败，账户余额还原失败，请联系相关技术人员查看,appUserId=[" + tradeWithdrawDO.getAppUserId()
-								+ "],orderNo=" + tradeWithdrawDO.getOrderNo() + "inprice=["
-								+ tradeWithdrawDO.getAmount() + "]");
-						logger.error(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+					// 以ACCT开头的订单号为帐户余额充值，需要操作账户金额
+					if (rechargeOrderDO.getOrderNo().startsWith("ACCT")) {
+						logger.info("流量充值-查询结果:充值失败，需要将原用户账户资金还原");
+						// 还原APP账户余额
+						Boolean flag = appAccountBalanceService.doFrozenBalance(tradeWithdrawDO.getAppUserId(),
+								new BigDecimal(0).subtract(tradeWithdrawDO.getAmount()));
+						if (!flag) {
+							logger.error(
+									">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+							logger.error("手机充值-查询结果:充值失败，账户余额还原失败，请联系相关技术人员查看,appUserId=["
+									+ tradeWithdrawDO.getAppUserId() + "],orderNo=" + tradeWithdrawDO.getOrderNo()
+									+ "inprice=[" + tradeWithdrawDO.getAmount() + "]");
+							logger.error(
+									">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+						}
 					}
-
 					rechargeOrderDO.setStatus(2);// 设置交易状态为2-失败
 					rechargeOrderService.doUpdate(rechargeOrderDO);
 
@@ -537,16 +546,21 @@ public class PrepaidRefillService extends BaseService {
 					String amtStr = new BigDecimal(map.get("uordercash")).setScale(2, BigDecimal.ROUND_HALF_UP)
 							.multiply(new BigDecimal(100)).setScale(0, BigDecimal.ROUND_HALF_UP).toString();
 
-					// 更新冻结金额(减掉本次冻结的金额)
-					Boolean flag = appAccountBalanceService.doUpdateFrozenAmount(tradeWithdrawDO.getAppUserId(),
-							new BigDecimal(amtStr));
-					// 更新冻结金额失败，则记录日志，以便于后续对账
-					if (!flag) {
-						logger.error(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-						logger.error("手机充值-查询结果:充值成功，但是更新冻结金额出错，orderNo=" + tradeWithdrawDO.getOrderNo());
-						logger.error("手机充值-查询结果:充值成功，但是更新冻结金额出错，appUserId=" + tradeWithdrawDO.getAppUserId());
-						logger.error("手机充值-查询结果:充值成功，但是更新冻结金额出错，amt=" + amtStr);
-						logger.error(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+					//以ACCT开头的订单号为帐户余额充值，需要操作账户金额
+					if (rechargeOrderDO.getOrderNo().startsWith("ACCT")) {
+						// 更新冻结金额(减掉本次冻结的金额)
+						Boolean flag = appAccountBalanceService.doUpdateFrozenAmount(tradeWithdrawDO.getAppUserId(),
+								new BigDecimal(amtStr));
+						// 更新冻结金额失败，则记录日志，以便于后续对账
+						if (!flag) {
+							logger.error(
+									">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+							logger.error("手机充值-查询结果:充值成功，但是更新冻结金额出错，orderNo=" + tradeWithdrawDO.getOrderNo());
+							logger.error("手机充值-查询结果:充值成功，但是更新冻结金额出错，appUserId=" + tradeWithdrawDO.getAppUserId());
+							logger.error("手机充值-查询结果:充值成功，但是更新冻结金额出错，amt=" + amtStr);
+							logger.error(
+									">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+						}
 					}
 
 					rechargeOrderDO.setAmt(amtStr);// 设置实际消费金额
@@ -571,16 +585,21 @@ public class PrepaidRefillService extends BaseService {
 					return ResultDTO.success(ph);
 				} else if ("9".equals(map.get("game_state"))) {// 失败
 
-					logger.info("手机充值-查询结果:充值失败，需要将原用户账户资金还原");
-					// 还原APP账户余额
-					Boolean flag = appAccountBalanceService.doFrozenBalance(tradeWithdrawDO.getAppUserId(),
-							new BigDecimal(0).subtract(tradeWithdrawDO.getAmount()));
-					if (!flag) {
-						logger.error(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-						logger.error("手机充值-查询结果:充值失败，账户余额还原失败，请联系相关技术人员查看,appUserId=[" + tradeWithdrawDO.getAppUserId()
-								+ "],orderNo=" + tradeWithdrawDO.getOrderNo() + "inprice=["
-								+ tradeWithdrawDO.getAmount() + "]");
-						logger.error(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+					//以ACCT开头的订单号为帐户余额充值，需要操作账户金额
+					if (rechargeOrderDO.getOrderNo().startsWith("ACCT")) {
+						logger.info("手机充值-查询结果:充值失败，需要将原用户账户资金还原");
+						// 还原APP账户余额
+						Boolean flag = appAccountBalanceService.doFrozenBalance(tradeWithdrawDO.getAppUserId(),
+								new BigDecimal(0).subtract(tradeWithdrawDO.getAmount()));
+						if (!flag) {
+							logger.error(
+									">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+							logger.error("手机充值-查询结果:充值失败，账户余额还原失败，请联系相关技术人员查看,appUserId=["
+									+ tradeWithdrawDO.getAppUserId() + "],orderNo=" + tradeWithdrawDO.getOrderNo()
+									+ "inprice=[" + tradeWithdrawDO.getAmount() + "]");
+							logger.error(
+									">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+						}
 					}
 
 					rechargeOrderDO.setStatus(2);// 设置交易状态为2-失败
@@ -648,7 +667,7 @@ public class PrepaidRefillService extends BaseService {
 		phoneChargeOrderDO.setMobile(chargeDTO.getPhone());// 设置充值手机号
 		phoneChargeOrderDO.setName(chargeDTO.getName());// 设置充值名称:xx元
 		phoneChargeOrderDO.setAmt(chargeDTO.getInprice().replace(".", ""));// 设置交易金额
-		phoneChargeOrderDO.setStatus(ThrRechargeStateEnum.INGOING.getCode());// 设置交易状态3-待支付
+		phoneChargeOrderDO.setStatus(ThrRechargeStateEnum.PROCESSING.getCode());// 设置交易状态0-待支付
 
 		tradeWithdrawDO.setOrderNo(orderid);// 设置订单号
 		tradeWithdrawDO.setOriginalOrderNo(orderid);// 设置原订单号(默认等于当前订单号)

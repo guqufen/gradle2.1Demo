@@ -20,6 +20,8 @@ public class CarBrandDO {
 	private String model;
 	@ApiModelProperty(value = "是否热门品牌0-否;1-是", example = "是否热门品牌0-否;1-是")
 	private Integer isHot;
+	@ApiModelProperty(value = "子节点数量", example = "子节点数量")
+	private Integer childCount;//用于标识该节点是否含有子节点，以便于ztree显示的时候不出错(不加则容易出现无子节点，前面仍然显示+号)
 
 	public Integer getId() {
 		return id;
@@ -83,6 +85,14 @@ public class CarBrandDO {
 
 	public void setIsHot(Integer isHot) {
 		this.isHot = isHot;
+	}
+
+	public Integer getChildCount() {
+		return childCount;
+	}
+
+	public void setChildCount(Integer childCount) {
+		this.childCount = childCount;
 	}
 
 }

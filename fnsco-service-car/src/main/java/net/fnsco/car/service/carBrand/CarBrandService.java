@@ -20,7 +20,7 @@ import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.ChineseInital;
-import net.fnsco.core.utils.OssLoaclUtil;
+import net.fnsco.core.utils.OssUtil;
 
 @Service
 public class CarBrandService extends BaseService {
@@ -42,7 +42,7 @@ public class CarBrandService extends BaseService {
 
 			if (!Strings.isNullOrEmpty(carBrandDO2.getIconImgPath())) {
 				String path = carBrandDO2.getIconImgPath().substring(carBrandDO2.getIconImgPath().indexOf("^") + 1);
-				carBrandDO2.setIconImgPath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+				carBrandDO2.setIconImgPath(OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), path));
 			}
 		}
 		Integer count = carBrandDAO.pageListCount(carBrandDO);
@@ -131,7 +131,7 @@ public class CarBrandService extends BaseService {
 		for (CarBrandDO carBrandDO2 : list) {
 			if (!Strings.isNullOrEmpty(carBrandDO2.getIconImgPath())) {
 				String path = carBrandDO2.getIconImgPath().substring(carBrandDO2.getIconImgPath().indexOf("^") + 1);
-				carBrandDO2.setIconImgPath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+				carBrandDO2.setIconImgPath(OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), path));
 			}
 		}
 		return ResultDTO.success(list);
@@ -180,7 +180,7 @@ public class CarBrandService extends BaseService {
 
 			if (!Strings.isNullOrEmpty(carBrandDO.getIconImgPath())) {
 				String path = carBrandDO.getIconImgPath().substring(carBrandDO.getIconImgPath().indexOf("^") + 1);
-				carBrandDO.setIconImgPath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+				carBrandDO.setIconImgPath(OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), path));
 			}
 
 			/**
@@ -210,17 +210,23 @@ public class CarBrandService extends BaseService {
 		return ResultDTO.success(carList);
 	}
 
-	public ResultDTO selectAllFirstLevel(){
-		
+	public ResultDTO selectAllFirstLevel() {
+
 		List<CarBrandDO> list = carBrandDAO.selectAllFirstLevel();
+		CarBrandDO root = new CarBrandDO();
+		root.setId(0);
+		root.setName("总菜单");
+		root.setSupperId(-1);
+		root.setLevel(-1);
+		list.add(root);
 		return ResultDTO.success(list);
 	}
-	
-	public ResultDTO selectChildById(Integer id){
+
+	public ResultDTO selectChildById(Integer id) {
 		List<CarBrandDO> list = carBrandDAO.selectChildById(id);
 		return ResultDTO.success(list);
 	}
-	
+
 	public ResultDTO selectChild(Integer id) {
 
 		// 通过父id查找关联的子Id(二级子id和三级子id和四级id)

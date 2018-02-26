@@ -214,42 +214,6 @@ public class MerchantInfoController extends BaseController {
 	}
 
 	/**
-	 * toAddTerminal:(这里用一句话描述这个方法的作用)保存终端设备信息
-	 *
-	 * @param terminals
-	 * @return 设定文件
-	 * @return ResultDTO<String> DOM对象
-	 * @throws @since
-	 *             CodingExample Ver 1.1
-	 */
-	@RequestMapping(value = "/toAddTerminal", method = RequestMethod.POST)
-	@ResponseBody
-	@RequiresPermissions(value = { "m:merchant:add" })
-	public ResultDTO<String> toAddTerminal(@RequestBody MerchantTerminal[] terminals) {
-		List<MerchantTerminal> params = Arrays.asList(terminals);
-		ResultDTO<String> result = merchantCoreService.doAddMerTerminal(params);
-		return result;
-	}
-
-	/**
-	 * toAddChannel:(这里用一句话描述这个方法的作用)保存渠道信息
-	 *
-	 * @param channels
-	 * @return 设定文件
-	 * @return ResultDTO<String> DOM对象
-	 * @throws @since
-	 *             CodingExample Ver 1.1
-	 */
-	@RequestMapping(value = "/toAddChannel", method = RequestMethod.POST)
-	@ResponseBody
-	@RequiresPermissions(value = { "m:merchant:add" })
-	public ResultDTO<String> toAddChannel(@RequestBody MerchantChannel[] channels) {
-		List<MerchantChannel> params = Arrays.asList(channels);
-		ResultDTO<String> result = merchantCoreService.doAddMerChannel(params);
-		return result;
-	}
-
-	/**
 	 * toAddBank:(这里用一句话描述这个方法的作用)保存或修改银行卡信息
 	 *
 	 * @param banks
