@@ -48,7 +48,8 @@ public class TrainOilCardUtil {
     	sortedParams.put("password", "");
     	sortedParams.put("timestamp", timestamp);
     	sortedParams.put("sign_type", "MD5");
-		String sign = SignatureUtil.md5Signature(sortedParams);
+    	String key ="";
+		String sign = SignatureUtil.md5Signature(sortedParams,key);
     	headers.put("sign", sign);//签名，详见签名机制
     	String data = HttpUtils.get(shelfURL,params,headers);
         if (data == null) {
