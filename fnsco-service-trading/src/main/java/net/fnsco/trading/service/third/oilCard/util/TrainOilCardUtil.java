@@ -1,12 +1,15 @@
 package net.fnsco.trading.service.third.oilCard.util;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.fnsco.core.constants.SignatureHashMap;
 import net.fnsco.core.utils.HttpUtils;
+import net.fnsco.core.utils.SignatureUtil;
 import net.sf.json.JSONObject;
 
 public class TrainOilCardUtil {
@@ -25,7 +28,30 @@ public class TrainOilCardUtil {
     	params.put("isp_id", ispId);
     	params.put("invoice_flag", invoiceFlag);
     	params.put("account_no", accountNo);
-    	String data = HttpUtils.get(shelfURL,params);
+    	Map<String, String> headers = new HashMap<String, String>();
+    	headers.put("partner_id", "");//商户在系统中开设的唯一编号
+    	headers.put("orgcode", "");//商户在系统中开设的运营机构
+    	headers.put("agent_id", "");//代理商唯一编号
+    	
+    	headers.put("password", "");//代理商密码（即后台管理系统的登陆密码），使用3DES加密后转为16进制字符
+    	Date date = new Date();
+    	String timestamp = String.valueOf(date.getTime()/1000);  
+    	headers.put("timestamp", timestamp);//时间戳，格式yyyyMMddHHmmss（年月日时分秒）充值下单交易会验证时间戳，如果与我方系统差距超过3分钟，交易会直接档回
+    	headers.put("sign_type", "MD5");//MD5
+    	SignatureHashMap sortedParams = new SignatureHashMap();
+    	sortedParams.put("isp_id", ispId);
+    	sortedParams.put("invoice_flag", invoiceFlag);
+    	sortedParams.put("account_no", accountNo);
+    	sortedParams.put("partner_id", "");
+    	sortedParams.put("orgcode", "");
+    	sortedParams.put("agent_id", "");
+    	sortedParams.put("password", "");
+    	sortedParams.put("timestamp", timestamp);
+    	sortedParams.put("sign_type", "MD5");
+    	String key ="";
+		String sign = SignatureUtil.md5Signature(sortedParams,key);
+    	headers.put("sign", sign);//签名，详见签名机制
+    	String data = HttpUtils.get(shelfURL,params,headers);
         if (data == null) {
             logger.error("调用油卡充值接口返回空");
             return null;

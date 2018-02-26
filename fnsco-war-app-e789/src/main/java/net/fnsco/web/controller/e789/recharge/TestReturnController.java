@@ -1,5 +1,6 @@
 package net.fnsco.web.controller.e789.recharge;
 
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,12 +21,7 @@ public class TestReturnController {
 	
 	@RequestMapping(value = "/ss/ss", method = RequestMethod.POST)
     @ApiOperation(value = "测试退款业务")
-	public ResultDTO<String> testReturn(){
-		AlipayRefundRequestParams requestParams = new AlipayRefundRequestParams();
-		requestParams.setOutTradeNo("2018020117150397565606");
-		requestParams.setRefundAmount("0.01");
-		requestParams.setRefundReason("正常退款");
-		requestParams.setTradeNo("2018020121001004880591005160");
+	public ResultDTO<String> testReturn(@RequestBody AlipayRefundRequestParams requestParams){
 		AlipayTradeRefundResponse params = AlipayClientUtil.createTradeReturnOrderParams(requestParams);
 		
 		

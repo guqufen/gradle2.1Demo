@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.base.Strings;
 
-import net.fnsco.bigdata.api.dto.WebMerchantPosDTO;
 import net.fnsco.bigdata.api.dto.WebMerchantPosDTO2;
 import net.fnsco.bigdata.api.merchant.MerchantPosService;
 import net.fnsco.bigdata.service.dao.master.MerchantEntityCoreRefDao;
@@ -28,9 +27,6 @@ import net.fnsco.freamwork.business.WebUserDTO;
 import net.fnsco.freamwork.comm.FrameworkConstant;
 import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.api.merchant.IntegralLogService;
-import net.fnsco.web.controller.merchant.jo.MerchantChannelJO;
-import net.fnsco.web.controller.merchant.jo.MerchantPosJO;
-import net.fnsco.web.controller.merchant.jo.PosJO;
 import net.fnsco.web.controller.merchant.pos.MerchantChannelJO2;
 import net.fnsco.web.controller.merchant.pos.PosJO2;
 /**
@@ -106,20 +102,6 @@ public class MerchantPosController extends BaseController {
 	 * @date 2017年8月17日 下午2:11:23
 	 * @return ResultDTO<String> DOM对象
 	 */
-//	@RequestMapping(value = "/deletePosInfo", method = RequestMethod.POST)
-	@ResponseBody
-	@RequiresPermissions(value = { "m:merchant:delete" })
-	public ResultDTO deletePosInfo(@RequestParam(value = "id") Integer id) {
-		if (null == id) {
-			return ResultDTO.fail();
-		}
-		boolean result = merchantPosService.deleteByPosId(id);
-		if (!result) {
-			return ResultDTO.fail();
-		}
-		return ResultDTO.success();
-	}
-	//新方法
 	@RequestMapping(value = "/deletePosInfo", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions(value = { "m:merchant:delete" })
@@ -192,27 +174,6 @@ public class MerchantPosController extends BaseController {
 					}
 				}
 
-			}
-		}
-	}
-	
-	
-	private void countPosScores(List<MerchantChannelJO> params, String innerCode) {
-
-		for (MerchantChannelJO webMerchantPosDTO : params) {
-			List<MerchantPosJO> posInfos = webMerchantPosDTO.getPosInfos();
-			for (MerchantPosJO webMerchantTerminalDTO : posInfos) {
-				// 等于空，才统计积分情况
-				if (null == webMerchantTerminalDTO.getPosId()) {
-					if (!Strings.isNullOrEmpty(innerCode)) {
-						MerchantEntityCoreRef mecr = merchantEntityCoreRefDao.selectByInnerCodeLimit1(innerCode);
-						if (null != mecr && !Strings.isNullOrEmpty(mecr.getEntityInnerCode())) {
-							integralRuleLogService.insert(mecr.getEntityInnerCode(),
-									ConstantEnum.IntegralTypeEnum.CODE_SQ.getCode());
-						}
-					}
-
-				}
 			}
 		}
 	}

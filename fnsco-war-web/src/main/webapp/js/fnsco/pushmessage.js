@@ -216,13 +216,7 @@ function querySingle(id){
                 $("#myModal input").attr("disabled",true);
                 $("#myModal select").attr("disabled",true);
                 $("#pushView").html('');
-                var imageUrl = data.data.imageUrl;
-                var path = null;
-                if(imageUrl){
-                	imageUrl = escape(imageUrl);
-                	path = PROJECT_NAME+'/web/fileInfo/doGetFileStream?filePath='+imageUrl;
-                }
-                $("#pushView").append('<img src='+path+'>').show();
+                $("#pushView").append('<img src='+data.data.imageUrl+'>').show();
                 $("#msgSubject").val(data.data.msgSubject);
                 $("#datetimepicker3").val(data.data.sendTimeStr);
                 $("#detailURL").val(data.data.detailUrl);
