@@ -17,7 +17,6 @@ import net.fnsco.bigdata.service.domain.MerchantFileTemp;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.FileUtils;
 import net.fnsco.core.utils.OssLoaclUtil;
-import net.fnsco.core.utils.OssUtil;
 
 /**@desc 文件上传实现类
  * @author tangliang

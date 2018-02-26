@@ -190,8 +190,8 @@ public class FileInfoController extends BaseController {
 					stream.write(bytes);
 					stream.close();
 					// 上传阿里云OSS文件服务器
-					OssLoaclUtil.uploadFile(fileURL, fileKey);
-					String newUrl = OssLoaclUtil.getHeadBucketName() + "^" + fileKey;
+					OssUtil.uploadFile(fileURL, fileKey);
+					String newUrl = OssUtil.getHeadBucketName() + "^" + fileKey;
 					TreeMap<String, String> paras = new TreeMap<>();
 					paras.put("url", newUrl);
 					String json = JSONArray.toJSONString(paras);
@@ -241,7 +241,7 @@ public class FileInfoController extends BaseController {
 	@ResponseBody
 	public String deleteOssFile(String url) {
 		String fileKey = url.substring(url.lastIndexOf("^") + 1);
-		OssUtil.deleteFile(OssLoaclUtil.getHeadBucketName(), fileKey);
+		OssLoaclUtil.deleteFile(OssLoaclUtil.getHeadBucketName(), fileKey);
 		return null;
 	}
 
@@ -259,7 +259,9 @@ public class FileInfoController extends BaseController {
 	public String getImagePath(String url) {
 		if (!Strings.isNullOrEmpty(url)) {
 			String path = url.substring(url.indexOf("^") + 1);
-			return OssLoaclUtil.getFileUrl(OssLoaclUtil.getHeadBucketName(), path);
+			//todo
+			//需要确认在什么地方调用。是用开放的还是用本地的地址
+			//return OssLoaclUtil.getFileUrl(OssLoaclUtil.getHeadBucketName(), path);
 		}
 		return "";
 	}

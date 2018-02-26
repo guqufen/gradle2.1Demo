@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.car.comm.CarServiceConstant;
@@ -24,7 +23,7 @@ import net.fnsco.car.service.safe.entity.OrderSafeDO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.MessageUtils;
-import net.fnsco.core.utils.dto.MessageValidateDTO;
+import net.fnsco.web.controller.dto.MessageValidateDTO;
 import net.fnsco.web.controller.jo.EstiPremiumsJO;
 import net.fnsco.web.controller.jo.SaveSafeJO;
 import net.fnsco.web.controller.vo.EstiPremiumsVO;
@@ -61,8 +60,7 @@ public class InsuranceController extends BaseController {
 		//获取session中验证码信息
 		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(type+mobile);
 		//校验验证码是否正确
-		MessageUtils utils = new MessageUtils();
-		ResultDTO<Object> rt = utils.validateCode2(code, mobile,mDTO);
+		ResultDTO<Object> rt = MessageUtils.validateCode2(code, mobile,mDTO.getCode(),mDTO.getTime());
 		if(!rt.isSuccess()){
 			return ResultDTO.fail(rt.getMessage());
 		}

@@ -58,7 +58,7 @@ public interface TradeWithdrawDAO {
         @Result(column = "channel_mer_id", property = "channelMerId"), @Result(column = "channel_type", property = "channelType"),
         @Result(column = "installment_num", property = "installmentNum"), @Result(column = "order_amount", property = "orderAmount"), @Result(column = "each_money", property = "eachMoney"),
         @Result(column = "card_holder_rate", property = "cardHolderRate")})
-    @Select("SELECT * FROM t_trade_withdraw WHERE original_order_no = #{originalOrderNo} AND status = 1 ORDER BY id DESC LIMIT 1")
+    @Select("SELECT * FROM t_trade_withdraw WHERE original_order_no = #{originalOrderNo} ORDER BY id DESC LIMIT 1")
     public TradeWithdrawDO queryByOriginalOrderNo(@Param("originalOrderNo") String originalOrderNo);
     
     @Results({ @Result(column = "order_no", property = "orderNo"), @Result(column = "original_order_no", property = "originalOrderNo"), @Result(column = "app_user_id", property = "appUserId"),
@@ -163,6 +163,6 @@ public interface TradeWithdrawDAO {
                @Result(column = "channel_mer_id", property = "channelMerId"), @Result(column = "channel_type", property = "channelType"),
                @Result(column = "installment_num", property = "installmentNum"), @Result(column = "order_amount", property = "orderAmount"), @Result(column = "each_money", property = "eachMoney"),
                @Result(column = "card_holder_rate", property = "cardHolderRate") })
-    @Select("SELECT * FROM t_trade_withdraw WHERE order_no = #{orderNo} and trade_sub_type = '27' order by id desc limit 1 ")
+    @Select("SELECT * FROM t_trade_withdraw WHERE original_order_no = #{orderNo} and trade_sub_type = '27' order by id desc limit 1 ")
     public TradeWithdrawDO getUndoByOrderNo(@Param("orderNo") String orderNo);
 }

@@ -27,7 +27,6 @@ import net.fnsco.car.service.loan.entity.OrderLoanDO;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.core.utils.OssLoaclUtil;
 
 @Service
 public class OrderLoanService extends BaseService {

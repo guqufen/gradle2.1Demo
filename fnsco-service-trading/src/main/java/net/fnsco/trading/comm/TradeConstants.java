@@ -373,7 +373,7 @@ public class TradeConstants extends CoreConstants {
                                                                                                                                                   "流量充值"), BUY_HCP(24,
                                                                                                                                                                    "火车票购买"), FEE(25,
                                                                                                                                                                                  "提现手续费"), RESEARCH_UNDO(26,
-                                                                                                                                                                                                         "收入撤销"),REFUND_HCP(26,
+                                                                                                                                                                                                         "收入撤销"),REFUND_HCP(27,
                                                                                                                                                                                                                  "火车票购买撤销");
 
         private Integer code;

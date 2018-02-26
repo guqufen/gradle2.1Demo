@@ -1,9 +1,7 @@
 package net.fnsco.web.controller.e789.user;
 
 import java.io.BufferedOutputStream;
-import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Calendar;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +24,11 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.CreateFileUtils;
-import net.fnsco.core.utils.OssLoaclUtil;
+import net.fnsco.core.utils.OssUtil;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.AppUserDTO;
 import net.fnsco.order.api.dto.AppUserInfoDTO;
-import net.fnsco.order.api.dto.AppUserLoginInfoDTO;
 import net.fnsco.trading.service.bank.AppUserBankService;
 import net.fnsco.trading.service.bank.entity.AppUserBankDO;
 import net.fnsco.web.controller.e789.jo.CommonJO;
@@ -40,7 +37,6 @@ import net.fnsco.web.controller.e789.jo.ModifyInfoJO;
 import net.fnsco.web.controller.e789.jo.ModifyPasswordJO;
 import net.fnsco.web.controller.e789.jo.ModifyPayPasswordJO;
 import net.fnsco.web.controller.e789.vo.GetPersonInfoVO;
-import net.fnsco.web.controller.e789.vo.LoginVO;
 
 /**
  * @author   hjt
@@ -156,13 +152,13 @@ public class MyselfController extends BaseController {
                     stream.write(bytes);
                     stream.close();
                     //上传阿里云OSS文件服务器
-                    OssLoaclUtil.uploadFile(fileURL, fileKey);
-                    String newUrl = OssLoaclUtil.getHeadBucketName() + "^" + fileKey;
+                    OssUtil.uploadFile(fileURL, fileKey);
+                    String newUrl = OssUtil.getHeadBucketName() + "^" + fileKey;
                     AppUserDTO appUserDto = new AppUserDTO();
                     appUserDto.setUserId(Integer.valueOf(userId));
                     appUserDto.setHeadImagePath(newUrl);
                     appUserService.modifyInfo(appUserDto);
-                    String imageUrl = OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), fileKey);
+                    String imageUrl = OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), fileKey);
                     Map<String, String> datas = Maps.newHashMap();
                     datas.put("headImageUrl", imageUrl);
                     return ResultDTO.success(datas);

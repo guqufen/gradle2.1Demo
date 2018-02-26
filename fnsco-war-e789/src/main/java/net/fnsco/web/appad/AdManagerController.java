@@ -21,7 +21,7 @@ import com.alibaba.fastjson.JSONObject;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.core.utils.OssLoaclUtil;
+import net.fnsco.core.utils.OssUtil;
 import net.fnsco.order.service.ad.AdService;
 import net.fnsco.order.service.ad.entity.AdDO;
 
@@ -33,11 +33,6 @@ public class AdManagerController extends BaseController{
 	private AdService adService;
 	@Autowired
 	private Environment env;
-	
-	
-	
-	
-	
 	@RequestMapping(value = "/deleteById", method = RequestMethod.GET)
 	@ResponseBody
 	@RequiresPermissions(value = { "sys:app:delete" })
@@ -168,8 +163,8 @@ public class AdManagerController extends BaseController{
 				stream.close();
 
 				// 上传阿里云OSS文件服务器
-				OssLoaclUtil.uploadFile(fileURL, fileKey);
-				String newUrl = OssLoaclUtil.getHeadBucketName() + "^" + fileKey;
+				OssUtil.uploadFile(fileURL, fileKey);
+				String newUrl = OssUtil.getHeadBucketName() + "^" + fileKey;
 				logger.warn("图片地址："+newUrl);
 				return ResultDTO.success(newUrl);
 			} catch (Exception e) {
