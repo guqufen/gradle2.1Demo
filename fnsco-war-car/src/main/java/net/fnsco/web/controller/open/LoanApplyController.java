@@ -41,6 +41,7 @@ import net.fnsco.car.service.loan.entity.OrderLoanDO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.MessageUtils;
+import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.core.utils.OssUtil;
 import net.fnsco.web.controller.dto.MessageValidateDTO;
 import net.fnsco.web.controller.jo.LoanJO;
@@ -199,8 +200,8 @@ public class LoanApplyController extends BaseController {
 					stream.write(bytes);
 					stream.close();
 					// 上传阿里云OSS文件服务器
-					OssUtil.uploadFile(fileURL, fileKey);
-					String newUrl = OssUtil.getHeadBucketName() + "^" + fileKey;
+					OssLoaclUtil.uploadFile(fileURL, fileKey);
+					String newUrl = OssLoaclUtil.getHeadBucketName() + "^" + fileKey;
 					fileInfo.setFilePath(newUrl);
 					fileInfo.setFileType(file_type);
 					fileInfo.setFileName(fileName);

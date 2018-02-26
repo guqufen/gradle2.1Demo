@@ -229,7 +229,7 @@ public class FileInfoController extends BaseController {
 	}
 
 	/**
-	 * deleteOssFile:(这里用一句话描述这个方法的作用)删除OSS上文件文件
+	 * deleteOssFile:(这里用一句话描述这个方法的作用)删除OSS外网上文件文件
 	 *
 	 * @param url
 	 * @return 设定文件
@@ -241,7 +241,7 @@ public class FileInfoController extends BaseController {
 	@ResponseBody
 	public String deleteOssFile(String url) {
 		String fileKey = url.substring(url.lastIndexOf("^") + 1);
-		OssLoaclUtil.deleteFile(OssLoaclUtil.getHeadBucketName(), fileKey);
+		OssUtil.deleteFile(OssUtil.getHeadBucketName(), fileKey);
 		return null;
 	}
 
@@ -365,6 +365,4 @@ public class FileInfoController extends BaseController {
 			logger.error("获取文件异常!",e);
 		}
 	}
-	
-	
 }
