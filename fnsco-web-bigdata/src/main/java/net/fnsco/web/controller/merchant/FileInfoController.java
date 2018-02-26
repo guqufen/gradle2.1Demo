@@ -246,27 +246,6 @@ public class FileInfoController extends BaseController {
 	}
 
 	/**
-	 * getImagePath:(这里用一句话描述这个方法的作用)查看文件外网路径
-	 *
-	 * @param url
-	 * @return 设定文件
-	 * @return String DOM对象
-	 * @throws @since
-	 *             CodingExample Ver 1.1
-	 */
-	@RequestMapping(value = "/getImagePath",method = RequestMethod.POST)
-	@ResponseBody
-	public String getImagePath(String url) {
-		if (!Strings.isNullOrEmpty(url)) {
-			String path = url.substring(url.indexOf("^") + 1);
-			//todo
-			//需要确认在什么地方调用。是用开放的还是用本地的地址
-			//return OssLoaclUtil.getFileUrl(OssLoaclUtil.getHeadBucketName(), path);
-		}
-		return "";
-	}
-
-	/**
 	 * @param req
 	 * @param response
 	 * @param isApp
