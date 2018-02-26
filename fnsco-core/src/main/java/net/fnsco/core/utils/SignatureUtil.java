@@ -9,6 +9,7 @@ import java.util.TreeMap;
 import com.alipay.api.internal.util.StringUtils;
 
 import net.fnsco.core.constants.SignatureHashMap;
+import net.fnsco.freamwork.comm.Md5Util;
 
 /**
  * @desc 关于签名公共方法
@@ -38,7 +39,7 @@ public class SignatureUtil {
         }
 		
 		String signContent =  getSignContent(requestParams);
-		return signContent;
+		return Md5Util.MD5(signContent);
 	}
 	
 	/**
