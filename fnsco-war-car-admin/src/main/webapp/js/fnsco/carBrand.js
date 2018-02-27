@@ -256,6 +256,7 @@ $('#btn_add').click(
 				$('#parentName').val(selectContent[0].supperName);// 上级菜单名称
 				$('#menuName').val(selectContent[0].name);// 汽车品牌名称
 				$('#iconImgPath').val(selectContent[0].iconImgPath);// 汽车品牌图标地址
+				$('#model').val(selectContent[0].model);
 				$('#level').val(selectContent[0].level);// 汽车等级
 				if ($('#level').val() == 1) {
 					$('#isHotDiv').show();
