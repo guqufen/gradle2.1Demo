@@ -265,6 +265,10 @@ $('#btn_add').click(
 					$('#isHotDiv').hide();
 				}
 			}
+			else{
+				// 先清掉相关数据，设置menuType默认选中,并展示相应菜单
+				clearInput();
+			}
 			// 给当前菜单ID置空,防止与修改功能串线
 			$('#id').val(null);
 
