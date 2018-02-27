@@ -174,7 +174,12 @@ function clearInput() {
 	$('#level').val(null);
 }
 
-// 菜单数树
+/**
+ * 菜单数树
+ * @param id:选中的节点id
+ * @param supperName:父级菜单名称
+ * @param level:菜单等级
+ */ 
 function getMenuTree(id, supperName, level) {
 
 	var m_setting = {
@@ -209,6 +214,7 @@ function getMenuTree(id, supperName, level) {
 
 				// 清空所有节点勾选
 				dd_ztree.cancelSelectedNode();
+				closeAll();
 
 				// dd_ztree.expandAll(true);
 				// id不等于空，表示修改
@@ -588,7 +594,9 @@ function closeAll() {
 	var zTree = $.fn.zTree.getZTreeObj("upMenuTree");
 	zTree.expandAll(false); // 关闭所有节点
 	var nodes = zTree.getNodes();
-	zTree.expandNode(nodes[0], true, false, true); // 打开根节点
+	for(var i = 0; i < nodes.length; i ++){
+		zTree.expandNode(nodes[i], true, false, true); // 打开根节点
+	}
 }
 
 /**
