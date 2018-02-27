@@ -134,6 +134,7 @@ function formatModel(value, row, index) {
 function formatSupperName(value, row, index) {
 
 	if (row.level == 1) {
+		row.supperName = '总菜单';
 		return '总菜单';
 	} else if (value == null) {
 		return '<span style="color:red">此菜单无上级菜单，请核查</span>';
@@ -247,7 +248,7 @@ $('#btn_add').click(
 			// 先清掉相关数据，设置menuType默认选中,并展示相应菜单
 			// clearInput();
 
-			// 找到当前table选择的行
+			// 找到当前table选择的行,新增需要带第一个选中的数据(如果有)，填入新弹出modal
 			var selectContent = ttable.bootstrapTable('getSelections');// 返回的是数组类型,Array
 			if (selectContent.length > 0) {
 				// 获取table选中数据的父菜单ID
@@ -272,7 +273,7 @@ $('#btn_add').click(
 
 			// 获取菜单树形结构(传空表示新增，不带父节点ID)
 			// getMenuTree(null, null, null);
-			getMenuTree2(null, null, null);
+			getMenuTree2(selectContent[0].supperId, null, null);
 		})
 
 /** ***** 修改edit****** */
