@@ -273,7 +273,12 @@ $('#btn_add').click(
 
 			// 获取菜单树形结构(传空表示新增，不带父节点ID)
 			// getMenuTree(null, null, null);
-			getMenuTree2(selectContent[0].supperId, null, null);
+			if ($('#parentId').val()) {
+				getMenuTree2(selectContent[0].supperId, null, null);
+			}else{
+				getMenuTree2(null, null, null);
+			}
+			
 		})
 
 /** ***** 修改edit****** */
