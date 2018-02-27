@@ -86,6 +86,7 @@ function queryParams(params) {
 	var param = {
 		supperName : $('#supperNameSerch').val(),
 		name : $('#nameSerch').val(),
+		level : $('#menuLevelSerch option:selected').val(),
 		currentPageNum : this.pageNumber,
 		pageSize : this.pageSize
 	}
@@ -154,7 +155,9 @@ function formatType(value, row, index) {
 // 条件查询按钮事件
 function queryEvent(id) {
 	console.log("id:" + id);
-	$('#' + id).bootstrapTable('refresh');
+	$('#' + id).bootstrapTable('destroy');//先要将table销毁，否则会保留上次加载的内容
+	initTableData();//重新初始化表格
+//	$('#' + id).bootstrapTable('refresh');
 }
 // 重置按钮事件
 function resetEvent(form, id) {
@@ -176,10 +179,11 @@ function clearInput() {
 
 /**
  * 菜单数树
+ * 
  * @param id:选中的节点id
  * @param supperName:父级菜单名称
  * @param level:菜单等级
- */ 
+ */
 function getMenuTree(id, supperName, level) {
 
 	var m_setting = {
@@ -271,8 +275,7 @@ $('#btn_add').click(
 				} else if ($('#level').val() > 1) {
 					$('#isHotDiv').hide();
 				}
-			}
-			else{
+			} else {
 				// 先清掉相关数据，设置menuType默认选中,并展示相应菜单
 				clearInput();
 			}
@@ -286,10 +289,10 @@ $('#btn_add').click(
 			// getMenuTree(null, null, null);
 			if ($('#parentId').val()) {
 				getMenuTree2(selectContent[0].supperId, null, null);
-			}else{
+			} else {
 				getMenuTree2(null, null, null);
 			}
-			
+
 		})
 
 /** ***** 修改edit****** */
@@ -594,7 +597,7 @@ function closeAll() {
 	var zTree = $.fn.zTree.getZTreeObj("upMenuTree");
 	zTree.expandAll(false); // 关闭所有节点
 	var nodes = zTree.getNodes();
-	for(var i = 0; i < nodes.length; i ++){
+	for (var i = 0; i < nodes.length; i++) {
 		zTree.expandNode(nodes[i], true, false, true); // 打开根节点
 	}
 }
