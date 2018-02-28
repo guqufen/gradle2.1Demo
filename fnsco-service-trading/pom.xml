@@ -60,7 +60,12 @@
 			<artifactId>fnsco-core</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-
+<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+<dependency>
+    <groupId>com.google.code.gson</groupId>
+    <artifactId>gson</artifactId>
+    <version>2.3.1</version>
+</dependency>
 		<dependency>
 			<groupId>net.fnsco</groupId>
 			<artifactId>fnsco-service-bigdata</artifactId>
