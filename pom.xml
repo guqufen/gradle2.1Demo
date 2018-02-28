@@ -7,10 +7,7 @@
 	<packaging>pom</packaging>
 	<name>fnsco-big-data</name>
 	<modules>
-		<!-- 框架代码 -->
-		<module>fnsco-framework</module>
-		<!-- 核心代码 -->
-		<module>fnsco-core</module>
+		<module>fnsco-bigdata-parent</module>
 		<!-- web打包用 -->
 		<module>fnsco-config</module>
 		<module>fnsco-war-web</module>
@@ -20,12 +17,9 @@
 		<!-- 数据接入service项目-->
 		<module>fnsco-service-order</module>
 		<module>fnsco-service-bigdata</module>
-		<module>fnsco-service-api-doc</module>
 		<module>fnsco-service-auth</module>
 		<module>fnsco-service-finance</module>
 		<module>fnsco-web-bigdata</module>
-		<!-- 数据接入web项目-->
-		<module>fnsco-war-api-doc</module>
 		
 	</modules>
 
