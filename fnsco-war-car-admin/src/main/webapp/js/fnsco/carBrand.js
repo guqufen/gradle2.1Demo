@@ -16,6 +16,7 @@ function initTableData() {
 		uniqueId : 'roleId', // 将index列设为唯一索引
 		sortOrder : "asc", // 排序方式
 		singleSelect : false,// 单选
+		paginationVAlign : "top",
 		pageNumber : 1, // 初始化加载第一页，默认第一页
 		pageSize : 15, // 每页的记录行数（*）
 		pageList : [ 15, 20, 50, 100 ], // 可供选择的每页的行数（*）
@@ -85,6 +86,7 @@ function queryParams(params) {
 	var param = {
 		supperName : $('#supperNameSerch').val(),
 		name : $('#nameSerch').val(),
+		level : $('#menuLevelSerch option:selected').val(),
 		currentPageNum : this.pageNumber,
 		pageSize : this.pageSize
 	}
@@ -133,6 +135,7 @@ function formatModel(value, row, index) {
 function formatSupperName(value, row, index) {
 
 	if (row.level == 1) {
+		row.supperName = '总菜单';
 		return '总菜单';
 	} else if (value == null) {
 		return '<span style="color:red">此菜单无上级菜单，请核查</span>';
@@ -152,7 +155,9 @@ function formatType(value, row, index) {
 // 条件查询按钮事件
 function queryEvent(id) {
 	console.log("id:" + id);
-	$('#' + id).bootstrapTable('refresh');
+	$('#' + id).bootstrapTable('destroy');//先要将table销毁，否则会保留上次加载的内容
+	initTableData();//重新初始化表格
+//	$('#' + id).bootstrapTable('refresh');
 }
 // 重置按钮事件
 function resetEvent(form, id) {
@@ -172,7 +177,13 @@ function clearInput() {
 	$('#level').val(null);
 }
 
-// 菜单数树
+/**
+ * 菜单数树
+ * 
+ * @param id:选中的节点id
+ * @param supperName:父级菜单名称
+ * @param level:菜单等级
+ */
 function getMenuTree(id, supperName, level) {
 
 	var m_setting = {
@@ -206,26 +217,18 @@ function getMenuTree(id, supperName, level) {
 						data.data);
 
 				// 清空所有节点勾选
-				// dd_ztree.checkAllNodes(false);
 				dd_ztree.cancelSelectedNode();
-
-				// id不等于空，表示修改
-				if (id != null) {
-					// 指定节点id选中
-					var node = dd_ztree.getNodeByParam("id", id);
-					if (node != null) {
-
-						dd_ztree.expandNode(node, true, true, true);// 指定选中ID节点展开
-						dd_ztree.selectNode(node, true);// 指定选中ID的节点
-
-						// findParent(dd_ztree,node);
-					}
-				}
-				// else {
-				// // 展开所有节点
-				// // dd_ztree.expandAll(false);
-				// }
 				closeAll();
+
+				// dd_ztree.expandAll(true);
+				// id不等于空，表示修改
+				// if (id != null) {
+				// // 指定节点id选中
+				// var node = dd_ztree.getNodeByParam("id", id);
+				// if (node != null) {
+				// node.open = true;
+				// }
+				// }
 			} else if (!data.success) {
 				layer.msg(data.message);
 			}
@@ -246,20 +249,51 @@ function chooseTree() {
 
 /** *** 新增add ****** */
 // 点击增加按钮事件
-$('#btn_add').click(function() {
+$('#btn_add').click(
+		function() {
 
-	$('.fileinput-remove').click();
+			$('.fileinput-remove').click();
 
-	$('h4').html('新增菜单');
-	// 先清掉相关数据，设置menuType默认选中,并展示相应菜单
-	clearInput();
+			$('h4').html('新增菜单');
+			// 先清掉相关数据，设置menuType默认选中,并展示相应菜单
+			// clearInput();
 
-	// 给当前菜单ID置空,防止与修改功能串线
-	$('#id').val(null);
+			// 找到当前table选择的行,新增需要带第一个选中的数据(如果有)，填入新弹出modal
+			var selectContent = ttable.bootstrapTable('getSelections');// 返回的是数组类型,Array
+			if (selectContent.length > 0) {
+				// 获取table选中数据的父菜单ID
+				$('#parentId').val(selectContent[0].supperId);// 上级菜单id
+				$('#parentName').val(selectContent[0].supperName);// 上级菜单名称
+				$('#menuName').val(selectContent[0].name);// 汽车品牌名称
+				$('#iconImgPath').val(selectContent[0].iconImgPath);// 汽车品牌图标地址
+				$('#model').val(selectContent[0].model);
+				$('#level').val(selectContent[0].level);// 汽车等级
+				if ($('#level').val() == 1) {
+					$('#isHotDiv').show();
+					$('#isHot option[value=' + selectContent[0].isHot + ']')
+							.attr('selected', true);
+				} else if ($('#level').val() > 1) {
+					$('#isHotDiv').hide();
+				}
+			} else {
+				// 先清掉相关数据，设置menuType默认选中,并展示相应菜单
+				clearInput();
+			}
+			// 给当前菜单ID置空,防止与修改功能串线
+			$('#id').val(null);
 
-	// 获取菜单树形结构(传空表示新增，不带父节点ID)
-	getMenuTree(null, null, null);
-})
+			// $('#parentId').val("");
+			// $('#parentName').val("");
+
+			// 获取菜单树形结构(传空表示新增，不带父节点ID)
+			// getMenuTree(null, null, null);
+			if ($('#parentId').val()) {
+				getMenuTree2(selectContent[0].supperId, null, null);
+			} else {
+				getMenuTree2(null, null, null);
+			}
+
+		})
 
 /** ***** 修改edit****** */
 // 点击修改按钮
@@ -284,7 +318,8 @@ $('#btn_edit').click(
 				$('#parentName').val(selectContent[0].supperName);
 
 				// 获取树形结构，传入当前选中的父菜单ID，便于在菜单树形结构展示选中点
-				getMenuTree(supperId, null, null);
+				// getMenuTree(selectContent[0].supperId, null, null);
+				getMenuTree2(selectContent[0].supperId, null, null);
 
 				// 给当前菜单ID赋值,表示当前使用功能是修改
 				$('#id').val(selectContent[0].id);
@@ -551,7 +586,7 @@ function test() {
 		var nodes = treeObj.getNodesByParam("isHidden", true);
 		treeObj.showNodes(nodes);
 
-		getMenuTree(null, null, null);
+		getMenuTree2(null, null, null);
 	}
 }
 
@@ -562,7 +597,9 @@ function closeAll() {
 	var zTree = $.fn.zTree.getZTreeObj("upMenuTree");
 	zTree.expandAll(false); // 关闭所有节点
 	var nodes = zTree.getNodes();
-	zTree.expandNode(nodes[0], true, false, true); // 打开根节点
+	for (var i = 0; i < nodes.length; i++) {
+		zTree.expandNode(nodes[i], true, false, true); // 打开根节点
+	}
 }
 
 /**

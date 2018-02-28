@@ -35,12 +35,21 @@ textarea {
 			<!-- 搜索条件 -->
 			<form id="formSearch" class="form-horizontal">
 				<div class="form-group" style="margin-top: 15px">
-					<div class="row col-sm-10">
+					<div class="row col-sm-12">
 						<div class="col-sm-4">
 							<label class="control-label" for="nameSerch">汽车品牌名称：</label> <input
 								type="text" class="form-control" id="nameSerch" />
 						</div>
-						<div class="col-sm-2"></div>
+						<div class="col-sm-4">
+							<label class="control-label" for="menuLevelSerch">菜单等级：</label> <select
+								id="menuLevelSerch" class="form-control">
+								<option value="" selected="selected">全部</option>
+								<option value="1">1级菜单</option>
+								<option value="2">2级菜单</option>
+								<option value="3">3级菜单</option>
+								<option value="4">4级菜单</option>
+							</select>
+						</div>
 						<div class="col-sm-4">
 							<label class="control-label" for="supperNameSerch">上级品牌名称：</label>
 							<input type="text" class="form-control" id="supperNameSerch" />
@@ -48,7 +57,7 @@ textarea {
                         <input type="text" class="form-control" id="supperNameSerch" /> -->
 						</div>
 					</div>
-					<div class="col-sm-2" style="text-align: right;">
+					<div class="col-sm-4" style="text-align: left;">
 						<button type="button" id="btn_query" class="btn btn-primary"
 							onclick="javascript:queryEvent('table');">
 							<span class="glyphicon glyphicon-search"></span>查询
@@ -105,16 +114,12 @@ textarea {
 									<form class="form-horizontal">
 										<div class="form-group">
 											<div class="col-sm-2 control-label" id="level"></div>
-											<!-- <div class="col-sm-2 control-label" id="oType">级别</div>
-											<input id="contentType" value="1" name="team" type="radio" />一级汽车品牌
-											<input id="menuType" value="2" name="team" type="radio" />二级汽车品牌
-											<input id="btnType" value="3" name="team" type="radio" />三级汽车品牌 -->
 										</div>
 
 										<div class="form-group" id="menuNameDiv">
 											<!-- 加一个ID区分新增和修改 ，修改时ID给值-->
 											<div id="id"></div>
-											<div class="col-sm-2 control-label" id="parentId">汽车品牌名称</div>
+											<div class="col-sm-2 control-label">汽车品牌名称</div>
 											<div class="col-sm-10">
 												<input type="text" class="form-control" name="menuName"
 													id="menuName" placeholder="汽车品牌名称" />
@@ -249,25 +254,25 @@ textarea {
 				</div>
 			</div>
 		</div>
-
-		<script src="js/bootstrap/jquery.min.js"></script>
-		<script src="js/bootstrap/js/bootstrap.min.js"></script>
-		<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
-		<script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
-		<script
-			src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
-		<script src="js/layer/layer.js"></script>
-		<script src="js/plugins/bootstrap/fileinput.js"></script>
-		<script src="js/plugins/bootstrap/zh.js"></script>
-		<script src="js/uploadify-v3.1/jquery.uploadify.js"></script>
-		<script type="text/javascript" src="js/fnsco/common.js"></script>
-		<script src="js/ztree/jquery.ztree.all.min.js"></script>
-		<script src="js/ztree/jquery.ztree.core.min.js"></script>
-		<script src="js/ztree/jquery.ztree.exhide.min.js"></script>
-		<script src="js/ztree/jquery.ztree.exhide.js"></script>
-		<script type="text/javascript" src="js/fnsco/carBrand.js"></script>
-		<script type="text/javascript" src="js/fnsco/carBrand2.js"></script>
-		<!-- <script type="text/javascript">
+	</div>
+	<script src="js/bootstrap/jquery.min.js"></script>
+	<script src="js/bootstrap/js/bootstrap.min.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+	<script
+		src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+	<script src="js/layer/layer.js"></script>
+	<script src="js/plugins/bootstrap/fileinput.js"></script>
+	<script src="js/plugins/bootstrap/zh.js"></script>
+	<script src="js/uploadify-v3.1/jquery.uploadify.js"></script>
+	<script type="text/javascript" src="js/fnsco/common.js"></script>
+	<script src="js/ztree/jquery.ztree.all.min.js"></script>
+	<script src="js/ztree/jquery.ztree.core.min.js"></script>
+	<script src="js/ztree/jquery.ztree.exhide.min.js"></script>
+	<script src="js/ztree/jquery.ztree.exhide.js"></script>
+	<script type="text/javascript" src="js/fnsco/carBrand.js"></script>
+	<script type="text/javascript" src="js/fnsco/carBrand2.js"></script>
+	<!-- <script type="text/javascript">
 //在页面加载完成之后动态加载，避免因为缓存问题导致数据展示不对(在不人工清理缓存情况下)
 loadJSRandom(document, "js/fnsco/carBrand.js");
 </script> -->

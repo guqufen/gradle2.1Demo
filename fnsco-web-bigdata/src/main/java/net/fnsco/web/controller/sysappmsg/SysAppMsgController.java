@@ -2,6 +2,7 @@ package net.fnsco.web.controller.sysappmsg;
 
 import java.text.SimpleDateFormat;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.OssUtil;
 import net.fnsco.order.api.dto.AppPushMsgInfoDTO;
 import net.fnsco.order.api.sysappmsg.SysAppMsgService;
 import net.fnsco.order.service.domain.SysAppMessage;
@@ -98,6 +100,11 @@ public class SysAppMsgController extends BaseController {
             return ResultDTO.fail();
         }
         SysAppMessage message = sysAppMsgService.selectByPrimaryKey(id);
+        if(StringUtils.isNotEmpty(message.getImageUrl())){
+            String path = message.getImageUrl().substring(message.getImageUrl().indexOf("^")+1);
+            String imageURL =  OssUtil.getFileUrl(OssUtil.getHeadBucketName(), path);
+            message.setImageUrl(imageURL);
+        }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         message.setSendTimeStr(sdf.format(message.getSendTime()));
         return ResultDTO.success(message);

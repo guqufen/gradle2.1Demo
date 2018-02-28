@@ -41,8 +41,10 @@ public class CarBrandService extends BaseService {
 		for (CarBrandDO carBrandDO2 : pageList) {
 
 			if (!Strings.isNullOrEmpty(carBrandDO2.getIconImgPath())) {
-				String path = carBrandDO2.getIconImgPath().substring(carBrandDO2.getIconImgPath().indexOf("^") + 1);
-				carBrandDO2.setIconImgPath(OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), path));
+				if (!carBrandDO2.getIconImgPath().startsWith("http")) {
+					String path = carBrandDO2.getIconImgPath().substring(carBrandDO2.getIconImgPath().indexOf("^") + 1);
+					carBrandDO2.setIconImgPath(OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), path));
+				}
 			}
 		}
 		Integer count = carBrandDAO.pageListCount(carBrandDO);
@@ -56,6 +58,7 @@ public class CarBrandService extends BaseService {
 	 * @param carBrandDO
 	 */
 	public void insert(CarBrandDO carBrandDO) {
+
 		carBrandDAO.insert(carBrandDO);
 	}
 
@@ -158,6 +161,7 @@ public class CarBrandService extends BaseService {
 			root.setName("总菜单");
 			root.setSupperId(-1);
 			root.setLevel(-1);
+			root.setChildCount(1);
 			list.add(root);
 		}
 
@@ -218,6 +222,7 @@ public class CarBrandService extends BaseService {
 		root.setName("总菜单");
 		root.setSupperId(-1);
 		root.setLevel(-1);
+		root.setChildCount(1);
 		list.add(root);
 		return ResultDTO.success(list);
 	}

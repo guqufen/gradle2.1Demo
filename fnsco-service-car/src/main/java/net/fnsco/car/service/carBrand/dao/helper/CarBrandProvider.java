@@ -156,9 +156,9 @@ public class CarBrandProvider {
 						);
 					} else if (2 == brandDO.getLevel()) {
 						WHERE("id IN ( " + sql + " )" + //当前级别2
-								"OR id IN ( SELECT DISTINCT id FROM car_dic_type WHERE id IN ( " + sql1 + " ) )"  // 上一级别1
-//						"OR id IN ( SELECT DISTINCT id FROM car_dic_type WHERE supper_id IN ( SELECT DISTINCT id FROM car_dic_type WHERE supper_id IN ( "
-//								+ sql + " ) ) )" // 下下一级别4
+								"OR id IN ( SELECT DISTINCT id FROM car_dic_type WHERE id IN ( " + sql1 + " ) )"+  // 上一级别1
+						"OR id IN ( SELECT DISTINCT id FROM car_dic_type WHERE supper_id IN ( "
+								+ sql + " ) )" // 下一级别3
 						);
 					} else if (3 == brandDO.getLevel()) {
 
