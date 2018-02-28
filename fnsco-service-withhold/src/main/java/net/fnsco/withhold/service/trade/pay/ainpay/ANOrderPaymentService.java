@@ -3,6 +3,7 @@ package net.fnsco.withhold.service.trade.pay.ainpay;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -12,8 +13,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
 
 import net.fnsco.core.base.BaseService;
+import net.fnsco.core.cityzencard.WHP0003;
+import net.fnsco.core.cityzencard.ZShiMingKaUtil;
+import net.fnsco.core.utils.DateUtils;
+import net.fnsco.core.utils.NumberUtil;
 import net.fnsco.withhold.comm.ApiConstant;
 import net.fnsco.withhold.service.trade.entity.TradeDataDO;
+
 
 /**
  * 测试环境商户号200000000000001，密钥88888888，测试环境地址见文档，测试环境不发验证码的，验证码默认是123456，网银测试环境暂时只开放工行；
@@ -149,4 +155,52 @@ public class ANOrderPaymentService extends BaseService {
         tradeDataDO.setRespMsg(result1.get("respMsg"));
         return tradeDataDO;
     }
+    
+    /**
+     * collectPaymentSendPostByShiMK:(市民卡单笔代扣)
+     *
+     * @param  @param tradeDataDO
+     * @param  @return    设定文件
+     * @return TradeDataDO    DOM对象
+     * @author tangliang
+     * @date   2018年2月27日 上午9:54:19
+     */
+    public TradeDataDO collectPaymentSendPostByShiMK(TradeDataDO tradeDataDO) {
+        
+		WHP0003 obj = new WHP0003();
+		obj.setVersion("1.0.0");
+		obj.setTransCode("WHP0003");
+		obj.setReqSeq(tradeDataDO.getOrderSn());
+		obj.setMerCode("962250824");
+		obj.setChainNo("004");
+		obj.setDateTime(DateUtils.getNowTimeString());
+		obj.setMerCustId(tradeDataDO.getMerId());
+		obj.setSerialNo("");
+		obj.setOrderNo(tradeDataDO.getOrderSn());
+		obj.setShortCardNo(getShortCardNo(tradeDataDO.getBankCard()));
+		obj.setAmount(String.valueOf(NumberUtil.divide(tradeDataDO.getTxnAmt().toString(), 100).doubleValue()));
+		obj.setGoods(tradeDataDO.getBody());
+		obj.setSign("");
+		JSONObject jsonObject = ZShiMingKaUtil.postWHP0003(obj);
+		
+		tradeDataDO.setRespCode(jsonObject.getString("respCode"));
+        tradeDataDO.setRespMsg(jsonObject.getString("respDesc"));
+        
+        
+		return tradeDataDO;
+    }
+    
+    
+    private String getShortCardNo(String shortCardNo) {
+    	if(StringUtils.isEmpty(shortCardNo)) {
+    		return null;
+    	}
+    	
+    	if(shortCardNo.length() < 6) {
+    		return shortCardNo;
+    	}
+    	
+    	return shortCardNo.substring(0, 6)+shortCardNo.substring(shortCardNo.length()-4);
+    }
+    
 }

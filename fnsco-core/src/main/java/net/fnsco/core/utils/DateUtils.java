@@ -125,6 +125,13 @@ public class DateUtils {
         result = sf.format(new Date());
         return result;
     }
+    
+    public static String getNowTimeString() {
+        String result = "";
+        SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
+        result = sf.format(new Date());
+        return result;
+    }
 
     public static String getNowYMDOnlyStr() {
         String result = "";
