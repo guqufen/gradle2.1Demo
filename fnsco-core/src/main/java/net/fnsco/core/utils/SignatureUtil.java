@@ -1,10 +1,13 @@
 package net.fnsco.core.utils;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
+import org.apache.commons.codec.digest.DigestUtils;
 
 import com.alipay.api.internal.util.StringUtils;
 
@@ -40,6 +43,7 @@ public class SignatureUtil {
 		
 		String signContent =  getSignContent(requestParams);
 		return Md5Util.MD5(signContent+secretKey);
+		//return DigestUtils.md5Hex((signContent+secretKey).getBytes(Charset.forName("UTF-8")));
 	}
 	
 	/**

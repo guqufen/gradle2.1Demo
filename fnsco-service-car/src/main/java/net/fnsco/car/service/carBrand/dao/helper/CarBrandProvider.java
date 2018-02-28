@@ -58,12 +58,12 @@ public class CarBrandProvider {
 				}
 				if (!Strings.isNullOrEmpty(brandDO.getSupperName())) {
 					String sql = "SELECT DISTINCT id FROM car_dic_type WHERE name like CONCAT('%',#{carBrandDO.supperName},'%') AND supper_id = 0";
-					WHERE("id IN ( " + sql + " )" + // 1
+					WHERE("(id IN ( " + sql + " )" + // 1
 					"OR id IN ( SELECT DISTINCT id FROM car_dic_type WHERE supper_id IN ( " + sql + " ) )" + // 2
 					"OR id IN ( SELECT DISTINCT id FROM car_dic_type WHERE supper_id IN ( SELECT DISTINCT id FROM car_dic_type WHERE supper_id IN ( "
 							+ sql + " ) ) )" + // 3
 					"OR id IN ( SELECT DISTINCT id FROM car_dic_type WHERE supper_id IN ( SELECT DISTINCT id FROM car_dic_type WHERE supper_id IN ( SELECT DISTINCT id FROM car_dic_type "
-							+ "WHERE supper_id IN ( " + sql + " ) ) ) )"// 4
+							+ "WHERE supper_id IN ( " + sql + " ) ) ) ))"// 4
 					);
 				}
 				ORDER_BY("id asc limit " + start + ", " + limit);
@@ -102,12 +102,12 @@ public class CarBrandProvider {
 				}
 				if (!Strings.isNullOrEmpty(brandDO.getSupperName())) {
 					String sql = "SELECT DISTINCT id FROM car_dic_type WHERE name like CONCAT('%',#{carBrandDO.supperName},'%') AND supper_id = 0";
-					WHERE("id IN ( " + sql + " )" + // 1
+					WHERE("(id IN ( " + sql + " )" + // 1
 					"OR id IN ( SELECT DISTINCT id FROM car_dic_type WHERE supper_id IN ( " + sql + " ) )" + // 2
 					"OR id IN ( SELECT DISTINCT id FROM car_dic_type WHERE supper_id IN ( SELECT DISTINCT id FROM car_dic_type WHERE supper_id IN ( "
 							+ sql + " ) ) )" + // 3
 					"OR id IN ( SELECT DISTINCT id FROM car_dic_type WHERE supper_id IN ( SELECT DISTINCT id FROM car_dic_type WHERE supper_id IN ( SELECT DISTINCT id FROM car_dic_type "
-							+ "WHERE supper_id IN ( " + sql + " ) ) ) )"// 4
+							+ "WHERE supper_id IN ( " + sql + " ) ) ) ))"// 4
 					);
 				}
 			}
