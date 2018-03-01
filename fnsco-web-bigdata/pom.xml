@@ -35,6 +35,14 @@
 			<scope>system</scope>
 			<systemPath>${basedir}/../lib/fnsco-service-trading-0.0.1-SNAPSHOT.jar</systemPath>
 		</dependency>
+		 <!-- 浦发银行支付接口 -->
+		<dependency>
+			<groupId>com.sosopay</groupId>
+			<artifactId>sosopay-sdk</artifactId>
+			<version>1.0.3</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/../lib/sosopay-sdk.jar</systemPath>
+		</dependency>
 		<dependency>
 			<groupId>net.fnsco</groupId>
 			<artifactId>fnsco-service-order</artifactId>
