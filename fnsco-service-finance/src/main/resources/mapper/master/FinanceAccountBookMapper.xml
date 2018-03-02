@@ -19,10 +19,6 @@
     <result column="cash" property="cashDec" jdbcType="DECIMAL" />
     <result column="type" property="type" jdbcType="INTEGER" />
   </resultMap>
-  <resultMap id="EntityResultMap" type="net.fnsco.finance.api.dto.AppUserEntityDTO" >
-    <result column="entity_inner_code" property="entityInnerCode" jdbcType="VARCHAR" />
-    <result column="merc_name" property="mercName" jdbcType="VARCHAR" />
-  </resultMap>
   <resultMap id="ShopResultMap" type="net.fnsco.finance.api.dto.AppUserShopDTO" >
     <result column="shop_inner_code" property="shopInnerCode" jdbcType="VARCHAR" />
     <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
@@ -232,7 +228,7 @@
 		account_id = #{accountId,jdbcType=VARCHAR}
   </select>
   <!-- APP端记账查询商户信息 -->
-  <select id="queryEntityList" parameterType="java.lang.String" resultMap="EntityResultMap" >
+  <select id="queryEntityList" parameterType="java.lang.String" resultType="net.fnsco.finance.api.dto.AppUserEntityDTO" >
     SELECT
 		E.entity_inner_code AS entityInnerCode,
 		E.merc_name AS mercName
