@@ -30,7 +30,7 @@ public interface UserDAO {
 
     @Results({ @Result(column = "real_name", property = "realName"), @Result(column = "alias_name", property = "aliasName"), @Result(column = "agent_id", property = "agentId"),
                @Result(column = "modify_time", property = "modifyTime"), @Result(column = "modify_user_id", property = "modifyUserId") })
-    @Select("SELECT * FROM sys_user WHERE name=#{name}")
+    @Select("SELECT * FROM sys_user WHERE name=#{name} and status = 1 limit 1")
     public UserDO getByName(@Param("name") String name);
 
     @Insert("INSERT into sys_user(id,type,name,password,real_name,mobile,sex,alias_name,department,agent_id,remark,modify_time,modify_user_id,status) VALUES (#{id},#{type},#{name},#{password},#{realName},#{mobile},#{sex},#{aliasName},#{department},#{agentId},#{remark},#{modifyTime},#{modifyUserId},#{status})")

@@ -9,19 +9,19 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.base.Strings;
 
+import net.fnsco.auth.service.UserService;
 import net.fnsco.auth.service.UserTokenService;
+import net.fnsco.auth.service.sys.entity.UserDO;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.constants.CoreConstants;
 import net.fnsco.freamwork.business.WebService;
 import net.fnsco.freamwork.business.WebUserDTO;
-import net.fnsco.order.api.sysuser.SysUserService;
-import net.fnsco.order.service.domain.SysUser;
 
 @Service
 public class WebUserServiceImpl extends BaseService implements WebService {
     
     @Autowired
-    private SysUserService sysUserService;
+    private UserService sysUserService;
     @Autowired
     private UserTokenService userTokenService;
     
@@ -34,7 +34,7 @@ public class WebUserServiceImpl extends BaseService implements WebService {
             return user;
         }
         String userName = cookeiUser.toString().substring(cookeiUser.toString().lastIndexOf("#") + 1, cookeiUser.toString().length());
-        SysUser temp = sysUserService.getUserByName(userName);
+        UserDO temp = sysUserService.getByName(userName);
         if (temp != null) {
             user = new WebUserDTO();
             user.setId(temp.getId());
