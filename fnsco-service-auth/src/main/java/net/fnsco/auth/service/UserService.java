@@ -180,4 +180,13 @@ public class UserService extends BaseService {
 		}
 		return ResultDTO.success();
 	}
+
+	public Integer getAgentIdByUserId(Integer userId) {
+		UserDO userDO = userDAO.getById(userId);
+		if(userDO != null){
+			return userDO.getAgentId();
+		}
+		return null;
+		
+	}
 }

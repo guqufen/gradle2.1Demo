@@ -24,13 +24,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import net.fnsco.auth.service.UserService;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.service.domain.Agent;
 import net.fnsco.bigdata.service.domain.MerchantBank;
-import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantContact;
 import net.fnsco.bigdata.service.domain.MerchantCore;
-import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -52,6 +51,8 @@ public class MerchantInfoController extends BaseController {
 
 	@Autowired
 	private MerchantCoreService merchantCoreService;
+	@Autowired
+    private UserService   userService; 
 	
 	/**
 	 * 跳转到商户信息首页
@@ -64,6 +65,9 @@ public class MerchantInfoController extends BaseController {
 	public ResultPageDTO<MerchantCore> merchatInfoIndex(MerchantCore merchantCore, Integer currentPageNum,
 			Integer pageSize) {
 		logger.info("查询商户列表");
+		Integer userId = this.getUserId();
+		Integer agentId = userService.getAgentIdByUserId(userId);
+		merchantCore.setAgentId(agentId);
 		return merchantCoreService.queryMerchantCore(merchantCore, currentPageNum, pageSize);
 	}
 	/**

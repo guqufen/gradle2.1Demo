@@ -568,6 +568,10 @@
       <if test="condition.modifyTime != null and condition.modifyTime != ''" >
         AND CO.modify_time = #{condition.modifyTime,jdbcType=TIMESTAMP}
       </if>
+       <!-- 代理商 -->
+      <if test="condition.agentId != null and condition.agentId != ''" >
+        AND CO.agent_id = #{condition.agentId,jdbcType=INTEGER}
+      </if>
         <!-- AND CO.status = 1 -->
         AND CO.status in (1,2,5)
       </where>
@@ -645,6 +649,10 @@
       </if>
       <if test="modifyTime != null and modifyTime != ''" >
         AND modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+      </if>
+       <!-- 代理商 -->
+      <if test="agentId != null and agentId != ''" >
+        AND agent_id = #{agentId,jdbcType=INTEGER}
       </if>
         AND status = 1
   	 </where>
