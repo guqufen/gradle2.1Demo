@@ -13,8 +13,6 @@ import net.fnsco.finance.api.dto.FinanceBookKeepingDTO;
 import net.fnsco.finance.api.dto.FinanceDetailDTO;
 import net.fnsco.finance.api.dto.FinanceQueryDTO;
 import net.fnsco.finance.api.dto.FinanceRecordDTO;
-import net.fnsco.finance.api.dto.IoTypeAndShopDTO;
-import net.fnsco.finance.api.dto.QueryDetailDTO;
 import net.fnsco.finance.service.domain.FinanceIoType;
 
 /**
