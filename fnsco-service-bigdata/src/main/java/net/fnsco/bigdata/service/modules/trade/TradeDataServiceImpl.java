@@ -259,8 +259,11 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
      * @date 2017年6月28日 下午5:13:54
      */
     @Override
-    public ResultPageDTO<TradeData> queryTradeData(TradeDataDTO tradeDataDTO, int currentPageNum, int perPageSize) {
+    public ResultPageDTO<TradeData> queryTradeData(TradeDataDTO tradeDataDTO, int currentPageNum, int perPageSize,Integer agentId) {
         TradeData tradeData = new TradeData();
+        //查询agentid下所有内部商户号信息
+        List<String> innerCodeList = merchantCoreDao.queryAllInnercodeByAgentId(agentId);
+        tradeData.setInnerCodeList(innerCodeList);
         if (tradeDataDTO.getPayType() != null && tradeDataDTO.getPayType().equals("03")) {
             tradeDataDTO.setPayType(null);
         }
@@ -309,8 +312,11 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
     }
 
     @Override
-    public String queryTotalAmount(TradeDataDTO tradeDataDTO) {
+    public String queryTotalAmount(TradeDataDTO tradeDataDTO,Integer agentId) {
         TradeData tradeData = new TradeData();
+        //查询agentid下所有内部商户号信息
+        List<String> innerCodeList = merchantCoreDao.queryAllInnercodeByAgentId(agentId);
+        tradeData.setInnerCodeList(innerCodeList);
         if (tradeDataDTO.getPayType() != null &&tradeDataDTO.getPayType().equals("03")) {
             tradeDataDTO.setPayType(null);
         }

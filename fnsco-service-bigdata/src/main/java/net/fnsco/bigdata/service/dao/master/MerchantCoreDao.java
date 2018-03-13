@@ -177,6 +177,9 @@ public interface MerchantCoreDao {
 	 @Select("SELECT m1.inner_code,m2.channel_mer_id FROM m_merchant_core m1,m_merchant_channel m2 WHERE m1.inner_code=m2.inner_code AND m1.`status`=2")
 	List<MercQueryDTO> getMercList();
 
+	@Select("SELECT inner_code FROM m_merchant_core WHERE agent_id = #{agentId}")
+	List<String> queryAllInnercodeByAgentId(@Param("agentId") Integer agentId);
+
 	
 
    

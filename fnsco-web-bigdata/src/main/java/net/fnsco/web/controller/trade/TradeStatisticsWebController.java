@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import io.swagger.annotations.Api;
+import net.fnsco.auth.service.UserService;
 import net.fnsco.bigdata.api.dto.TradeDataDTO;
 import net.fnsco.bigdata.api.trade.TradeDataService;
 import net.fnsco.bigdata.api.trade.TradeStatisticsService;
@@ -45,6 +46,8 @@ public class TradeStatisticsWebController extends BaseController {
     private TradeStatisticsService tradeStatisticsService;
     @Autowired
     private TradeDataService       tradeDataService;
+    @Autowired
+    private UserService   userService;
     /**
      * 交易统计分页查询
      * 
@@ -78,7 +81,10 @@ public class TradeStatisticsWebController extends BaseController {
     	String day = DateUtils.strFormatToStr(tradeStatistics.getTradeDate());
     	tradeDataDTO.setStartTime(day);
     	tradeDataDTO.setEndTime(day);
-        return tradeDataService.queryTradeData(tradeDataDTO, currentPageNum, pageSize);
+    	//功能待测
+    	Integer userId = this.getUserId();
+    	Integer agentId = userService.getAgentIdByUserId(userId);
+        return tradeDataService.queryTradeData(tradeDataDTO, currentPageNum, pageSize,agentId);
     }
     /**
      * 交易流水excel导出

@@ -29,6 +29,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.base.Strings;
 
 import io.swagger.annotations.Api;
+import net.fnsco.auth.service.UserService;
 import net.fnsco.bigdata.api.constant.BigdataConstant.ChannelTypeEnum;
 import net.fnsco.bigdata.api.constant.BigdataConstant.DataSourceEnum;
 import net.fnsco.bigdata.api.constant.BigdataConstant.PayMediumEnum;
@@ -69,6 +70,8 @@ public class TradeDataWebController extends BaseController {
     private TradeDataImportService tradeDataImportService;
     @Autowired
     private LklTradeDataService    tradeDataLklService;
+    @Autowired
+    private UserService   userService; 
     
     private ExecutorService        cachedThreadPool = Executors.newCachedThreadPool();
 
@@ -84,7 +87,9 @@ public class TradeDataWebController extends BaseController {
     @ResponseBody
     @RequiresPermissions(value = { "m:trade:list" })
     public ResultPageDTO<TradeData> query(TradeDataDTO tradeDataDTO, Integer currentPageNum, Integer pageSize) {
-        return tradeDataService.queryTradeData(tradeDataDTO, currentPageNum, pageSize);
+    	Integer userId = this.getUserId();
+    	Integer agentId = userService.getAgentIdByUserId(userId);
+        return tradeDataService.queryTradeData(tradeDataDTO, currentPageNum, pageSize,agentId);
     }
     
     /**
@@ -96,7 +101,9 @@ public class TradeDataWebController extends BaseController {
     @ResponseBody
     @RequiresPermissions(value = { "m:trade:list" })
     public ResultDTO<String>  queryTotalAmount(TradeDataDTO tradeDataDTO){
-    	String total= tradeDataService.queryTotalAmount(tradeDataDTO);
+    	Integer userId = this.getUserId();
+    	Integer agentId = userService.getAgentIdByUserId(userId);
+    	String total= tradeDataService.queryTotalAmount(tradeDataDTO,agentId);
     	return ResultDTO.success(total);
     }
     

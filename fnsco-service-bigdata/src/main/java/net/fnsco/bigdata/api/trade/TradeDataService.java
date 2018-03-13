@@ -29,13 +29,13 @@ public interface TradeDataService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    ResultPageDTO<TradeData> queryTradeData(TradeDataDTO tradeDataDTO, int currentPageNum, int perPageSize);
+    ResultPageDTO<TradeData> queryTradeData(TradeDataDTO tradeDataDTO, int currentPageNum, int perPageSize,Integer agentId);
     /**
      * 总金额查询
      * @param tradeDataDTO
      * @return
      */
-    String queryTotalAmount(TradeDataDTO tradeDataDTO);
+    String queryTotalAmount(TradeDataDTO tradeDataDTO,Integer agentId);
     /**
     * 查询符合条件的数据用于excel导出
     * @param tradeDataDTO
