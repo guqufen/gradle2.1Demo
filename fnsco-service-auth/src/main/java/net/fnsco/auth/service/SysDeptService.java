@@ -2,6 +2,7 @@ package net.fnsco.auth.service;
 
 import java.util.List;
 
+import org.apache.commons.codec.binary.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +42,7 @@ public class SysDeptService extends BaseService {
 	 * @return
 	 */
 	public ResultPageDTO<DeptDO> queryList(DeptDO dept, Integer pageNum, Integer pageSize) {
-		//long timer = System.currentTimeMillis();
 		List<DeptDO> data = deptDAO.pageList(dept, pageNum, pageSize);
-		//logger.debug(null, System.currentTimeMillis()-timer);
 		for (DeptDO temp : data) {
 			DeptDO tdo = deptDAO.getById(temp.getParentId());
 			if (tdo == null) {
@@ -61,6 +60,7 @@ public class SysDeptService extends BaseService {
 
 	/**
 	 * 查询部门相关信息
+	 * 
 	 * @param flag:true-表示需要带自制根节点;false不需要带
 	 * @return
 	 */
@@ -117,7 +117,7 @@ public class SysDeptService extends BaseService {
 		if (data.getParentId() != 0) {
 			DeptDO user = deptDAO.getById(data.getParentId());
 			data.setParentName(user.getName());
-		}else {
+		} else {
 			data.setParentName(env.getProperty("web.compony.name"));
 		}
 		return data;

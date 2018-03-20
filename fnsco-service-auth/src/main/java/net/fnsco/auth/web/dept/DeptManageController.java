@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.fnsco.auth.service.SysDeptService;
+import net.fnsco.auth.service.UserService;
 import net.fnsco.auth.service.sys.entity.DeptDO;
+import net.fnsco.auth.service.sys.entity.UserDO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -26,6 +28,8 @@ import net.fnsco.core.base.ResultPageDTO;
 public class DeptManageController extends BaseController {
 	@Autowired
 	private SysDeptService sysDeptService;
+	@Autowired
+	private UserService userService;
 
 	/**
 	 * 页面信息查询
@@ -40,6 +44,11 @@ public class DeptManageController extends BaseController {
 	@RequiresPermissions(value = {"sys:dept:info"})
 	public ResultDTO<DeptDO> query(DeptDO dept, @RequestParam("currentPageNum") Integer pageNum,
 			@RequestParam("pageSize") Integer pageSize) {
+		Integer userID = this.getUserId();
+		UserDO userDO = userService.getUserById(userID);
+		if(userDO != null){
+			dept.setName(userDO.getDepartment());
+		}
 		ResultPageDTO<DeptDO> result = sysDeptService.queryList(dept, pageNum, pageSize);
 		return success(result);
 	}

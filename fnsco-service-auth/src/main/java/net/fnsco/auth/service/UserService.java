@@ -189,4 +189,13 @@ public class UserService extends BaseService {
 		return null;
 		
 	}
+
+	public UserDO getUserById(Integer userID) {
+		UserDO userDO = userDAO.getById(userID);
+		if(userDO != null){
+			return userDO;
+		}
+		return null;
+		
+	}
 }
