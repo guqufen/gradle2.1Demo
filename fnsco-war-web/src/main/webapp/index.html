@@ -139,7 +139,7 @@
                     </li>
                     <li class="dropdown">
                        	<a data-toggle="dropdown" class="dropdown-toggle" href="#" aria-expanded="false">
-                       		<span class="glyphicon glyphicon-user"></span><strong class="font-bold indexPageUserName">董审核</strong>
+                       		<span class="glyphicon glyphicon-user"></span><strong class="font-bold indexPageUserName"></strong>
                         </a> 
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
                             <li>
@@ -213,9 +213,10 @@ $(function(){
 		type:'POST',
 		success:function(data){
 			unloginHandler(data);
-			if(!data.sessionUser)
-			window.location='login.html';
-			$('.indexPageUserName').html(data.data.name);
+			if(!data.sessionUser){
+				window.location='login.html';
+			}
+			$('.indexPageUserName').html(data.sessionUser.name);
 		}
 	});
 });
