@@ -3,6 +3,7 @@ package net.fnsco.auth.web.role;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import io.swagger.annotations.Api;
 import net.fnsco.auth.service.RoleService;
+import net.fnsco.auth.service.UserService;
 import net.fnsco.auth.service.sys.entity.RoleDO;
+import net.fnsco.auth.service.sys.entity.UserDO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -28,10 +31,12 @@ public class RoleController extends BaseController{
 	
 	@Autowired
 	private RoleService roleService;
+	@Autowired
+	private UserService userService;
 
 	@RequestMapping("list")
 	@ResponseBody
-	@RequiresPermissions(value = { "sys:role:list" })
+//	@RequiresPermissions(value = { "sys:role:list" })
 	public ResultDTO pageList(RoleDO role) {
 		logger.info("开始分页查询RoleController.pageList, role=" + role.toString());
 		Map<String, Integer> params = super.copyParamsToInteger(new String[] { "currentPageNum", "pageSize" });
@@ -77,8 +82,14 @@ public class RoleController extends BaseController{
 	@ResponseBody
 	@RequiresPermissions(value = { "sys:role:list" })
 	public ResultDTO<RoleDO> queryRole() {
-
 		List<RoleDO> result = roleService.queryRole();
-		return success(result);
+		Integer userID = this.getUserId();
+		if(userID !=1){
+			List<RoleDO> result2 = roleService.queryRoleByUserID(userID);
+			return success(result2);
+		}else{
+			return success(result);
+			
+		}
 	}
 }

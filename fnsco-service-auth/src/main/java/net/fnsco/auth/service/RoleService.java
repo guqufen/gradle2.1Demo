@@ -125,4 +125,12 @@ public class RoleService extends BaseService {
 		     return data;
 	 }
 
+	public List<RoleDO> queryRoleByUserID(Integer userID) {
+		//返回根据条件查询的所有记录条数
+		 List<RoleDO> data = roleDAO.queryRoleByUserID(userID);
+
+	     return data;
+		
+	}
+
 }

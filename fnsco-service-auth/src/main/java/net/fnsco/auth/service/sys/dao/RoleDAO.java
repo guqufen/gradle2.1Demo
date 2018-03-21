@@ -42,4 +42,8 @@ public interface RoleDAO {
     @Select("SELECT * FROM sys_role")
     public List<RoleDO> queryAll();
 
+    @Results({@Result( column = "id",property = "roleId"),@Result( column = "role_name",property = "roleName"),@Result( column = "dept_id",property = "deptId"),@Result( column = "create_time",property = "createTime") })
+    @Select("SELECT * FROM sys_role WHERE id in (SELECT role_id FROM sys_user_role WHERE user_id = #{userID})")
+	public List<RoleDO> queryRoleByUserID(@Param("userID") Integer userID);
+
 }
