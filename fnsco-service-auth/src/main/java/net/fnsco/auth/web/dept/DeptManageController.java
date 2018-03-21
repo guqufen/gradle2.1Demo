@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.druid.stat.TableStat.Name;
+
 import net.fnsco.auth.service.SysDeptService;
 import net.fnsco.auth.service.UserService;
 import net.fnsco.auth.service.sys.entity.DeptDO;
@@ -62,7 +64,13 @@ public class DeptManageController extends BaseController {
 	@ResponseBody
 	@RequiresPermissions(value = {"sys:dept:info"})
 	public ResultDTO<DeptDO> querytree() {
-		List<DeptDO> result = sysDeptService.queryName(true);
+		Integer userID = this.getUserId();
+		UserDO userDO = userService.getUserById(userID);
+		String name = null ;
+		if(userDO != null){
+			name = userDO.getDepartment();
+		}
+		List<DeptDO> result = sysDeptService.queryName(false,name);
 		return success(result);
 	}
 	
@@ -75,7 +83,13 @@ public class DeptManageController extends BaseController {
 	@ResponseBody
 	@RequiresPermissions(value = {"sys:dept:info"})
 	public ResultDTO<DeptDO> queryNoRoottree() {
-		List<DeptDO> result = sysDeptService.queryName(false);
+		Integer userID = this.getUserId();
+		UserDO userDO = userService.getUserById(userID);
+		String name = null ;
+		if(userDO != null){
+			name = userDO.getDepartment();
+		}
+		List<DeptDO> result = sysDeptService.queryName(false,name);
 		return success(result);
 	}
 

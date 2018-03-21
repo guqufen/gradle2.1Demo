@@ -42,7 +42,12 @@ public class UserManageController extends BaseController {
 	@ResponseBody
 	@RequiresPermissions(value = {"sys:user:list"})
 	 public ResultDTO<UserDO> query(UserDO user,@RequestParam("currentPageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize) {
-		 ResultPageDTO<UserDO> result=userService.queryList(user, pageNum, pageSize);
+		Integer userID = this.getUserId();
+		UserDO userDO = userService.getUserById(userID);
+		if(userDO != null){
+			user.setDepartment(userDO.getDepartment());
+		}
+		ResultPageDTO<UserDO> result=userService.queryList(user, pageNum, pageSize);
 	     return success(result);
 	 }
 	/**

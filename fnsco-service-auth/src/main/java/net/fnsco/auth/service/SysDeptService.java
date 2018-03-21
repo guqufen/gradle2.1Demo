@@ -64,9 +64,9 @@ public class SysDeptService extends BaseService {
 	 * @param flag:true-表示需要带自制根节点;false不需要带
 	 * @return
 	 */
-	public List<DeptDO> queryName(Boolean flag) {
+	public List<DeptDO> queryName(Boolean flag,String name) {
 		// 返回根据条件查询的所有记录条数
-		List<DeptDO> data = deptDAO.pageNameList();
+		List<DeptDO> data = deptDAO.pageNameList(name);
 		// ResultDTO<DeptDO> result = new ResultDTO<DeptDO>(data);
 		if (flag) {
 			// 添加顶级菜单
