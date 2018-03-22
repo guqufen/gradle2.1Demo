@@ -117,7 +117,7 @@ public class TradeDataWebController extends BaseController {
      */
     @RequestMapping(value = "/queryLkl", method = RequestMethod.GET)
     @ResponseBody
-    @RequiresPermissions(value = { "m:trade:list" })
+//    @RequiresPermissions(value = { "m:trade:list" })
     public ResultPageDTO<TradeDataLkl> queryLkl(TradeDataDTO tradeDataDTO, Integer currentPageNum, Integer pageSize) {
         return tradeDataLklService.queryTradeData(tradeDataDTO, currentPageNum, pageSize);
     }
@@ -129,7 +129,7 @@ public class TradeDataWebController extends BaseController {
      */
     @RequestMapping(value="queryLklTotalAmount",method=RequestMethod.POST)
     @ResponseBody
-    @RequiresPermissions(value = { "m:trade:list" })
+//    @RequiresPermissions(value = { "m:trade:list" })
     public ResultDTO<String>  queryLklTotalAmount(TradeDataDTO tradeDataDTO){
     	String total= tradeDataLklService.queryTotalAmount(tradeDataDTO);
     	return ResultDTO.success(total);

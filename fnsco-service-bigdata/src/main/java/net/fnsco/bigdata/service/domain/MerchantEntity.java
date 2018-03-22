@@ -43,6 +43,7 @@ public class MerchantEntity {
     private BigDecimal scores;
     
     //新增字段
+    private Integer agentId;
     private String registAddress; //拼接的详细地址
 	private Integer registProvince;//省
     private Integer registCity;//市
@@ -58,7 +59,32 @@ public class MerchantEntity {
     
     private String industryName;
     
-    public String getIndustryName() {
+    
+    
+    
+    /**
+	 * agentId
+	 *
+	 * @return  the agentId
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Integer getAgentId() {
+		return agentId;
+	}
+
+	/**
+	 * agentId
+	 *
+	 * @param   agentId    the agentId to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setAgentId(Integer agentId) {
+		this.agentId = agentId;
+	}
+
+	public String getIndustryName() {
 		return industryName;
 	}
 
@@ -275,5 +301,26 @@ public class MerchantEntity {
 	public void setLastModefyUserId(Integer lastModefyUserId) {
 		this.lastModefyUserId = lastModefyUserId;
 	}
+
+	/**
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "MerchantEntity [id=" + id + ", entityInnerCode=" + entityInnerCode + ", mercName=" + mercName
+				+ ", legalPerson=" + legalPerson + ", legalPersonMobile=" + legalPersonMobile + ", businessLicenseNum="
+				+ businessLicenseNum + ", cardType=" + cardType + ", cardNum=" + cardNum + ", status=" + status
+				+ ", createTimer=" + createTimer + ", createSource=" + createSource + ", createUserId=" + createUserId
+				+ ", lastModefyTimer=" + lastModefyTimer + ", lastModefyUserId=" + lastModefyUserId + ", scores="
+				+ scores + ", agentId=" + agentId + ", registAddress=" + registAddress + ", registProvince="
+				+ registProvince + ", registCity=" + registCity + ", registArea=" + registArea + ", etpsAttr="
+				+ etpsAttr + ", etpsTp=" + etpsTp + ", registAddressDetail=" + registAddressDetail
+				+ ", registProvinceName=" + registProvinceName + ", registCityName=" + registCityName
+				+ ", registAreaName=" + registAreaName + ", industryCode=" + industryCode + ", industryName="
+				+ industryName + "]";
+	}
+	
+	
     
 }

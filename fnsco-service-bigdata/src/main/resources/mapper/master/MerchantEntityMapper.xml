@@ -380,6 +380,9 @@
       <if test="condition.scores != null" >
         and scores = #{condition.scores,jdbcType=DECIMAL}
       </if>
+      <if test="condition.agentId != null" >
+        and agent_id = #{condition.agentId,jdbcType=INTEGER}
+      </if>
         and status = 1
       </where>
       ORDER BY id DESC
@@ -428,6 +431,9 @@
       </if>
       <if test="scores != null" >
         and scores = #{scores,jdbcType=DECIMAL}
+      </if>
+       <if test="agentId != null" >
+        and agent_id = #{agentId,jdbcType=INTEGER}
       </if>
       and status = 1
   	 </where>
