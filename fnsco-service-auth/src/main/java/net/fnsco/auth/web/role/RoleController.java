@@ -80,7 +80,7 @@ public class RoleController extends BaseController{
 
 	@RequestMapping(value = "/queryRole", method = RequestMethod.POST)
 	@ResponseBody
-	@RequiresPermissions(value = { "sys:role:list" })
+//	@RequiresPermissions(value = { "sys:role:list" })
 	public ResultDTO<RoleDO> queryRole() {
 		List<RoleDO> result = roleService.queryRole();
 		Integer userID = this.getUserId();

@@ -238,6 +238,7 @@ $("#btn_add").click(function(){
     $("#myModalLabel").html("新增商户实体");
     $('#addForm')[0].reset();
     queryIndustryEvent(null);
+    requestAgent(null);//请求所有代理商
     merProvince("0");
 })
 $('.sunmitBtn').click(function(){
@@ -354,9 +355,9 @@ function editData(id){
         success:function(data){
         	unloginHandler(data);
         	var entity = data.data;
-            console.log(data);queryIndustryEvent(null);
+            queryIndustryEvent(null);
+            requestAgent(entity.agentId);
         	if(data.success){
-        		
         		var entity = data.data;
                 $("#myModal").modal();
                 $("#myModalLabel").html("编辑商户实体详情");
@@ -375,6 +376,7 @@ function editData(id){
                 merProcessSelect("0",false);
                 $("#registArea0").find("option[value="+entity.registArea+"]").attr("selected",true);
                 $("#registAddressDetail").val(entity.registAddressDetail);
+                
         	}else{
         		layer.msg('系统异常!'+e);
         	}
@@ -397,6 +399,7 @@ function detailsData(id){
         success:function(data){
         	unloginHandler(data);
         	var entity = data.data;
+        	requestAgent(entity.agentId);
         	if(data.success){
         		var entity = data.data;
                 $("#myDetailModal").modal();
@@ -529,4 +532,35 @@ function responseDetailHandler(res) {
             "total" : 0
         };
     }
+}
+
+//请求所有代理商数据
+function requestAgent(type){
+	 $.ajax({
+		   url:PROJECT_NAME+'/web/merchantinfo/queryAgents',
+		   type:'POST',
+		   success:function(data){
+			   unloginHandler(data);
+			   var agtS = data.data;
+			   var html_opt = '';
+			   $.each(agtS,function(index,value){
+				   if(type && type == value.id){
+					   html_opt += '<option value="'+value.id+'" selected ="selected">'+value.name+'</option>';
+				   }else{
+					   html_opt += '<option value="'+value.id+'">'+value.name+'</option>';
+				   }
+			   })
+			   if(!type){
+				   $('#agentId').html('');
+//				   $('#agentId').append(html_opt);
+			   }else{
+//				   $('#agentId').html('');
+				   $('#agentId').append(html_opt);
+				   $('#agentId1').append(html_opt);
+			   }
+		   },
+		   error:function(e){
+			   layer.msg('服务器出错');
+		   }
+	   })
 }
