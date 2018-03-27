@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="pragma" content="no -cache">
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+<meta http-equiv="expires" content="0">
+<title>商户信息-法奈昇大数据平台</title>
+<meta name="keywords" content="法奈昇大数据平台">
+<meta name="description" content="法奈昇大数据平台">
+<link rel="shortcut icon" href="favicon.ico">
+<link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
+<link href="css/plugins/bootstrap-table/bootstrap-table.min.css"
+	rel="stylesheet">
+<link
+	href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css"
+	rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="css/custom.css" rel="stylesheet">
+<link href="css/plugins/bootstrap/fileinput.css" rel="stylesheet">
+<link href="js/uploadify-v3.1/uploadify.css">
+<link rel="stylesheet" href="js/viewer/viewer.min.css">
+<style type="text/css">
+.btn-div {
+	float: left;
+	width: 100%;
+}
+
+.addPos,.addTerminalRates {
+	float: left;
+	padding: 20px 5px;
+	margin: 10px 15px;
+	background-color: #fff;
+	position: relative;
+}
+
+.addPos h2 {
+	width: 100%;
+	float: left;
+	font-size: 18px;
+	font-weight: bold;
+	text-indent: 15px;
+	margin-top: 0;
+}
+
+.zd {
+	float: left;
+	padding: 20px 5px;
+	margin: 15px;
+	background-color: #f4f4f4;
+	position: relative;
+}
+
+.addChannel {
+	padding-bottom: 20px;
+}
+
+.addChannel .btn {
+	margin-left: 15px;
+	margin-bottom: 10px;
+}
+</style>
+</head>
+<body class="gray-bg">
+	<div class="panel-body animated fadeInRight">
+		<div class="panel panel-default">
+			<form id="formSearch" class="form-horizontal">
+				<div class="form-group" style="margin-top: 15px">
+					<div class="row col-sm-10">
+						<div class="col-sm-4">
+							<label class="control-label" for="txt_search_id">商户名：</label> <input
+								type="text" class="form-control" id="txt_search_id">
+						</div>
+						<div class="col-sm-4">
+							<label class="control-label" for="txt_search_merId">渠道商户号：</label> <input
+								type="text" class="form-control" id="txt_search_merId">
+						</div>
+						<div class="col-sm-4">
+							<label class="control-label" for="txt_search_innerCode">内部商户号：</label> <input
+								type="text" class="form-control" id="txt_search_innerCode">
+						</div>
+						<div class="col-sm-4">
+							<label class="control-label" for="txt_search_name">法人姓名：</label>
+							<input type="text" class="form-control" id="txt_search_name">
+						</div>
+						<div class="col-sm-4">
+							<label class="control-label" for="txt_search_price">法人手机：</label>
+							<input type="text" class="form-control" id="txt_search_price">
+						</div>
+						<div class="col-sm-4">
+							<label class="control-label" for="channel_type">渠道类型:</label> 
+							<select id="channel_type" name="channel_type" class="form-control">
+								<option value="" selected>请选择</option>
+								<option value="00">拉卡拉</option>
+								<option value="01">浦发</option>
+								<option value="02">爱农</option>
+								<option value="03">法奈昇</option>
+								<option value="04">聚惠分</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-sm-2" style="text-align: right;">
+						<button type="button" id="btn_query" class="btn btn-primary"
+							onclick="javascript:queryEvent('table');">
+							<span class="glyphicon glyphicon-search"></span>查询
+						</button>
+						<button type="button" id="btn_reset" class="btn btn-default"
+							onclick="javascript:resetEvent('formSearch');">
+							<span class="glyphicon glyphicon-refresh"></span>重置
+						</button>
+						<button type="button" id="btn_export" class="btn btn-info"
+							onclick="javascript:exportEvent();">
+							<span class="glyphicon glyphicon-export"></span>导出
+						</button>
+						<button type="button" id="btn_import" class="btn btn-info"
+							onclick="javascript:importEvent();">
+							<span class="glyphicon glyphicon-import"></span>导入
+						</button>
+					</div>
+				</div>
+			</form>
+			<!-- start -->
+			<div class="ibox float-e-margins">
+				<div class="ibox-content">
+					<div class="row row-lg">
+						<div class="col-sm-12">
+							<div id="toolbar">
+								<button id="btn_add" type="button" class="btn btn-success"
+									data-toggle="modal" data-target="#myModal">
+									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+								</button>
+								<button id="btn_delete" type="button" class="btn btn-danger">
+									<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>批量删除
+								</button>
+							</div>
+							<table id="table" style="min-width: 2400px;"></table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- end  -->
+			<!-- 导入 -->
+			<div class="modal fade" id="importModal" tabindex="-1" role="dialog"
+				aria-labelledby="importModalLabel" data-backdrop="static"
+				data-keyboard="false">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="importModalLabel">请选择Excel文件</h4>
+						</div>
+						<div class="modal-body">
+							<div class="tab-content">
+								<div class="modal-header">
+									<button type="button" id="btn_down" class="btn btn-info"
+										onclick="javascript:downEvent();">
+										<span class="glyphicon glyphicon-download-alt"></span>下载模板
+									</button>
+								</div>
+								<input type="file" name="excel_file_merchant"
+									id="excel_file_merchant" multiple class="file-loading" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- model新增 start -->
+			<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+				aria-labelledby="myModalLabel" data-backdrop="static"
+				data-keyboard="false">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel">新增商户</h4>
+						</div>
+						<div class="modal-body">
+							<ul class="nav nav-tabs" role="tablist">
+								<li role="presentation" class="active"><a>基本信息</a></li>
+								<li role="presentation"><a>银行卡信息</a></li>
+								<li role="presentation"><a>资质文件</a></li>
+								<li role="presentation"><a>终端信息</a></li>
+								<li role="presentation"><a>联系信息</a></li>
+							</ul>
+							<div class="tab-content">
+								<div role="tabpanel" class="tab-pane active" id="home">
+									<form action="" id="mercore_form" method="post">
+										<div class="row">
+											<div class="col-sm-4">
+												<label class="control-label" for="entityMerName0">实体商户：</label>
+												<input
+													type="text" class="form-control entityMerName" id="entityMerName0"
+													name="entityMerName0" required="required" onclick="selectBusiness(0)">
+												<input type="hidden" name="entityInnerCode" class="entityInnerCode">
+											</div>
+											<div class="col-sm-4">
+												<label class="control-label" for="merName">商户名：</label> <input
+													type="text" class="form-control" id="merName"
+													name="merName" required="required">
+											</div>
+											<div class="col-sm-4">
+												<label class="control-label" for="abbreviation">简称：</label>
+												<input type="text" class="form-control" id="abbreviation"
+													name="abbreviation">
+											</div>
+											<div class="col-sm-4">
+												<label class="control-label" for="legalPerson">商户法人姓名：</label>
+												<input type="text" class="form-control legalPerson" id="legalPerson"
+													name="legalPerson">
+											</div>
+											<div class="col-sm-4">
+												<label class="control-label" for="legalPersonMobile">法人手机号码：</label>
+												<input type="number" class="form-control legalPersonMobile"
+													id="legalPersonMobile" name="legalPersonMobile">
+											</div>
+											<!-- <div class="col-sm-4">
+												<label class="control-label " for="legalValidCardType">法人有效证件类型：</label>
+												<select id="legalValidCardType" name="legalValidCardType"
+													class="form-control">
+													<option value="0">身份证</option>
+													<option value="1">护照</option>
+													<option value="2">士兵证</option>
+													<option value="3">军官证</option>
+													<option value="4">港澳台通行证</option>
+												</select>
+											</div> -->
+											<div class="col-sm-4">
+												<label class="control-label" for="cardNum">身份证号：</label> <input
+													type="text" class="form-control cardNum" id="cardNum"
+													name="cardNum">
+											</div>
+											<div class="col-sm-4">
+												<label class="control-label" for="cardValidTime">证件有效期：</label>
+												<input type="text" class="form-control" id="cardValidTime"
+													name="cardValidTime">
+											</div>
+											<div class="col-sm-4">
+												<label class="control-label" for="businessLicenseNum">营业执照号码：</label>
+												<input type="text" class="form-control businessLicenseNum"
+													id="businessLicenseNum" name="businessLicenseNum">
+											</div>
+											<div class="col-sm-4">
+												<label class="control-label" for="businessLicenseValidTime">营业执照有效期：</label>
+												<input type="text" class="form-control"
+													id="businessLicenseValidTime"
+													name="businessLicenseValidTime">
+											</div>
+											<div class="col-sm-4">
+												<label class="control-label" for="registAddressDetail">商户注册地址：</label>
+												<input type="text" class="form-control registAddressDetail" id="registAddressDetail"
+													name="registAddressDetail">
+											</div>
+											<!-- <div class="col-sm-4">
+												<label class="control-label" for="mercFlag">商户标签：</label> <input
+													type="text" class="form-control" id="mercFlag"
+													name="mercFlag">
+											</div> -->
+											<div class="col-sm-4">
+												<label class="control-label" for="agentId">代理商：</label> <select
+													id="agentId" name="agentId" class="form-control">
+												</select>
+											</div>
+											<div class="col-sm-4">
+												<label class="control-label" for="etpsAttr">商户性质：</label> 
+												<select  class="form-control etpsAttr" id="etpsAttr" name="etpsAttr">
+													<option value="1">政府机构</option>
+													<option value="2">国营企业</option>
+													<option value="3">私营企业</option>
+													<option value="4">外资企业</option>
+													<option value="5" selected>个体工商户</option>
+													<option value="7">事业单位</option>
+												</select>
+											</div>
+											<div class="col-sm-4">
+												<label class="control-label" for="registProvince0">商户所属省：</label> 
+												<select  class="form-control registProvince addSelect" id="registProvince0" name="registProvince" onchange="merProcessSelect(0,true)">
+													<option value="">--选择省--</option>
+												</select>
+												<input type="hidden" class="registProvinceName" name="registProvinceName">
+											</div>
+											<div class="col-sm-4">
+												<label class="control-label" for="registCity0">商户所属市：</label> 
+												<select  class="form-control registCity addSelect" id="registCity0" name="registCity" onchange="merProcessSelect(0,false)">
+													<option value="">--选择市--</option>
+												</select>
+												<input type="hidden" class="registCityName" name="registCityName">
+											</div>
+											<div class="col-sm-4">
+												<label class="control-label" for="registArea0">商户所属区：</label> 
+												<select  class="form-control registArea addSelect" id="registArea0" name="registArea">
+													<option value="">--选择区--</option>
+												</select>
+												<input type="hidden" class="registAreaName" name="registAreaName">
+											</div>
+											<input type="hidden" name="innerCode" />
+										</div>
+										<a class="staticBtn" onclick="javascript:saveMerCore();">保存并下一步</a>
+									</form>
+								</div>
+								<div role="tabpanel" class="tab-pane" id="bankCard_info">
+									<div id="bankCard-con">
+										<!-- 银行卡列表默认js增加 -->
+									</div>
+									<button id="btn_addBankCard" type="button"
+										class="btn btn-primary">
+										<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增银行卡信息
+									</button>
+									<!-- <a class="nextBtn" href="#profile" aria-controls="profile" role="tab" data-toggle="tab" id="btn_saveBankCard">保存并下一步</a> -->
+									<a class="staticBtn" id="btn_saveBankCard">保存并下一步</a>
+								</div>
+								<div role="tabpanel" class="tab-pane" id="profile">
+									<form action="" id="file_form" method="post">
+										<table class="table table-bordered">
+											<thead>
+												<th style="width: 30%">材料名称</th>
+												<th style="width: 40%">文件名</th>
+												<th style="width: 30%">操作</th>
+											</thead>
+											<tr>
+												<td>银行卡正面</td>
+												<td><div id="view1100"></div>
+													<div id="fileQueue1100"></div></td>
+												<td><input type="file" name="file"
+													id="uploadify_file1100" style="display: none"> <input
+													type="button" name='init' class="btn" value="开始上传"
+													id="fileupload_button_first1100" onclick="fileUp(1100);"
+													style="display: none;" /></td>
+											</tr>
+											<tr>
+												<td>银行卡反面</td>
+												<td><div id="view1101"></div>
+													<div id="fileQueue1101"></div></td>
+												<td><input type="file" name="file"
+													id="uploadify_file1101" style="display: none"> <input
+													type="button" name='init' class="btn" value="开始上传"
+													id="fileupload_button_first1101" onclick="fileUp(1101);"
+													style="display: none" /></td>
+											</tr>
+											<tr>
+												<td>手持身份证、银行卡</td>
+												<td><div id="view1190"></div>
+													<div id="fileQueue1190"></div></td>
+												<td><input type="file" name="file"
+													id="uploadify_file1190" style="display: none"> <input
+													type="button" name='init' class="btn" value="开始上传"
+													id="fileupload_button_first1190" onclick="fileUp(1190);"
+													style="display: none" /></td>
+											</tr>
+											<tr>
+												<td>营业执照</td>
+												<td><div id="view1"></div>
+													<div id="fileQueue1"></div></td>
+												<td><input type="file" name="file" id="uploadify_file1"
+													style="display: none" /> <input type="button" name='init'
+													class="btn" value="开始上传" id="fileupload_button_first1"
+													onclick="fileUp(1);" style="display: none" /></td>
+											</tr>
+											<tr>
+												<td>签约协议照片</td>
+												<td><div id="view2"></div>
+													<div id="fileQueue2"></div></td>
+												<td><input type="file" name="file" id="uploadify_file2"
+													style="display: none" /> <input type="button" name='init'
+													class="btn" value="开始上传" id="fileupload_button_first2"
+													onclick="fileUp(2);" style="display: none" /></td>
+											</tr>
+											<tr>
+												<td>入账人身份证正面</td>
+												<td><div id="view300"></div>
+													<div id="fileQueue300"></div></td>
+												<td><input type="file" name="file"
+													id="uploadify_file300" style="display: none"> <input
+													type="button" name='init' class="btn" value="开始上传"
+													id="fileupload_button_first300" onclick="fileUp(300);"
+													style="display: none" /></td>
+											</tr>
+											<tr>
+												<td>入账人身份证反面</td>
+												<td><div id="view301"></div>
+													<div id="fileQueue301"></div></td>
+												<td><input type="file" name="file"
+													id="uploadify_file301" style="display: none"> <input
+													type="button" name='init' class="btn" value="开始上传"
+													id="fileupload_button_first301" onclick="fileUp(301);"
+													style="display: none" /></td>
+											</tr>
+											<tr>
+												<td>房屋租赁合同照片</td>
+												<td><div id="view4"></div>
+													<div id="fileQueue4"></div></td>
+												<td><input type="file" name="file" id="uploadify_file4"
+													style="display: none"> <input type="button"
+													name='init' class="btn" value="开始上传"
+													id="fileupload_button_first4" onclick="fileUp(4);"
+													style="display: none" /></td>
+											</tr>
+											<tr>
+												<td>法人身份证照片正面</td>
+												<td><div id="view6"></div>
+													<div id="fileQueue6"></div></td>
+												<td><input type="file" name="file" id="uploadify_file6"
+													style="display: none"> <input type="button"
+													name='init' class="btn" value="开始上传"
+													id="fileupload_button_first6" onclick="fileUp(6);"
+													style="display: none" /></td>
+											</tr>
+											<tr>
+												<td>法人身份证照片反面</td>
+												<td><div id="view601"></div>
+													<div id="fileQueue601"></div></td>
+												<td><input type="file" name="file"
+													id="uploadify_file601" style="display: none"> <input
+													type="button" name='init' class="btn" value="开始上传"
+													id="fileupload_button_first601" onclick="fileUp(601);"
+													style="display: none" /></td>
+											</tr>
+											<tr>
+												<td>商户信息登记表照片</td>
+												<td><div id="view7"></div>
+													<div id="fileQueue7"></div></td>
+												<td><input type="file" name="file" id="uploadify_file7"
+													style="display: none"> <input type="button"
+													name='init' class="btn" value="开始上传"
+													id="fileupload_button_first7" onclick="fileUp(7);"
+													style="display: none" /></td>
+											</tr>
+											<tr>
+												<td>组织机构代码证照片</td>
+												<td><div id="view8"></div>
+													<div id="fileQueue8"></div></td>
+												<td><input type="file" name="file" id="uploadify_file8"
+													style="display: none"> <input type="button"
+													name='init' class="btn" value="开始上传"
+													id="fileupload_button_first8" onclick="fileUp(8);"
+													style="display: none" /></td>
+											</tr>
+											<tr>
+												<td>店面外景</td>
+												<td><div id="view900"></div>
+													<div id="fileQueue900"></div></td>
+												<td><input type="file" name="file"
+													id="uploadify_file900" style="display: none"> <input
+													type="button" name='init' class="btn" value="开始上传"
+													id="fileupload_button_first900" onclick="fileUp(900);"
+													style="display: none" /></td>
+											</tr>
+											<tr>
+												<td>店面内景</td>
+												<td><div id="view901"></div>
+													<div id="fileQueue901"></div></td>
+												<td><input type="file" name="file"
+													id="uploadify_file901" style="display: none"> <input
+													type="button" name='init' class="btn" value="开始上传"
+													id="fileupload_button_first901" onclick="fileUp(901);"
+													style="display: none" /></td>
+											</tr>
+											<tr>
+												<td>收银台照</td>
+												<td><div id="view902"></div>
+													<div id="fileQueue902"></div></td>
+												<td><input type="file" name="file"
+													id="uploadify_file902" style="display: none"> <input
+													type="button" name='init' class="btn" value="开始上传"
+													id="fileupload_button_first902" onclick="fileUp(902);"
+													style="display: none" /></td>
+											</tr>
+											<tr>
+												<td>税务登记证照片</td>
+												<td><div id="view10"></div>
+													<div id="fileQueue10"></div></td>
+												<td><input type="file" name="file"
+													id="uploadify_file10" style="display: none"> <input
+													type="button" name='init' class="btn" value="开始上传"
+													id="fileupload_button_first10" onclick="fileUp(10);"
+													style="display: none" /></td>
+											</tr>
+										</table>
+										<input type="hidden" name="innerCode" /> <a class="nextBtn"
+											href="#terminal_info" aria-controls="terminal_info"
+											role="tab" data-toggle="tab" onclick="javascript:saveFile();">保存并下一步</a>
+									</form>
+								</div>
+								<!-- 终端信息 -->
+								<div role="tabpanel" class="tab-pane" id="terminal_info">
+									<div id="terminal-con">
+										<!-- 终端列表默认js增加 -->
+									</div>
+<!-- 									<button id="btn_addTerminal" type="button" -->
+<!-- 										class="btn btn-primary"> -->
+<!-- 										<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增渠道 -->
+<!-- 									</button> -->
+									<a class="nextBtn" href="#messages" aria-controls="messages"
+										role="tab" data-toggle="tab" id="btn_saveTerminal">保存并下一步</a>
+								</div>
+								<!-- 联系信息 -->
+								<div role="tabpanel" class="tab-pane" id="messages">
+									<div id="contact-con">
+										<!-- 联系列表默认js增加 -->
+									</div>
+									<button id="btn_addContact" type="button"
+										class="btn btn-primary">
+										<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增联系人
+									</button>
+									<a class="saveBtn" id="btn_saveContact">保存</a>
+								</div>
+							</div>
+						</div>
+						<input type="hidden" id="innerCode" name="innerCode">
+					</div>
+				</div>
+			</div>
+			<!-- model end -->
+			<!-- editModel修改 start -->
+			<div class="modal fade" id="editModal" tabindex="-1" role="dialog"
+				aria-labelledby="editModalLabel" data-backdrop="static"
+				data-keyboard="false">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="editModalLabel">修改商户信息</h4>
+						</div>
+						<div class="modal-body">
+							<ul class="nav nav-tabs" role="tablist">
+								<li role="presentation" class="active"><a href="#home1"
+									aria-controls="home1" role="tab" data-toggle="tab">基本信息</a></li>
+								<li role="presentation"><a href="#bankCard_info1"
+									aria-controls="bankCard_info1" role="tab" data-toggle="tab">银行卡信息</a></li>
+								<li role="presentation"><a href="#profile1"
+									aria-controls="profile1" role="tab" data-toggle="tab">资质文件</a></li>
+								<li role="presentation"><a href="#terminal_info1"
+									aria-controls="terminal_info1" role="tab" data-toggle="tab">终端信息</a></li>
+								<li role="presentation"><a href="#messages1"
+									aria-controls="messages1" role="tab" data-toggle="tab">联系信息</a></li>
+							</ul>
+							<div class="tab-content">
+								<div role="tabpanel" class="tab-pane active" id="home1">
+									<a class="editBtn_edit btn btn-default"><span
+										class="glyphicon glyphicon-pencil"></span>编辑</a> <a
+										class="editBtn_save btn btn-success" id="editBtn_merchant"><span
+										class="glyphicon glyphicon-book"></span>保存</a>
+									<div class="row">
+										<div class="col-sm-4">
+											<label class="control-label" for="entityMerName1">实体商户：</label> <input
+												type="text" class="form-control entityMerName" id="entityMerName1"
+												name="entityMerName1" required="required" onclick="selectBusiness(1)">
+											<input type="hidden" name="entityInnerCode" class="entityInnerCode">
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="merName1">商户名：</label> <input
+												type="text" class="form-control" id="merName1"
+												name="merName1" required="required">
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="abbreviation1">简称：</label>
+											<input type="text" class="form-control" id="abbreviation1"
+												name="abbreviation1">
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="legalPerson1">商户法人姓名：</label>
+											<input type="text" class="form-control legalPerson" id="legalPerson1"
+												name="legalPerson1">
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="legalPersonMobile1">法人手机号码：</label>
+											<input type="number" class="form-control legalPersonMobile"
+												id="legalPersonMobile1" name="legalPersonMobile1">
+										</div>
+										<!-- <div class="col-sm-4">
+											<label class="control-label " for="legalValidCardType1">法人有效证件类型：</label>
+											<select id="legalValidCardType1" name="legalValidCardType1"
+												class="form-control">
+												<option value="0">身份证</option>
+												<option value="1">护照</option>
+												<option value="2">士兵证</option>
+												<option value="3">军官证</option>
+												<option value="4">港澳台通行证</option>
+											</select>
+										</div> -->
+										<div class="col-sm-4">
+											<label class="control-label" for="cardNum1">身份证号：</label> <input
+												type="text" class="form-control cardNum" id="cardNum1"
+												name="cardNum1">
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="cardValidTime1">证件有效期：</label>
+											<input type="text" class="form-control" id="cardValidTime1"
+												name="cardValidTime1">
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="businessLicenseNum1">营业执照号码：</label>
+											<input type="text" class="form-control businessLicenseNum"
+												id="businessLicenseNum1" name="businessLicenseNum1">
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="businessLicenseValidTime1">营业执照有效期：</label>
+											<input type="text" class="form-control"
+												id="businessLicenseValidTime1"
+												name="businessLicenseValidTime1">
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="registAddressDetail1">商户注册地址：</label>
+											<input type="text" class="form-control registAddressDetail" id="registAddressDetail1"
+												name="registAddressDetail1">
+										</div>
+										<!-- <div class="col-sm-4">
+											<label class="control-label" for="mercFlag1">商户标签：</label> <input
+												type="text" class="form-control" id="mercFlag1"
+												name="mercFlag1">
+										</div> -->
+										<div class="col-sm-4">
+											<label class="control-label" for="agentId1">代理商：</label> <select
+												id="agentId1" name="agentId1" class="form-control">
+											</select>
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="etpsAttr1">商户性质：</label> 
+											<select  class="form-control etpsAttr" id="etpsAttr1" name="etpsAttr1">
+												<option value="1">政府机构</option>
+												<option value="2">国营企业</option>
+												<option value="3">私营企业</option>
+												<option value="4">外资企业</option>
+												<option value="5" selected="selected">个体工商户</option>
+												<option value="7">事业单位</option>
+											</select>
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="registProvince1">商户所属省：</label> 
+											<select  class="form-control addSelect registProvince" id="registProvince1" name="registProvince" onchange="merProcessSelect('1',true)">
+												<option value="">--选择省--</option>
+											</select>
+											<input type="hidden" name="registProvinceName">
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="registCity1">商户所属市：</label> 
+											<select  class="form-control registCity addSelect" id="registCity1" name="registCity" onchange="merProcessSelect('1',false)">
+												<option value="">--选择市--</option>
+											</select>
+											<input type="hidden" name="registCityName">
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="registArea1">商户所属区：</label> 
+											<select  class="form-control registArea addSelect" id="registArea1" name="registArea">
+												<option value="">--选择区--</option>
+											</select>
+											<input type="hidden" name="registAreaName">
+										</div>
+										<input type="hidden" name="merId" />
+									</div>
+								</div>
+								<div role="tabpanel" class="tab-pane" id="profile1">
+									<a class="editBtn_edit btn btn-default"><span
+										class="glyphicon glyphicon-pencil"></span>编辑</a> <a
+										class="editBtn_save btn btn-success" id="editBtn_profile"
+										onclick="saveFile()"><span
+										class="glyphicon glyphicon-book"></span>保存</a>
+									<table class="table table-bordered">
+										<thead>
+											<th style="width: 30%">材料名称</th>
+											<th style="width: 40%">文件名</th>
+											<th style="width: 30%">操作</th>
+										</thead>
+										<tr>
+											<td>银行卡正面</td>
+											<td><div id="view1100_1"></div>
+												<div id="fileQueue1100_1"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file1100_1" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first1100_1" style="display: none;" />
+											</td>
+										</tr>
+										<tr>
+											<td>银行卡反面</td>
+											<td><div id="view1101_1"></div>
+												<div id="fileQueue1101_1"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file1101_1" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first1101_1" style="display: none" />
+											</td>
+										</tr>
+										<tr>
+											<td>手持身份证、银行卡</td>
+											<td><div id="view1190_1"></div>
+												<div id="fileQueue1190_1"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file1190_1" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first1190_1" style="display: none" />
+											</td>
+										</tr>
+										<tr>
+											<td>营业执照</td>
+											<td><div id="view1_1"></div>
+												<div id="fileQueue1_1"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file1_1" style="display: none" /> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first1_1" style="display: none" /></td>
+										</tr>
+										<tr>
+											<td>签约协议照片</td>
+											<td><div id="view2_1"></div>
+												<div id="fileQueue2_1"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file2_1" style="display: none" /> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first2_1" style="display: none" /></td>
+										</tr>
+										<tr>
+											<td>入账人身份证正面</td>
+											<td><div id="view300_1"></div>
+												<div id="fileQueue300_1"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file300_1" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first300_1" style="display: none" /></td>
+										</tr>
+										<tr>
+											<td>入账人身份证反面</td>
+											<td><div id="view301_1"></div>
+												<div id="fileQueue301_1"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file301_1" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first301_1" style="display: none" /></td>
+										</tr>
+										<tr>
+											<td>房屋租赁合同照片</td>
+											<td><div id="view4_1"></div>
+												<div id="fileQueue4_1"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file4_1" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first4_1" style="display: none" /></td>
+										</tr>
+										<tr>
+											<td>法人身份证照片正面</td>
+											<td><div id="view6_1"></div>
+												<div id="fileQueue6_1"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file6_1" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first6_1" style="display: none" /></td>
+										</tr>
+										<tr>
+											<td>法人身份证照片反面</td>
+											<td><div id="view601_1"></div>
+												<div id="fileQueue601_1"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file601_1" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first01_1" style="display: none" /></td>
+										</tr>
+										<tr>
+											<td>商户信息登记表照片</td>
+											<td><div id="view7_1"></div>
+												<div id="fileQueue7_1"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file7_1" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first7_1" style="display: none" /></td>
+										</tr>
+										<tr>
+											<td>组织机构代码证照片</td>
+											<td><div id="view8_1"></div>
+												<div id="fileQueue8_1"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file8_1" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first8_1" style="display: none" /></td>
+										</tr>
+										<tr>
+											<td>店面外景</td>
+											<td><div id="view900_1"></div>
+												<div id="fileQueue900_1"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file900_1" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first900_1" style="display: none" /></td>
+										</tr>
+										<tr>
+											<td>店面内景</td>
+											<td><div id="view901_1"></div>
+												<div id="fileQueue901_1"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file901_1" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first901_1" style="display: none" /></td>
+										</tr>
+										<tr>
+											<td>收银台照</td>
+											<td><div id="view902_1"></div>
+												<div id="fileQueue902_1"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file902_1" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first902_1" style="display: none" /></td>
+										</tr>
+										<tr>
+											<td>税务登记证照片</td>
+											<td><div id="view10_1"></div>
+												<div id="fileQueue10_1"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file10_1" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first10_1" style="display: none" /></td>
+										</tr>
+									</table>
+								</div>
+								<!-- 联系人信息 -->
+								<div role="tabpanel" class="tab-pane" id="messages1">
+									<a class="editBtn_edit btn btn-default"><span
+										class="glyphicon glyphicon-pencil"></span>编辑</a> <a
+										class="editBtn_save btn btn-success" id="editBtn_contact"><span
+										class="glyphicon glyphicon-book"></span>保存</a>
+									<div id="contact-con1">
+										<!-- js获取联系人数据 -->
+									</div>
+									<button id="btn_addContact1" type="button"
+										class="btn btn-primary btn-addList">
+										<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增联系人
+									</button>
+								</div>
+								<!-- 终端信息 -->
+								<div role="tabpanel" class="tab-pane" id="terminal_info1">
+									<a class="editBtn_edit btn btn-default"><span
+										class="glyphicon glyphicon-pencil"></span>编辑</a> <a
+										class="editBtn_save btn btn-success"
+										id="editBtn_terminal_info"><span
+										class="glyphicon glyphicon-book"></span>保存</a>
+									<div id="terminal-con1">
+										<!-- js获取数据 -->
+									</div>
+<!-- 									<button id="btn_addTerminal1" type="button" -->
+<!-- 										class="btn btn-primary btn-addList"> -->
+<!-- 										<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增终端 -->
+<!-- 									</button> -->
+								</div>
+								<!-- 渠道信息 -->
+								<div role="tabpanel" class="tab-pane" id="channel_info1">
+									<a class="editBtn_edit btn btn-default"><span
+										class="glyphicon glyphicon-pencil"></span>编辑</a> <a
+										class="editBtn_save btn btn-success" id="editBtn_channel_info"><span
+										class="glyphicon glyphicon-book"></span>保存</a>
+									<div id="channel-con1">
+										<!-- js获取数据 -->
+									</div>
+									<button id="btn_addChannel1" type="button"
+										class="btn btn-primary btn-addList">
+										<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增渠道
+									</button>
+								</div>
+								<!-- 银行卡信息 -->
+								<div role="tabpanel" class="tab-pane" id="bankCard_info1">
+									<a class="editBtn_edit btn btn-default"><span
+										class="glyphicon glyphicon-pencil"></span>编辑</a> <a
+										class="editBtn_save btn btn-success" id="editBtn_bank_info"><span
+										class="glyphicon glyphicon-book"></span>保存</a>
+									<div id="bankCard-con1">
+										<!-- js获取数据 -->
+									</div>
+									<button id="btn_addBankCard1" type="button"
+										class="btn btn-primary btn-addList">
+										<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增银行卡
+									</button>
+								</div>
+							</div>
+						</div>
+						<input type="hidden" id="innerCode" name="innerCode"> <input
+							type="hidden" id="fileIds" name="fileIds">
+					</div>
+				</div>
+			</div>
+			<!-- model end -->
+			<!-- detailsModel详情 start -->
+			<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog"
+				aria-labelledby="detailsModelLabel" data-backdrop="static"
+				data-keyboard="false">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="editModalLabel">商户详情</h4>
+						</div>
+						<div class="modal-body">
+							<ul class="nav nav-tabs" role="tablist">
+								<li role="presentation" class="active"><a href="#home2"
+									aria-controls="home2" role="tab" data-toggle="tab">基本信息</a></li>
+								<li role="presentation"><a href="#bankCard_info2"
+									aria-controls="bankCard_info2" role="tab" data-toggle="tab">银行卡信息</a></li>
+								<li role="presentation"><a href="#profile2"
+									aria-controls="profile2" role="tab" data-toggle="tab">资质文件</a></li>
+								<li role="presentation"><a href="#terminal_info2"
+									aria-controls="terminal_info2" role="tab" data-toggle="tab">终端信息</a></li>
+								<li role="presentation"><a href="#messages2"
+									aria-controls="messages2" role="tab" data-toggle="tab">联系信息</a></li>
+							</ul>
+							<div class="tab-content">
+								<!-- 基本信息 -->
+								<div role="tabpanel" class="tab-pane active" id="home2">
+									<div class="row">
+										<div class="col-sm-4">
+											<label class="control-label" for="entityMerName2">实体商户：</label> <input
+												type="text" class="form-control entityMerName" id="entityMerName2"
+												name="entityMerName2" required="required" onclick="selectBusiness()">
+											<input type="hidden" name="entityInnerCode" class="entityInnerCode">
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="merName2">商户名：</label> <input
+												type="text" class="form-control" id="merName2"
+												name="merName2" required="required">
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="abbreviation2">简称：</label>
+											<input type="text" class="form-control" id="abbreviation2"
+												name="abbreviation2">
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="legalPerson2">商户法人姓名：</label>
+											<input type="text" class="form-control legalPerson" id="legalPerson2"
+												name="legalPerson2">
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="legalPersonMobile2">法人手机号码：</label>
+											<input type="number" class="form-control legalPersonMobile"
+												id="legalPersonMobile2" name="legalPersonMobile2">
+										</div>
+										<!-- <div class="col-sm-4">
+											<label class="control-label " for="legalValidCardType2">法人有效证件类型：</label>
+											<select id="legalValidCardType2" name="legalValidCardType2"
+												class="form-control">
+												<option value="0">身份证</option>
+												<option value="1">护照</option>
+												<option value="2">士兵证</option>
+												<option value="3">军官证</option>
+												<option value="4">港澳台通行证</option>
+											</select>
+										</div> -->
+										<div class="col-sm-4">
+											<label class="control-label" for="cardNum2">身份证号：</label> <input
+												type="text" class="form-control cardNum" id="cardNum2"
+												name="cardNum2">
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="cardValidTime2">证件有效期：</label>
+											<input type="text" class="form-control" id="cardValidTime2"
+												name="cardValidTime2">
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="businessLicenseNum2">营业执照号码：</label>
+											<input type="text" class="form-control businessLicenseNum" id="businessLicenseNum2" name="businessLicenseNum2">
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="businessLicenseValidTime2">营业执照有效期：</label>
+											<input type="text" class="form-control" id="businessLicenseValidTime2" name="businessLicenseValidTime2">
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="registAddressDetail12">商户注册地址：</label>
+											<input type="text" class="form-control registAddressDetail2" id="registAddressDetail2" name="registAddressDetail2">
+										</div>
+										<!-- <div class="col-sm-4">
+											<label class="control-label" for="mercFlag2">商户标签：</label> <input
+												type="text" class="form-control" id="mercFlag2"
+												name="mercFlag2">
+										</div> -->
+										<div class="col-sm-4">
+											<label class="control-label" for="agentId2">代理商：</label> <select
+												id="agentId2" name="agentId2" class="form-control">
+											</select>
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="etpsAttr2">商户性质：</label> 
+											<select  class="form-control etpsAttr2" id="etpsAttr2" name="etpsAttr">
+												<option value="1">政府机构</option>
+												<option value="2">国营企业</option>
+												<option value="3">私营企业</option>
+												<option value="4">外资企业</option>
+												<option value="5" selected>个体工商户</option>
+												<option value="7">事业单位</option>
+											</select>
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="registProvince2">商户所属省：</label> 
+											<select  class="form-control registProvince" id="registProvince2" name="registProvince" >
+												<option value="">--选择省--</option>
+											</select>
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="registCity2">商户所属市：</label> 
+											<select  class="form-control registCity" id="registCity2" name="registCity">
+												<option value="">--选择市--</option>
+											</select>
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="registArea2">商户所属区：</label> 
+											<select  class="form-control registArea" id="registArea2" name="registArea">
+												<option value="">--选择区--</option>
+											</select>
+										</div>
+										<input type="hidden" name="merId" />
+									</div>
+								</div>
+								<!-- 银行卡信息 -->
+								<div role="tabpanel" class="tab-pane" id="bankCard_info2">
+									<div id="bankCard-con2">
+										<!-- js获取终端数据 -->
+									</div>
+								</div>
+								<!-- 文件信息 -->
+								<div role="tabpanel" class="tab-pane" id="profile2">
+									<table class="table table-bordered">
+										<thead>
+											<th style="width: 30%">材料名称</th>
+											<th style="width: 40%">文件名</th>
+											<th style="width: 30%">操作</th>
+										</thead>
+										<tr>
+											<td>银行卡正面</td>
+											<td><div id="view1100_2"></div>
+												<div id="fileQueue1100_2"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file1100_2" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first1100_2" style="display: none;" />
+											</td>
+										</tr>
+										<tr>
+											<td>银行卡反面</td>
+											<td><div id="view1101_2"></div>
+												<div id="fileQueue1101_2"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file1101_2" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first1101_2" style="display: none" />
+											</td>
+										</tr>
+										<tr>
+											<td>手持身份证、银行卡</td>
+											<td><div id="view1190_2"></div>
+												<div id="fileQueue1190_2"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file1190_2" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first1190_2" style="display: none" />
+											</td>
+										</tr>
+										<tr>
+											<td>营业执照</td>
+											<td><div id="view1_2"></div>
+												<div id="fileQueue1_2"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file1_2" style="display: none" /> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first1_2" style="display: none" /></td>
+										</tr>
+										<tr>
+											<td>签约协议照片</td>
+											<td><div id="view2_2"></div>
+												<div id="fileQueue2_2"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file2_2" style="display: none" /> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first2_2" style="display: none" /></td>
+										</tr>
+										<tr>
+											<td>入账人身份证正面</td>
+											<td><div id="view300_2"></div>
+												<div id="fileQueue300_2"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file300_2" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first300_2" style="display: none" /></td>
+										</tr>
+										<tr>
+											<td>入账人身份证反面</td>
+											<td><div id="view301_2"></div>
+												<div id="fileQueue301_2"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file301_2" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first301_2" style="display: none" /></td>
+										</tr>
+										<tr>
+											<td>房屋租赁合同照片</td>
+											<td><div id="view4_2"></div>
+												<div id="fileQueue4_2"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file4_2" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first4_2" style="display: none" /></td>
+										</tr>
+										<tr>
+											<td>法人身份证照片正面</td>
+											<td><div id="view6_2"></div>
+												<div id="fileQueue6_2"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file6_2" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first6_2" style="display: none" /></td>
+										</tr>
+										<tr>
+											<td>法人身份证照片反面</td>
+											<td><div id="view601_2"></div>
+												<div id="fileQueue601_2"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file601_2" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first601_2" style="display: none" /></td>
+										</tr>
+										<tr>
+											<td>商户信息登记表照片</td>
+											<td><div id="view7_2"></div>
+												<div id="fileQueue7_2"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file7_2" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first7_2" style="display: none" /></td>
+										</tr>
+										<tr>
+											<td>组织机构代码证照片</td>
+											<td><div id="view8_2"></div>
+												<div id="fileQueue8_2"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file8_2" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first8_2" style="display: none" /></td>
+										</tr>
+										<tr>
+											<td>店面外景</td>
+											<td><div id="view900_2"></div>
+												<div id="fileQueue900_2"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file900_2" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first900_2" style="display: none" /></td>
+										</tr>
+										<tr>
+											<td>店面内景</td>
+											<td><div id="view901_2"></div>
+												<div id="fileQueue901_2"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file901_2" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first901_2" style="display: none" /></td>
+										</tr>
+										<tr>
+											<td>收银台照</td>
+											<td><div id="view902_2"></div>
+												<div id="fileQueue902_2"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file902_2" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first902_2" style="display: none" /></td>
+										</tr>
+										<tr>
+											<td>税务登记证照片</td>
+											<td><div id="view10_2"></div>
+												<div id="fileQueue10_2"></div></td>
+											<td><input type="file" name="file"
+												id="uploadify_file10_2" style="display: none"> <input
+												type="button" name='init1' class="btn" value="开始上传"
+												id="fileupload_button_first10_2" style="display: none" /></td>
+										</tr>
+									</table>
+								</div>
+								<!-- 终端信息 -->
+								<div role="tabpanel" class="tab-pane" id="terminal_info2">
+									<div id="terminal-con2">
+										<!-- js获取终端数据 -->
+									</div>
+								</div>
+								<!-- 联系人信息 -->
+								<div role="tabpanel" class="tab-pane" id="messages2">
+									<div id="contact-con2">
+										<!-- js获取联系人数据 -->
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- model end -->
+			<!-- banksModel详情 start -->
+			<div class="modal fade" id="banksModal" tabindex="-1" role="dialog"
+				aria-labelledby="banksModalLabel" data-backdrop="static"
+				data-keyboard="false">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="banksModalLabel">支行信息</h4>
+						</div>
+						<div class="modal-body">
+							<form id="bankFormSearch" class="form-horizontal">
+								<div class="form-group" style="margin-top: 15px">
+									<div class="row col-sm-10">
+										<div class="col-sm-6">
+											<label class="control-label" for="txt_search_id">银行名称：</label>
+											<input type="text" class="form-control" id="txt_search_bank">
+										</div>
+										<div class="col-sm-6">
+											<label class="control-label" for="txt_search_name">所在省：</label>
+											<input type="text" class="form-control" id="txt_search_pro">
+										</div>
+										<div class="col-sm-6">
+											<label class="control-label" for="txt_search_price">所在市：</label>
+											<input type="text" class="form-control" id="txt_search_city">
+										</div>
+										<div class="col-sm-6">
+											<label class="control-label" for="txt_search_price">支行名称：</label>
+											<input type="text" class="form-control"
+												id="txt_search_branch">
+										</div>
+									</div>
+									<div class="col-sm-2" style="text-align: right;">
+										<button type="button" id="btn_query" class="btn btn-primary"
+											onclick="javascript:queryEvent('bankTable');">
+											<span class="glyphicon glyphicon-search"></span>查询
+										</button>
+										<button type="button" id="btn_reset" class="btn btn-default"
+											onclick="javascript:resetEvent('bankFormSearch','bankTable');">
+											<span class="glyphicon glyphicon-refresh"></span>重置
+										</button>
+									</div>
+								</div>
+							</form>
+							<div id="banksToolbar">
+								<button id="btn_select_bank" type="button"
+									class="btn btn-success">
+									<span class="glyphicon glyphicon-file" aria-hidden="true"></span>确定选择
+								</button>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<div id="bankTable" style="width: 100%;"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- model end -->
+			<!-- qrcode详情 start -->
+			<div class="modal fade" id="showQrcode" tabindex="-1" role="dialog"
+				aria-labelledby="showQrcodeModalLabel" data-backdrop="static"
+				data-keyboard="false">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="showQrcodeModalLabel">二维码</h4>
+						</div>
+						<div class="modal-body" style="text-align: center;">
+							<img class="qrcode" width="500" height="500" src="" alt="生成二维码失败">
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- model end -->
+			<!-- 油卡推荐model start -->
+			<div class="modal fade" id="oilCardQrcode" tabindex="-1" role="dialog"
+				aria-labelledby="showOilCardModalLabel" data-backdrop="static"
+				data-keyboard="false">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="showOilCardModalLabel">油卡二维码</h4>
+						</div>
+						<div class="modal-body" style="text-align: center;">
+							<img class="oilcardCode" width="500" height="500" src="" alt="生成二维码失败">
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- model end -->
+			<!-- businessModel详情 start -->
+			<div class="modal " id="businessModal" tabindex="-1" role="dialog"
+				aria-labelledby="businessModalLabel" data-backdrop="static"
+				data-keyboard="false">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="businessModalLabel">实体商户</h4>
+						</div>
+						<div class="modal-body">
+							<form id="businessFormSearch" class="form-horizontal">
+								<div class="form-group" style="margin-top: 15px">
+									<div class="row col-sm-10">
+										<div class="col-sm-6">
+											<label class="control-label" for="search_merName">商户名称：</label>
+											<input type="text" class="form-control" id="search_merName">
+										</div>
+										<div class="col-sm-6">
+											<label class="control-label" for="search_legalPerson">法人姓名：</label>
+											<input type="text" class="form-control" id="search_legalPerson">
+										</div>
+										<div class="col-sm-6">
+											<label class="control-label" for="search_legalPersonMobile">手机号：</label>
+											<input type="text" class="form-control" id="search_legalPersonMobile">
+										</div>
+									</div>
+									<div class="col-sm-2" style="text-align: right;">
+										<button type="button" id="btn_query" class="btn btn-primary"
+											onclick="javascript:queryEvent('businessTable');">
+											<span class="glyphicon glyphicon-search"></span>查询
+										</button>
+										<button type="button" id="btn_reset" class="btn btn-default"
+											onclick="javascript:resetEvent('businessFormSearch','businessTable');">
+											<span class="glyphicon glyphicon-refresh"></span>重置
+										</button>
+									</div>
+								</div>
+							</form>
+							<div id="businessToolbar">
+								<button id="btn_select_business" type="button"
+									class="btn btn-success">
+									<span class="glyphicon glyphicon-file" aria-hidden="true"></span>确定选择
+								</button>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<div id="businessTable" style="width: 100%;"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- model end -->
+		</div>
+
+	</div>
+	<script src="js/bootstrap/jquery.min.js"></script>
+	<script src="js/bootstrap/js/bootstrap.min.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-export.js"></script>
+	<script src="js/plugins/bootstrap-table/tableExport.js"></script>
+	<script src="js/plugins/bootstrap-table/tableExport.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+	<script src="js/plugins/bootstrap/fileinput.js"></script>
+	<script src="js/viewer/viewer.min.js"></script>
+	<script src="js/layer/layer.js"></script>
+	<script src="js/uploadify-v3.1/jquery.uploadify.js"></script>
+	<script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+	<script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script type="text/javascript" src="js/fnsco/common.js"></script>
+	<script src="js/fnsco/fileup.js"></script>
+	<script src="js/plugins/bootstrap/zh.js"></script>
+	<script type="text/javascript">
+	//在页面加载完成之后动态加载，避免因为缓存问题导致数据展示不对(在不人工清理缓存情况下)
+	loadJSRandom(document, "js/fnsco/showPosArea.js");
+	loadJSRandom(document, "js/fnsco/merchatInfo1.js");
+	loadJSRandom(document, "js/fnsco/initBusiness.js");
+	loadJSRandom(document, "js/fnsco/fileup.js");
+</script>
+</body>
+</html>

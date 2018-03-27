@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>发现</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="css/mui.css">
+		<link rel="stylesheet" href="css/find.css">
+	</head>
+	<body>
+		<!--下拉刷新-->
+		<div id="findPageList" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<ul class="mui-table-view mui-table-view-chevron findList">
+					<li>
+						<a id="news1"><img src="img/1478152948123.jpg"></a>
+					</li>
+					<li>
+						<a id="news2"><img src="img/1478152975635.jpg"></a>
+					</li>
+					<!-- <li>
+						<a id="news3"><img src="img/bigdata-2.jpg"></a>
+					</li> -->
+				</ul>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/setWidth.js"></script>
+	<script type="text/javascript" src="js/mui.min.js"></script>
+	<script type="text/javascript">
+		$("#news1").on('tap',function(){
+			// param("http://www.fnsco.net/find/input1.html");
+			window.location.href='http://www.fnsco.net/find/input2.html?back';
+		})
+		$("#news2").on('tap',function(){
+			// param("http://www.fnsco.net/find/input1.html");
+			window.location.href='http://www.fnsco.net/find/input1.html?back';
+		})
+		//传值方法
+		function param(url){
+			//alert(url);
+			console.log(url)
+			document.location = "js://webview?url="+url+"";
+			return window.webkit.messageHandlers.param.postMessage(url);
+		}
+		//新开一个webview
+		// $("#xld").on('tap',function(){
+		// 	window.location.href='http://www.zheft.cn/template/weixin/xld/xld.html?back';
+		// })
+		
+		// 下拉刷新
+		mui.init({
+		  pullRefresh : {
+		    container:"#findPageList",//下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+		    down : {
+		      height:50,//可选,默认50.触发下拉刷新拖动距离,
+		      auto: false,//可选,默认false.首次加载自动下拉刷新一次
+		      contentdown : "下拉可以刷新",//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+		      contentover : "释放立即刷新",//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+		      contentrefresh : "正在刷新",//可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+		      callback :refreshPage //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+		    }
+		  }
+		});
+		function refreshPage(){
+			setTimeout(function(){
+				location.reload()
+			},1000)
+		}
+	</script>
+</html>

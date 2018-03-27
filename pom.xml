@@ -14,6 +14,7 @@
 		<module>fnsco-war-timer</module>
 		<module>fnsco-war-app</module>
 		<module>fnsco-war-open</module>
+		<module>fnsco-war-lkl</module>
 		<!-- 数据接入service项目-->
 		<module>fnsco-service-order</module>
 		<module>fnsco-service-bigdata</module>
