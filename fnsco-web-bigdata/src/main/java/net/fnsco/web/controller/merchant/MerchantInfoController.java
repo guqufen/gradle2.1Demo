@@ -71,12 +71,7 @@ public class MerchantInfoController extends BaseController {
 		Integer userId = this.getUserId();
 		UserDO user = userService.getUserById(userId);
 		if (user != null) {
-			if (!StringUtils.equals("admin", user.getName())) {
 				merchantCore.setAgentId(user.getAgentId());
-
-			} else {
-				merchantCore.setAgentId(null);
-			}
 		}
 		return merchantCoreService.queryMerchantCore(merchantCore, currentPageNum, pageSize);
 	}
