@@ -117,20 +117,6 @@ public class UserProvider {
         if (user.getModifyUserId() != null) {
             WHERE("modify_user_id=#{user.modifyUserId}");
         }
-        WHERE("status!=0  )"
-        		+"UNION (SELECT * FROM sys_user WHERE department in (SELECT `name` FROM sys_dept WHERE parent_id in (SELECT id FROM sys_dept WHERE name = #{user.department}))  "
-        		+ "AND STATUS != 0)"
-        		+ "UNION (SELECT * FROM sys_user WHERE department in "
-        		+ "(SELECT name  FROM sys_dept WHERE parent_id in (SELECT id FROM sys_dept WHERE parent_id in (SELECT id FROM sys_dept WHERE name = #{user.department})))"
-        		+ " AND STATUS != 0)"
-        		+"UNION"
-        		+ "(SELECT * FROM sys_user WHERE department in"
-        		+ "      (SELECT `name` FROM sys_dept WHERE parent_id in "
-        		+ "      (SELECT id FROM sys_dept WHERE parent_id in "
-        		+ "		 (SELECT id FROM sys_dept WHERE parent_id in "
-        		+ "      (SELECT id FROM sys_dept WHERE name = #{user.department}))))"
-        		+ "AND STATUS != 0"
-        		);
         ORDER_BY("id limit " + start + ", " + limit );
         }}.toString();
 
@@ -141,7 +127,7 @@ public class UserProvider {
 
         return new SQL() {{
        
-        SELECT("count(1) from ( select * ");
+        SELECT("count(1)");
         FROM(TABLE_NAME);
         if (user.getId() != null) {
             WHERE("id=#{user.id}");
@@ -182,19 +168,7 @@ public class UserProvider {
         if (user.getModifyUserId() != null) {
             WHERE("modify_user_id=#{user.modifyUserId}");
         }
-        WHERE("status!=0 )"
-        		+"UNION (SELECT * FROM sys_user WHERE department in (SELECT `name` FROM sys_dept WHERE parent_id in (SELECT id FROM sys_dept WHERE name = #{user.department}))  "
-        		+ "AND STATUS != 0)"
-        		+ "UNION (SELECT * FROM sys_user WHERE department in "
-        		+ "(SELECT name  FROM sys_dept WHERE parent_id in (SELECT id FROM sys_dept WHERE parent_id in (SELECT id FROM sys_dept WHERE name = #{user.department})))"
-        		+ " AND STATUS != 0)"
-        		+"UNION"
-        		+ "(SELECT * FROM sys_user WHERE department in"
-        		+ "(SELECT `name` FROM sys_dept WHERE parent_id in "
-        		+ 		"(SELECT id FROM sys_dept WHERE parent_id in (SELECT id FROM sys_dept WHERE parent_id in (SELECT id FROM sys_dept WHERE name = #{user.department}))))"
-        		+ "AND STATUS != 0"
-        		);
-        }}.toString()+")t";
+        }}.toString();
     }
 
     public String queryAllPerms(Map<String, Object> params) {

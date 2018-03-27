@@ -45,7 +45,7 @@ public class UserManageController extends BaseController {
 		Integer userID = this.getUserId();
 		UserDO userDO = userService.getUserById(userID);
 		if(userDO != null){
-			user.setDepartment(userDO.getDepartment());
+			user.setAgentId(userDO.getAgentId());
 		}
 		ResultPageDTO<UserDO> result=userService.queryList(user, pageNum, pageSize);
 	     return success(result);
