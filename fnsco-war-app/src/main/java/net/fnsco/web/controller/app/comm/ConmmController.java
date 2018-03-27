@@ -55,10 +55,18 @@ public class ConmmController extends BaseController {
     @ApiOperation(value = "用户协议")
     @ResponseBody
     public ResultDTO getProtocol(@RequestBody ProtocolDTO protocolDTO) {
-        ResultDTO result = conmmService.getProtocol(protocolDTO);
+        ResultDTO result = conmmService.getBigDataProtocol(protocolDTO);
         return result;
     }
 
+    @RequestMapping(value = "/getLklProtocol")
+    @ApiOperation(value = "拉卡拉用户协议")
+    @ResponseBody
+    public ResultDTO getLklProtocol(@RequestBody ProtocolDTO protocolDTO) {
+        ResultDTO result = conmmService.getLklProtocol(protocolDTO);
+        return result;
+    }
+    
     @RequestMapping(value = "/discovery")
     @ApiOperation(value = "发现页面")
     @ResponseBody
