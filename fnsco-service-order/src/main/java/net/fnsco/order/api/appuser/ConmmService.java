@@ -13,8 +13,10 @@ public interface ConmmService {
     ResultDTO<VersionResultDTO> queryLastVersionInfo(VersionDTO sysVersionDTO);
     //获取用户协议
     ResultDTO<Map<String, String>> getProtocol(ProtocolDTO protocolDTO);
-   //获取数钱吧用户协议
+    //获取数钱吧用户协议
     ResultDTO<Map<String, String>> getBigDataProtocol(ProtocolDTO protocolDTO);
+    //获取拉卡拉用户协议
+    ResultDTO<Map<String, String>> getLklProtocol(ProtocolDTO protocolDTO);
     //用户建议
     ResultDTO<String> suggest(SuggestDTO suggestDTO);
 }
