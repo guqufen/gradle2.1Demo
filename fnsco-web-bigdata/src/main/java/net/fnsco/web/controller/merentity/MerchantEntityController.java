@@ -4,6 +4,7 @@ package net.fnsco.web.controller.merentity;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.beust.jcommander.Strings;
 
 import net.fnsco.auth.service.UserService;
+import net.fnsco.auth.service.sys.entity.UserDO;
 import net.fnsco.bigdata.api.dto.ChannelMerchantDTO;
 import net.fnsco.bigdata.api.merchant.MerchantEntityService;
 import net.fnsco.bigdata.service.dao.master.MerchantEntityCoreRefDao;
@@ -67,9 +69,16 @@ public class MerchantEntityController extends BaseController {
 		if(2 == merchantEntity.getStatus()) {
 			merchantEntity.setStatus(null);
 		}
-		Integer userID = this.getUserId();
-		Integer agentId = userService.getAgentIdByUserId(userID);
-		merchantEntity.setAgentId(agentId);
+		Integer userId = this.getUserId();
+		UserDO user = userService.getUserById(userId);
+		if(user != null){
+			if(!StringUtils.equals("admin", user.getName())){
+				merchantEntity.setAgentId(user.getAgentId());
+				
+			}else{
+				merchantEntity.setAgentId(null);
+			}
+		}
 		logger.info("查询商户实体列表");
 		return merchantEntityService.queryPageList(merchantEntity, currentPageNum, pageSize);
 	}

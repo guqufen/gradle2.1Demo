@@ -3,6 +3,7 @@ package net.fnsco.web.controller.merchant;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.fnsco.auth.service.UserService;
+import net.fnsco.auth.service.sys.entity.UserDO;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.service.domain.Agent;
 import net.fnsco.bigdata.service.domain.MerchantBank;
@@ -52,8 +55,8 @@ public class MerchantInfoController extends BaseController {
 	@Autowired
 	private MerchantCoreService merchantCoreService;
 	@Autowired
-    private UserService   userService; 
-	
+	private UserService userService;
+
 	/**
 	 * 跳转到商户信息首页
 	 * 
@@ -66,107 +69,120 @@ public class MerchantInfoController extends BaseController {
 			Integer pageSize) {
 		logger.info("查询商户列表");
 		Integer userId = this.getUserId();
-		Integer agentId = userService.getAgentIdByUserId(userId);
-		merchantCore.setAgentId(agentId);
+		UserDO user = userService.getUserById(userId);
+		if (user != null) {
+			if (!StringUtils.equals("admin", user.getName())) {
+				merchantCore.setAgentId(user.getAgentId());
+
+			} else {
+				merchantCore.setAgentId(null);
+			}
+		}
 		return merchantCoreService.queryMerchantCore(merchantCore, currentPageNum, pageSize);
 	}
+
 	/**
 	 * 商户excel导出
+	 * 
 	 * @param tradeDataDTO
 	 * @param currentPageNum
 	 * @param pageSize
 	 * @param req
 	 * @param response
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@RequestMapping(value = "/export", method = RequestMethod.GET)
 	@ResponseBody
 	@RequiresPermissions(value = { "m:merchant:export" })
-	public void export(MerchantCore merchantCore ,HttpServletRequest req, HttpServletResponse response) throws IOException {
-		List<MerchantCore> dataList= merchantCoreService.queryMerchantList(merchantCore);
+	public void export(MerchantCore merchantCore, HttpServletRequest req, HttpServletResponse response)
+			throws IOException {
+		List<MerchantCore> dataList = merchantCoreService.queryMerchantList(merchantCore);
 		if (dataList != null) {
-						for (MerchantCore merchantdo : dataList) {
-							Date li = merchantdo.getCreateTime();
-						if (li != null) {
-								SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-								String dateString = formatter.format(li);
-								merchantdo.setCreateTimeStr(dateString);
-							}
-						if (null != merchantdo.getLegalValidCardType()) {
-							if (merchantdo.getSource()==0) {
-								merchantdo.setSourceStr("WEB");
-							}else if(merchantdo.getSource()==1) {
-								merchantdo.setSourceStr("APP");
-							}
-							}
-						// 法人有效证件类型
-						if (null != merchantdo.getLegalValidCardType()) {
-							if ("0".equals(merchantdo.getLegalValidCardType())) {
-								merchantdo.setLegalValidCardType("身份证");
-							} else if ("1".equals(merchantdo.getLegalValidCardType())) {
-								merchantdo.setLegalValidCardType("护照");
-							}else if ("2".equals(merchantdo.getLegalValidCardType())) {
-								merchantdo.setLegalValidCardType("士兵证");
-							}else if ("3".equals(merchantdo.getLegalValidCardType())) {
-								merchantdo.setLegalValidCardType("军官证");
-							}else if ("4".equals(merchantdo.getLegalValidCardType())) {
-								merchantdo.setLegalValidCardType("护照");
-							}
-						}
-						// 渠道类型
-						if (null != merchantdo.getChannelType()) {
-							if ("00".equals(merchantdo.getChannelType())) {
-								merchantdo.setChannelType("拉卡拉");
-							} else if ("01".equals(merchantdo.getChannelType())) {
-								merchantdo.setChannelType("浦发");
-							}else if ("02".equals(merchantdo.getChannelType())) {
-								merchantdo.setChannelType("爱农");
-							}else if ("03".equals(merchantdo.getChannelType())) {
-								merchantdo.setChannelType("法奈昇");
-							}else if ("04".equals(merchantdo.getChannelType())) {
-								merchantdo.setChannelType("聚惠分");
-							}
-						}
-						}
+			for (MerchantCore merchantdo : dataList) {
+				Date li = merchantdo.getCreateTime();
+				if (li != null) {
+					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					String dateString = formatter.format(li);
+					merchantdo.setCreateTimeStr(dateString);
+				}
+				if (null != merchantdo.getLegalValidCardType()) {
+					if (merchantdo.getSource() == 0) {
+						merchantdo.setSourceStr("WEB");
+					} else if (merchantdo.getSource() == 1) {
+						merchantdo.setSourceStr("APP");
 					}
+				}
+				// 法人有效证件类型
+				if (null != merchantdo.getLegalValidCardType()) {
+					if ("0".equals(merchantdo.getLegalValidCardType())) {
+						merchantdo.setLegalValidCardType("身份证");
+					} else if ("1".equals(merchantdo.getLegalValidCardType())) {
+						merchantdo.setLegalValidCardType("护照");
+					} else if ("2".equals(merchantdo.getLegalValidCardType())) {
+						merchantdo.setLegalValidCardType("士兵证");
+					} else if ("3".equals(merchantdo.getLegalValidCardType())) {
+						merchantdo.setLegalValidCardType("军官证");
+					} else if ("4".equals(merchantdo.getLegalValidCardType())) {
+						merchantdo.setLegalValidCardType("护照");
+					}
+				}
+				// 渠道类型
+				if (null != merchantdo.getChannelType()) {
+					if ("00".equals(merchantdo.getChannelType())) {
+						merchantdo.setChannelType("拉卡拉");
+					} else if ("01".equals(merchantdo.getChannelType())) {
+						merchantdo.setChannelType("浦发");
+					} else if ("02".equals(merchantdo.getChannelType())) {
+						merchantdo.setChannelType("爱农");
+					} else if ("03".equals(merchantdo.getChannelType())) {
+						merchantdo.setChannelType("法奈昇");
+					} else if ("04".equals(merchantdo.getChannelType())) {
+						merchantdo.setChannelType("聚惠分");
+					}
+				}
+			}
+		}
 		JSONObject jObject = new JSONObject();
-        jObject.put("data", dataList);
-        List<MerchantCore> list = (List<MerchantCore>) jObject.get("data");
-        String itemMark = "merName,innerCode,legalPerson,legalPersonMobile,legalValidCardType,cardNum,cardValidTime,businessLicenseNum,businessLicenseValidTime,taxRegistCode,registAddress,mercFlag,sourceStr,createTimeStr,channelType,entityMerName";
-        String itemParap = "商户名, 内部商户号, 商户法人姓名, 法人手机号码, 法人有效证件类型, 证件号码, 证件有效期, 营业执照号码, 营业执照有效期, 税务登记号, 商户注册地址, 商户标签, 商户注册来源,创建日期,渠道类型,实体商户名";
-        String[] itemMarks = itemMark.split(",");// 键
-        String[] itemParaps = itemParap.split(",");// 列头
+		jObject.put("data", dataList);
+		List<MerchantCore> list = (List<MerchantCore>) jObject.get("data");
+		String itemMark = "merName,innerCode,legalPerson,legalPersonMobile,legalValidCardType,cardNum,cardValidTime,businessLicenseNum,businessLicenseValidTime,taxRegistCode,registAddress,mercFlag,sourceStr,createTimeStr,channelType,entityMerName";
+		String itemParap = "商户名, 内部商户号, 商户法人姓名, 法人手机号码, 法人有效证件类型, 证件号码, 证件有效期, 营业执照号码, 营业执照有效期, 税务登记号, 商户注册地址, 商户标签, 商户注册来源,创建日期,渠道类型,实体商户名";
+		String[] itemMarks = itemMark.split(",");// 键
+		String[] itemParaps = itemParap.split(",");// 列头
 
-        HSSFWorkbook workbook = ExcelUtils.getInputStream(itemParaps.length, itemMarks, itemParaps, list, "商户信息");
+		HSSFWorkbook workbook = ExcelUtils.getInputStream(itemParaps.length, itemMarks, itemParaps, list, "商户信息");
 
-        response.setContentType("application/vnd.ms-excel;");
-        String nowStr = DateUtils.getNowYMDStr();
-        String fileName = "商户信息"+nowStr+".xls";
-        response.setHeader("Content-disposition", "attachment;filename=" + new String(fileName.getBytes("GB2312"), "ISO8859_1"));// 设定输出文件头
+		response.setContentType("application/vnd.ms-excel;");
+		String nowStr = DateUtils.getNowYMDStr();
+		String fileName = "商户信息" + nowStr + ".xls";
+		response.setHeader("Content-disposition",
+				"attachment;filename=" + new String(fileName.getBytes("GB2312"), "ISO8859_1"));// 设定输出文件头
 
-        OutputStream ouputStream = response.getOutputStream();
-        workbook.write(ouputStream);
+		OutputStream ouputStream = response.getOutputStream();
+		workbook.write(ouputStream);
 
-        ouputStream.flush();
-        ouputStream.close();
+		ouputStream.flush();
+		ouputStream.close();
 	}
+
 	@RequestMapping(value = "/down", method = RequestMethod.GET)
 	@ResponseBody
 	@RequiresPermissions(value = { "m:merchant:export" })
 	public void down(HttpServletRequest req, HttpServletResponse response) throws IOException {
-		/*String g=request.getSession().getServletContext().getRealPath("");
-		String url=env.getProperty("excle.url");
-		String filePath=g+url;
-		String fileName="merchantSheet.xlsx";
-		//解析excel，获取客户信息集合。
-        ReadExcel.downTemplate(filePath, fileName, response);*/
-        String filePath = request.getSession().getServletContext().getRealPath("");
-        filePath = filePath + "template/商户信息导入模板.xlsx";
-        String fileName = "商户信息导入模板.xlsx";
-        //解析excel，获取客户信息集合。
-        ReadExcel.downTemplate(filePath, fileName, response);
+		/*
+		 * String g=request.getSession().getServletContext().getRealPath("");
+		 * String url=env.getProperty("excle.url"); String filePath=g+url;
+		 * String fileName="merchantSheet.xlsx"; //解析excel，获取客户信息集合。
+		 * ReadExcel.downTemplate(filePath, fileName, response);
+		 */
+		String filePath = request.getSession().getServletContext().getRealPath("");
+		filePath = filePath + "template/商户信息导入模板.xlsx";
+		String fileName = "商户信息导入模板.xlsx";
+		// 解析excel，获取客户信息集合。
+		ReadExcel.downTemplate(filePath, fileName, response);
 	}
+
 	/**
 	 * 获取表格数据
 	 * 
@@ -195,7 +211,8 @@ public class MerchantInfoController extends BaseController {
 	@ResponseBody
 	@RequiresPermissions(value = { "m:merchant:add" })
 	public ResultDTO<String> toAddCore(MerchantCore merchantCore) {
-		ResultDTO<String> result = merchantCoreService.doAddMerCore(merchantCore,getUserId() == null?null:String.valueOf(getUserId()));
+		ResultDTO<String> result = merchantCoreService.doAddMerCore(merchantCore,
+				getUserId() == null ? null : String.valueOf(getUserId()));
 		return result;
 	}
 
@@ -228,7 +245,7 @@ public class MerchantInfoController extends BaseController {
 	 */
 	@RequestMapping(value = "/toAddBank", method = RequestMethod.POST)
 	@ResponseBody
-	@RequiresPermissions(value = { "m:merchant:add","m:merchant:update" })
+	@RequiresPermissions(value = { "m:merchant:add", "m:merchant:update" })
 	public ResultDTO<String> toAddBank(@RequestBody MerchantBank[] banks) {
 		List<MerchantBank> params = Arrays.asList(banks);
 		ResultDTO<String> result = merchantCoreService.doAddMerBanks(params);
@@ -341,9 +358,27 @@ public class MerchantInfoController extends BaseController {
 	 */
 	@RequestMapping(value = "/queryAgents", method = RequestMethod.POST)
 	@ResponseBody
-	@RequiresPermissions(value = { "m:merchant:list"})
+	@RequiresPermissions(value = { "m:merchant:list" })
 	public ResultDTO<List<Agent>> queryAllAgent() {
-		return merchantCoreService.queryAllAgent();
+		ResultDTO<List<Agent>> result = merchantCoreService.queryAllAgent();
+		Integer userId = this.getUserId();
+		UserDO user = userService.getUserById(userId);
+		if (user == null) {
+			return result;
+		}
+		if (StringUtils.equals("admin", user.getName())) {
+			return result;
+
+		} else {
+			List<Agent> list = new ArrayList<>();
+			for (Agent agents : result.getData()) {
+				if (user.getAgentId() == agents.getId()) {
+					list.add(agents);
+				}
+			}
+			return ResultDTO.success(list);
+		}
+
 	}
-	
+
 }

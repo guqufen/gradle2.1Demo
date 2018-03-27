@@ -89,7 +89,7 @@
 								<option value="">全部</option>
 							</select>
 						</div>
-						<div class="col-sm-12">
+						<!-- <div class="col-sm-12">
 						<label class="control-label" for="resp_code">渠道类型:</label>
 							<button type="button" id="channelAll" class="btn btn-primary"
 							onclick="javascript:Determine(id);">全部
@@ -110,7 +110,7 @@
 							onclick="javascript:Determine(id);">聚惠分
 							</button>
 							</select>
-						</div>
+						</div> -->
 					</div>
 					<div class="col-sm-2" style="text-align: right;">
 						<button type="button" id="btn_query" class="btn btn-primary"
@@ -403,7 +403,7 @@
 		if(amtyuan1 !=null && amtyuan1 !=""){
 		amtyuan2 = amtyuan1*100;
 		}
-		determineJudgment();
+		//determineJudgment();
 		$.ajax({
 			traditional : true,
 			url : PROJECT_NAME + '/web/trade/queryTotalAmount',
@@ -442,12 +442,12 @@
 	//重置按钮事件
 	function resetEvent() {
 		$('#formSearch')[0].reset();
-		document.getElementById("channelAll").className = "btn btn-primary";
+		/* document.getElementById("channelAll").className = "btn btn-primary";
 		document.getElementById("channelLkl").className = "btn btn-default";
 		document.getElementById("channelPf").className = "btn btn-default";
 		document.getElementById("channelAn").className = "btn btn-default";
 		document.getElementById("channelFns").className = "btn btn-default";
-		document.getElementById("channelJhf").className = "btn btn-default";
+		document.getElementById("channelJhf").className = "btn btn-default"; */
 		queryEvent();
 	}
 	//模板下载按钮事件
@@ -460,7 +460,7 @@
 		$('#importModal').modal();
 	}
 	//渠道类型全部选择按钮事件
-	var channelAll = 1;
+	/* var channelAll = 1;
 	var channelLkl = 0;
 	var channelPf = 0;
 	var channelAn = 0;
@@ -501,7 +501,7 @@
 			determineMethod(channelJhf,id);
 			channelJhf++;
 		}
-	}
+	} */
 	//渠道选中按钮方法
 	function determineMethod(type,id) {
 		if (type % 2 == 0) {
@@ -603,7 +603,7 @@
 	//导出按钮事件
 	function exportEvent() {
 		//拼接参数
-		determineJudgment();
+		//determineJudgment();
 		var orderNo = $.trim($('#txt_search_id').val());
 		var merId = $.trim($('#txt_search_name').val());
 		var merName = $.trim($('#merName').val());
@@ -662,7 +662,7 @@
 		if(amtyuan1 !=null && amtyuan1 !=""){
 			amtyuan2 = amtyuan1*100;
 		}
-		determineJudgment();
+		//determineJudgment();
 		var param = {
 			currentPageNum : this.pageNumber,
 			pageSize : this.pageSize,
