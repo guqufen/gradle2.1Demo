@@ -30,6 +30,7 @@ import com.google.common.base.Strings;
 
 import io.swagger.annotations.Api;
 import net.fnsco.auth.service.UserService;
+import net.fnsco.auth.service.sys.entity.UserDO;
 import net.fnsco.bigdata.api.constant.BigdataConstant.ChannelTypeEnum;
 import net.fnsco.bigdata.api.constant.BigdataConstant.DataSourceEnum;
 import net.fnsco.bigdata.api.constant.BigdataConstant.PayMediumEnum;
@@ -88,7 +89,15 @@ public class TradeDataWebController extends BaseController {
     @RequiresPermissions(value = { "m:trade:list" })
     public ResultPageDTO<TradeData> query(TradeDataDTO tradeDataDTO, Integer currentPageNum, Integer pageSize) {
     	Integer userId = this.getUserId();
-    	Integer agentId = userService.getAgentIdByUserId(userId);
+    	Integer agentId = null;
+    	UserDO user = userService.getUserById(userId);
+    	if(user == null){
+    		return null;
+    	}
+    	if(user.getType() == 2){//该用户是代理商用户
+    		agentId = user.getAgentId();
+    	}
+    	
         return tradeDataService.queryTradeData(tradeDataDTO, currentPageNum, pageSize,agentId);
     }
     
@@ -102,7 +111,14 @@ public class TradeDataWebController extends BaseController {
     @RequiresPermissions(value = { "m:trade:list" })
     public ResultDTO<String>  queryTotalAmount(TradeDataDTO tradeDataDTO){
     	Integer userId = this.getUserId();
-    	Integer agentId = userService.getAgentIdByUserId(userId);
+    	Integer agentId = null;
+    	UserDO user = userService.getUserById(userId);
+    	if(user == null){
+    		return null;
+    	}
+    	if(2 == user.getType()){//该用户是代理商用户
+    		agentId = user.getAgentId();
+    	}
     	String total= tradeDataService.queryTotalAmount(tradeDataDTO,agentId);
     	return ResultDTO.success(total);
     }
