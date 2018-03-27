@@ -1,5 +1,6 @@
 package net.fnsco.auth.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.codec.binary.StringUtils;
@@ -57,6 +58,30 @@ public class SysDeptService extends BaseService {
 		ResultPageDTO<DeptDO> result = new ResultPageDTO<DeptDO>(totalNum, data);
 		return result;
 	}
+	/**
+	 * 根据代理商查询部门信息
+	 * queryList2:(这里用一句话描述这个方法的作用)
+	 *
+	 * binghui.li
+	 */
+	public ResultPageDTO<DeptDO> queryList2(DeptDO dept, Integer pageNum, Integer pageSize) {
+
+		List<DeptDO> data = deptDAO.pageList2(dept, pageNum, pageSize);
+		for (DeptDO temp : data) {
+			DeptDO tdo = deptDAO.getById(temp.getParentId());
+			if (tdo == null) {
+				temp.setParentName(env.getProperty("web.compony.name"));
+			} else {
+				temp.setParentName(tdo.getName());
+			}
+		}
+		// 返回根据条件查询的所有记录条数
+		int totalNum = deptDAO.pageListCount2(dept);
+		// 返回给页面总条数和每页查询的数据
+		ResultPageDTO<DeptDO> result = new ResultPageDTO<DeptDO>(totalNum, data);
+		return result;
+
+	}
 
 	/**
 	 * 查询部门相关信息
@@ -64,10 +89,14 @@ public class SysDeptService extends BaseService {
 	 * @param flag:true-表示需要带自制根节点;false不需要带
 	 * @return
 	 */
-	public List<DeptDO> queryName(Boolean flag,String name) {
+	public List<DeptDO> queryName(Boolean flag, Integer agentId) {
 		// 返回根据条件查询的所有记录条数
-		List<DeptDO> data = deptDAO.pageNameList(name);
-		// ResultDTO<DeptDO> result = new ResultDTO<DeptDO>(data);
+		List<DeptDO> data = new ArrayList<>();
+		if(agentId != null){
+			data = deptDAO.pageNameList(agentId);
+		}else{
+			data = deptDAO.pageNameList2(agentId);
+		}
 		if (flag) {
 			// 添加顶级菜单
 			DeptDO root = new DeptDO();
@@ -143,4 +172,5 @@ public class SysDeptService extends BaseService {
 		}
 		return ResultDTO.success();
 	}
+
 }

@@ -46,39 +46,94 @@ public class DeptProvider {
         int start = (pageNum - 1) * pageSize;
         int limit = pageSize;
         return new SQL() {{
-        SELECT(" * from sys_dept where name = #{dept.name} and del_flag=0 "
-        		+ "UNION SELECT * FROM sys_dept WHERE parent_id in (SELECT id FROM sys_dept WHERE name = #{dept.name} and del_flag=0) "
-        		+ "UNION  SELECT * FROM sys_dept WHERE parent_id in (SELECT id FROM sys_dept WHERE parent_id in (SELECT id FROM sys_dept WHERE name = #{dept.name} and del_flag=0)) "
-        		+ "UNION  SELECT * FROM sys_dept WHERE parent_id in (SELECT id FROM sys_dept WHERE parent_id in (SELECT id FROM sys_dept WHERE parent_id in (SELECT id FROM sys_dept WHERE name = #{dept.name} and del_flag=0)))" );
-        
-        ORDER_BY("order_num asc limit " + start + ", " + limit );
-        }}.toString();
+            SELECT(" m.*");
+            FROM(TABLE_NAME+" m ");
+            if (dept.getId() != null) {
+                WHERE("id=#{dept.id}");
+            }
+            if (dept.getParentId() != null) {
+                WHERE("parent_id=#{dept.parentId}");
+            }
+            if (StringUtils.isNotBlank(dept.getName())){
+                WHERE("name=#{dept.name}");
+            }
+            if (dept.getOrderNum() != null) {
+                WHERE("order_num=#{dept.orderNum}");
+            }
+            WHERE("del_flag=0");
+            ORDER_BY("order_num asc limit " + start + ", " + limit );
+            }}.toString();
     }
+   
 
     public String pageListCount(Map<String, Object> params) {
         DeptDO dept = (DeptDO) params.get("dept");
         return new SQL() {{
-        SELECT("count(1) from ("
-        		+ "SELECT * from sys_dept where name = #{dept.name} and del_flag=0 "
-        		+ "UNION SELECT * FROM sys_dept WHERE parent_id in (SELECT id FROM sys_dept WHERE name = #{dept.name} and del_flag=0) "
-        		+ "UNION  SELECT * FROM sys_dept WHERE parent_id in (SELECT id FROM sys_dept WHERE parent_id in (SELECT id FROM sys_dept WHERE name = #{dept.name} and del_flag=0)) "
-        		+ "UNION  SELECT * FROM sys_dept WHERE parent_id in (SELECT id FROM sys_dept WHERE parent_id in (SELECT id FROM sys_dept WHERE parent_id in (SELECT id FROM sys_dept WHERE name = #{dept.name} and del_flag=0))) "
-        		+ ") t");
-//        FROM(TABLE_NAME);
-//        if (dept.getId() != null) {
-//            WHERE("id=#{dept.id}");
-//        }
-//        if (dept.getParentId() != null) {
-//            WHERE("parent_id=#{dept.parentId}");
-//        }
-//        if (StringUtils.isNotBlank(dept.getName())){
-//            WHERE("name=#{dept.name}");
-//        }
-//        if (dept.getOrderNum() != null) {
-//            WHERE("order_num=#{dept.orderNum}");
-//        }
+            SELECT("count(1)");
+            FROM(TABLE_NAME);
+            if (dept.getId() != null) {
+                WHERE("id=#{dept.id}");
+            }
+            if (dept.getParentId() != null) {
+                WHERE("parent_id=#{dept.parentId}");
+            }
+            if (StringUtils.isNotBlank(dept.getName())){
+                WHERE("name=#{dept.name}");
+            }
+            if (dept.getOrderNum() != null) {
+                WHERE("order_num=#{dept.orderNum}");
+            }
+            WHERE("del_flag=0");
+            }}.toString();
+    }
+    
+ 
+    
+    public String pageList2(Map<String, Object> params) {
+        DeptDO dept = (DeptDO) params.get("dept");
+        Integer pageNum = (Integer) params.get("pageNum");
+        Integer pageSize = (Integer) params.get("pageSize");
+        if (pageNum == null || pageNum == 0) {
+            pageNum = 1;
+        }
+        if (pageSize == null || pageSize == 0) {
+            pageSize = 20;
+        }
+        int start = (pageNum - 1) * pageSize;
+        int limit = pageSize;
+        return new SQL() {{
+        SELECT(" * FROM sys_dept where id in "
+        		+ "(SELECT dept_id FROM sys_role_dept WHERE role_id in "
+        		+ 	"( SELECT role_id FROM sys_user_role WHERE user_id in "
+        		+ 	"( SELECT id FROM sys_user WHERE agent_id = #{dept.agentId}))) and del_flag=0" );
 //        WHERE("del_flag=0");
+        ORDER_BY("order_num asc limit " + start + ", " + limit );
         }}.toString();
+    }
+    
+    
+    public String pageListCount2(Map<String, Object> params) {
+        DeptDO dept = (DeptDO) params.get("dept");
+        return new SQL() {{
+            SELECT("count(1) FROM sys_dept where id in "
+            		+ "(SELECT dept_id FROM sys_role_dept WHERE role_id in "
+            		+ "( SELECT role_id FROM sys_user_role WHERE user_id in "
+            		+ "( SELECT id FROM sys_user WHERE agent_id = #{dept.agentId}))) and del_flag=0");
+//            FROM(TABLE_NAME);
+//            if (dept.getId() != null) {
+//                WHERE("id=#{dept.id}");
+//            }
+//            if (dept.getParentId() != null) {
+//                WHERE("parent_id=#{dept.parentId}");
+//            }
+//            if (StringUtils.isNotBlank(dept.getName())){
+//                WHERE("name=#{dept.name}");
+//            }
+//            if (dept.getOrderNum() != null) {
+//                WHERE("order_num=#{dept.orderNum}");
+//            }
+//            WHERE("del_flag=0");
+            }}.toString();
     }
 }
 
