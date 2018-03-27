@@ -92,7 +92,7 @@ public class TradeDataWebController extends BaseController {
     	Integer agentId = null;
     	UserDO user = userService.getUserById(userId);
     	if(user != null ){
-    		if(user.getAgentId() != null && user.getAgentId() != 1){
+    		if(!"admin".equals(user.getName())){
     			agentId = user.getAgentId();//该用户是代理商用户
     		}
     	}
