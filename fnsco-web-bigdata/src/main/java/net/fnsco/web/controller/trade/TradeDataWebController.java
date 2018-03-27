@@ -91,11 +91,10 @@ public class TradeDataWebController extends BaseController {
     	Integer userId = this.getUserId();
     	Integer agentId = null;
     	UserDO user = userService.getUserById(userId);
-    	if(user == null){
-    		return null;
-    	}
-    	if(user.getType() == 2){//该用户是代理商用户
-    		agentId = user.getAgentId();
+    	if(user != null ){
+    		if(user.getAgentId() != null && user.getAgentId() != 1){
+    			agentId = user.getAgentId();//该用户是代理商用户
+    		}
     	}
     	
         return tradeDataService.queryTradeData(tradeDataDTO, currentPageNum, pageSize,agentId);
@@ -113,11 +112,10 @@ public class TradeDataWebController extends BaseController {
     	Integer userId = this.getUserId();
     	Integer agentId = null;
     	UserDO user = userService.getUserById(userId);
-    	if(user == null){
-    		return null;
-    	}
-    	if(2 == user.getType()){//该用户是代理商用户
-    		agentId = user.getAgentId();
+    	if(user != null ){
+    		if(user.getAgentId() != null && user.getAgentId() != 1){
+    			agentId = user.getAgentId();//该用户是代理商用户
+    		}
     	}
     	String total= tradeDataService.queryTotalAmount(tradeDataDTO,agentId);
     	return ResultDTO.success(total);
