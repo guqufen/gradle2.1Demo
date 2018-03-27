@@ -16,8 +16,34 @@ public class DeptDO {
      * 上级部门名称
      */
     private String parentName;
+    
+    
+    //代理商id  
+    private Integer agentId;
 
-    public String getParentName() {
+    /**
+	 * agentId
+	 *
+	 * @return  the agentId
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Integer getAgentId() {
+		return agentId;
+	}
+
+	/**
+	 * agentId
+	 *
+	 * @param   agentId    the agentId to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setAgentId(Integer agentId) {
+		this.agentId = agentId;
+	}
+
+	public String getParentName() {
 		return parentName;
 	}
 

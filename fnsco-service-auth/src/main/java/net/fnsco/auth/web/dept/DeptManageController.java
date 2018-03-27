@@ -2,6 +2,7 @@ package net.fnsco.auth.web.dept;
 
 import java.util.List;
 
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,11 +49,18 @@ public class DeptManageController extends BaseController {
 			@RequestParam("pageSize") Integer pageSize) {
 		Integer userID = this.getUserId();
 		UserDO userDO = userService.getUserById(userID);
+		//用户有代理查代理下部门，无代理查全部
+		ResultPageDTO<DeptDO> result = null;
 		if(userDO != null){
-			dept.setName(userDO.getDepartment());
+			if(userDO.getAgentId() == null){
+				result = sysDeptService.queryList(dept, pageNum, pageSize);
+			}else{
+				dept.setAgentId(userDO.getAgentId());
+				result = sysDeptService.queryList2(dept, pageNum, pageSize);
+			}
 		}
-		ResultPageDTO<DeptDO> result = sysDeptService.queryList(dept, pageNum, pageSize);
 		return success(result);
+		
 	}
 
 	/**
@@ -66,11 +74,13 @@ public class DeptManageController extends BaseController {
 	public ResultDTO<DeptDO> querytree() {
 		Integer userID = this.getUserId();
 		UserDO userDO = userService.getUserById(userID);
-		String name = null ;
+		Integer agentId = null;
 		if(userDO != null){
-			name = userDO.getDepartment();
+			if(userDO.getAgentId() != null){
+				agentId = userDO.getAgentId();
+			}
 		}
-		List<DeptDO> result = sysDeptService.queryName(false,name);
+		List<DeptDO> result = sysDeptService.queryName(false,agentId);
 		return success(result);
 	}
 	
@@ -85,11 +95,13 @@ public class DeptManageController extends BaseController {
 	public ResultDTO<DeptDO> queryNoRoottree() {
 		Integer userID = this.getUserId();
 		UserDO userDO = userService.getUserById(userID);
-		String name = null ;
+		Integer agentId = null;
 		if(userDO != null){
-			name = userDO.getDepartment();
+			if(userDO.getAgentId() != null){
+				agentId = userDO.getAgentId();
+			}
 		}
-		List<DeptDO> result = sysDeptService.queryName(false,name);
+		List<DeptDO> result = sysDeptService.queryName(false,agentId);
 		return success(result);
 	}
 
