@@ -55,7 +55,7 @@ public class ConmmController extends BaseController {
     @ApiOperation(value = "用户协议")
     @ResponseBody
     public ResultDTO getProtocol(@RequestBody ProtocolDTO protocolDTO) {
-        ResultDTO result = conmmService.getProtocol(protocolDTO);
+        ResultDTO result = conmmService.getBigDataProtocol(protocolDTO);
         return result;
     }
 
