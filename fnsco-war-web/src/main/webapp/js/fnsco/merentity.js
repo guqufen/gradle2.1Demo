@@ -550,9 +550,9 @@ function requestAgent(type){
 					   html_opt += '<option value="'+value.id+'">'+value.name+'</option>';
 				   }
 			   })
-			   if(!type){
+			   if(!type){//type 未代理商id
 				   $('#agentId').html('');
-				   $('#agentId').append(html_opt);
+//				   $('#agentId').append(html_opt);
 			   }else{
 //				   $('#agentId').html('');
 				   $('#agentId').append(html_opt);

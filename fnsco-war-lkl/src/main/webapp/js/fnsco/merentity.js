@@ -551,8 +551,8 @@ function requestAgent(type){
 				   }
 			   })
 			   if(!type){
-				   $('#agentId').html('');
-//				   $('#agentId').append(html_opt);
+//				   $('#agentId').html('');
+				   $('#agentId').append(html_opt);
 			   }else{
 //				   $('#agentId').html('');
 				   $('#agentId').append(html_opt);
