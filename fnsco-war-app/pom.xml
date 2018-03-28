@@ -38,9 +38,21 @@
 			</properties>
 		</profile>
 		<profile>
+			<id>testlkl</id>
+			<properties>
+				<profileActive>testlkl</profileActive>
+			</properties>
+		</profile>
+		<profile>
 			<id>prod</id>
 			<properties>
 				<profileActive>prod</profileActive>
+			</properties>
+		</profile>
+		<profile>
+			<id>prodlkl</id>
+			<properties>
+				<profileActive>prodlkl</profileActive>
 			</properties>
 		</profile>
 	</profiles>
@@ -65,11 +77,6 @@
 		<dependency>
 			<groupId>net.fnsco</groupId>
 			<artifactId>fnsco-service-bigdata</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>net.fnsco</groupId>
-			<artifactId>fnsco-config</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>

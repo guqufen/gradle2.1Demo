@@ -70,6 +70,15 @@ public class AppUserController extends BaseController {
         ResultDTO result = appUserService.getValidateCode(appUserDTO);
         return result;
     }
+    
+  //获取易账房验证码
+    @ResponseBody
+    @RequestMapping(value = "/getYZFValidateCode")
+    @ApiOperation(value = "获取验证码")
+    public ResultDTO getYZFValidateCode(@RequestBody AppUserDTO appUserDTO) {
+        ResultDTO result = appUserService.getYZFValidateCode(appUserDTO);
+        return result;
+    }
 
     //修改密码     旧密码和新密码
     @RequestMapping(value = "/modifyPassword")
