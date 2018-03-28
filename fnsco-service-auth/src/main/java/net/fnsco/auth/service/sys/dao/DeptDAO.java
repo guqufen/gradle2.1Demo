@@ -49,16 +49,13 @@ public interface DeptDAO {
     
 //    @Select("SELECT * FROM sys_dept where del_flag = 0 order by order_num")
     @Results({@Result( column = "parent_id",property = "parentId"),@Result( column = "order_num",property = "orderNum"),@Result( column = "del_flag",property = "delFlag") })
-    @Select("SELECT * FROM sys_dept where id in "
-    		+ "(SELECT dept_id FROM sys_role_dept WHERE role_id in "
-    		+ "( SELECT role_id FROM sys_user_role WHERE user_id in "
-    		+ "( SELECT id FROM sys_user WHERE agent_id = #{agentId})))")
+    @Select("SELECT * FROM sys_dept WHERE  `name` in ( SELECT department FROM sys_user WHERE agent_id = #{agentId})")
     public List<DeptDO> pageNameList(@Param("agentId") Integer agentId);
     
     
     @Results({@Result( column = "parent_id",property = "parentId"),@Result( column = "order_num",property = "orderNum"),@Result( column = "del_flag",property = "delFlag") })
     @Select("SELECT * FROM sys_dept where del_flag = 0 order by order_num")
-    public List<DeptDO> pageNameList2(@Param("agentId") Integer agentId);
+    public List<DeptDO> pageNameList2();
 
 
     @SelectProvider(type = DeptProvider.class, method = "pageListCount")

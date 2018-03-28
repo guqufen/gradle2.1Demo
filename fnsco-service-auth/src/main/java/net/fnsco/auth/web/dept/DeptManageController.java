@@ -74,13 +74,17 @@ public class DeptManageController extends BaseController {
 	public ResultDTO<DeptDO> querytree() {
 		Integer userID = this.getUserId();
 		UserDO userDO = userService.getUserById(userID);
-		Integer agentId = null;
-		if(userDO != null){
-			if(userDO.getAgentId() != null){
-				agentId = userDO.getAgentId();
-			}
+		if(userDO == null){
+			return null;
 		}
-		List<DeptDO> result = sysDeptService.queryName(false,agentId);
+//		Integer agentId = null;
+//		String name;
+//		if(userDO != null){
+//			if(userDO.getAgentId() != null){
+//				name = userDO.getName();
+//			}
+//		}
+		List<DeptDO> result = sysDeptService.queryName(false,userDO);
 		return success(result);
 	}
 	
@@ -95,13 +99,13 @@ public class DeptManageController extends BaseController {
 	public ResultDTO<DeptDO> queryNoRoottree() {
 		Integer userID = this.getUserId();
 		UserDO userDO = userService.getUserById(userID);
-		Integer agentId = null;
-		if(userDO != null){
-			if(userDO.getAgentId() != null){
-				agentId = userDO.getAgentId();
-			}
-		}
-		List<DeptDO> result = sysDeptService.queryName(false,agentId);
+//		Integer agentId = null;
+//		if(userDO != null){
+//			if(userDO.getAgentId() != null){
+//				agentId = userDO.getAgentId();
+//			}
+//		}
+		List<DeptDO> result = sysDeptService.queryName(false,userDO);
 		return success(result);
 	}
 

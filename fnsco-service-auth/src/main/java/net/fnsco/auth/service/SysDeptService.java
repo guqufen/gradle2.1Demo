@@ -11,10 +11,13 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.druid.stat.TableStat.Name;
+
 import net.fnsco.auth.comm.AuthConstant;
 import net.fnsco.auth.service.sys.dao.DeptDAO;
 import net.fnsco.auth.service.sys.dao.RoleDeptDAO;
 import net.fnsco.auth.service.sys.entity.DeptDO;
+import net.fnsco.auth.service.sys.entity.UserDO;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -89,13 +92,13 @@ public class SysDeptService extends BaseService {
 	 * @param flag:true-表示需要带自制根节点;false不需要带
 	 * @return
 	 */
-	public List<DeptDO> queryName(Boolean flag, Integer agentId) {
+	public List<DeptDO> queryName(Boolean flag, UserDO userDO) {
 		// 返回根据条件查询的所有记录条数
 		List<DeptDO> data = new ArrayList<>();
-		if(agentId != null){
-			data = deptDAO.pageNameList(agentId);
-		}else{
-			data = deptDAO.pageNameList2(agentId);
+		if(userDO.getAgentId() != null){ //代理下部门
+			data = deptDAO.pageNameList(userDO.getAgentId());
+		}else{ //查询全部
+			data = deptDAO.pageNameList2();
 		}
 		if (flag) {
 			// 添加顶级菜单
