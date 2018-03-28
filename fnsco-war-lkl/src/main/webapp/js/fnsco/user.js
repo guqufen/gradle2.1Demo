@@ -357,7 +357,7 @@ $('#btn_yes').click(function() {
 					"status" : status,
 					"realName" : $('#realname').val(),
 					//"aliasName" : $('#aliasname').val(),
-					//"agentId" : $('#agentId').val(),
+					"agentId" : $('#agentId').val(),
 					//"remark" : remark
 				};
 			if (username == null || username.length == 0) {
@@ -426,7 +426,7 @@ $('#btn_yes1').click(
 					"status" : status,
 					"realName" : $('#realname1').val(),
 					//"aliasName" : $('#aliasname1').val(),
-					//"agentId" : $('#agentId1').val(),
+					"agentId" : $('#agentId1').val(),
 					//"remark" : remark
 				};
 			/*if (username == null || username.length == 0) {
