@@ -96,8 +96,10 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         String appMasterSecret = this.env.getProperty("ad.app.master.secret");
         AndroidListcast listcast = new AndroidListcast(appkey,appMasterSecret);
         listcast.setDeviceToken(param_and);
-        listcast.setTicker("【数钱吧】您有一条新消息");
-        listcast.setTitle("数钱吧");
+        //listcast.setTicker("【数钱吧】您有一条新消息");
+        //listcast.setTitle("数钱吧");
+        listcast.setTicker(this.env.getProperty("ad.ticker"));
+        listcast.setTitle(this.env.getProperty("ad.title"));
         listcast.setText(content);
         listcast.goAppAfterOpen();
         listcast.setDisplayType(AndroidNotification.DisplayType.NOTIFICATION);//通知
@@ -160,8 +162,10 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         String appkey = this.env.getProperty("ad.appkey");
         String appMasterSecret = this.env.getProperty("ad.app.master.secret");
         AndroidBroadcast broadcast = new AndroidBroadcast(appkey,appMasterSecret);
-        broadcast.setTicker("【数钱吧】您有一条新消息");
-        broadcast.setTitle("数钱吧");
+        //broadcast.setTicker("【数钱吧】您有一条新消息");
+        //broadcast.setTitle("数钱吧");
+        broadcast.setTicker(this.env.getProperty("ad.ticker"));
+        broadcast.setTitle(this.env.getProperty("ad.title"));
         broadcast.setText(content);
         broadcast.goAppAfterOpen();
         broadcast.setDisplayType(AndroidNotification.DisplayType.NOTIFICATION);
@@ -235,7 +239,8 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         unicast.setExtraField("msgType", "1");//通知
         unicast.setExtraField("titleType", "系统通知");
         unicast.setExtraField("innerTermCode", innerTermCode);
-        unicast.setTicker("【数钱吧】您有一条新消息");
+        //unicast.setTicker("【数钱吧】您有一条新消息");
+        unicast.setTicker(this.env.getProperty("ad.ticker"));
         int status = client.send(unicast);
         return status;
     }
@@ -512,8 +517,10 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         String appMasterSecret = this.env.getProperty("ad.app.master.secret");
         AndroidListcast listcast = new AndroidListcast(appkey,appMasterSecret);
         listcast.setDeviceToken(param_and);
-        listcast.setTicker("【数钱吧】您有一条新消息");
-        listcast.setTitle("数钱吧");
+        //listcast.setTicker("【数钱吧】您有一条新消息");
+        //listcast.setTitle("数钱吧");
+        listcast.setTicker(this.env.getProperty("ad.ticker"));
+        listcast.setTitle(this.env.getProperty("ad.title"));
         listcast.setText(content);
         listcast.goAppAfterOpen();
         listcast.setDisplayType(AndroidNotification.DisplayType.NOTIFICATION);//通知

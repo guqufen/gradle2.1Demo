@@ -26,6 +26,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import net.fnsco.bigdata.api.merchant.MerchantPosService;
+import net.fnsco.bigdata.comm.BigdataSmsUtil;
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
 import net.fnsco.bigdata.service.dao.master.MerchantEntityDao;
 import net.fnsco.bigdata.service.domain.MerchantCore;
@@ -221,7 +222,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             @Override
             public void run() {
                 try {
-                    String callback = SmsUtil.Code(mobile, code);
+                    String callback = BigdataSmsUtil.Code(mobile, code);
                     JSONObject callbackJson = (JSONObject) JSONObject.parse(callback);
                     String resultCode = callbackJson.getString("code");
                     if ("0".equals(resultCode)) {
@@ -237,6 +238,47 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }).start();
         return ResultDTO.success();
     }
+    
+  //生产验证码 
+    @Override
+    public ResultDTO getYZFValidateCode(AppUserDTO appUserDTO) {
+        String deviceId = appUserDTO.getDeviceId();
+        final String mobile = appUserDTO.getMobile();
+        //注册需要判断    0表示通过注册流程来获取验证码  1表示通过忘记密码流程来获取验证码
+        if (appUserDTO.getOprationType() != null && appUserDTO.getOprationType() == 0) {
+            AppUser user = appUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
+            if (user != null) {
+                return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
+            }
+        }
+
+        // 生成6位验证码
+        final String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
+        valOpsStr.set(mobile + deviceId,code,30,TimeUnit.MINUTES);
+        /**
+        * 开启线程发送手机验证码
+        */
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String callback = BigdataSmsUtil.bigDataCode(mobile, code);
+                    JSONObject callbackJson = (JSONObject) JSONObject.parse(callback);
+                    String resultCode = callbackJson.getString("code");
+                    if ("0".equals(resultCode)) {
+                        logger.warn("验证码" + code + "已经发送至手机号" + mobile + "返回详情" + callback);
+                    } else {
+                        logger.warn("验证码" + code + "未能够发送至手机" + mobile + "错误code" + resultCode + ";错误详情" + callback);
+                    }
+                } catch (Exception e) {
+                    logger.warn("验证码" + code + "未能够发送至手机" + mobile + "错误原因:异常错误");
+                    logger.error("短信发送异常 ", e);
+                }
+            }
+        }).start();
+        return ResultDTO.success();
+    }
+    
   //验证码对比
     public ResultDTO validateCode(Integer type,String deviceId, String code, String mobile) {
     	//非空判断

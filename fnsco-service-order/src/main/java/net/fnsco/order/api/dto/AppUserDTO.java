@@ -138,6 +138,7 @@ public class AppUserDTO extends DTO {
         this.sex = sex;
     }
 
+
     public Integer getOprationType() {
         return oprationType;
     }
