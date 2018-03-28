@@ -323,7 +323,7 @@ function operateFormatter(value, row, index) {
     returnHtml+='<a class="details" href="javascript:;"><i class="glyphicon"></i></a>';
   }
   
-  oilcardHtml +=  '<a class="details" href="javascript:showOilCardcode('+value+');" title="油卡二维码"><i class="glyphicon glyphicon-tint"></i></a>';
+//  oilcardHtml +=  '<a class="details" href="javascript:showOilCardcode('+value+');" title="油卡二维码"><i class="glyphicon glyphicon-tint"></i></a>';
   
 	return [
     '<a class="redact" href="javascript:editData('+value+');" title="点击编辑">',
