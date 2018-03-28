@@ -1,5 +1,6 @@
 package net.fnsco.auth.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.codec.binary.StringUtils;
@@ -10,10 +11,13 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.druid.stat.TableStat.Name;
+
 import net.fnsco.auth.comm.AuthConstant;
 import net.fnsco.auth.service.sys.dao.DeptDAO;
 import net.fnsco.auth.service.sys.dao.RoleDeptDAO;
 import net.fnsco.auth.service.sys.entity.DeptDO;
+import net.fnsco.auth.service.sys.entity.UserDO;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -57,6 +61,30 @@ public class SysDeptService extends BaseService {
 		ResultPageDTO<DeptDO> result = new ResultPageDTO<DeptDO>(totalNum, data);
 		return result;
 	}
+	/**
+	 * 根据代理商查询部门信息
+	 * queryList2:(这里用一句话描述这个方法的作用)
+	 *
+	 * binghui.li
+	 */
+	public ResultPageDTO<DeptDO> queryList2(DeptDO dept, Integer pageNum, Integer pageSize) {
+
+		List<DeptDO> data = deptDAO.pageList2(dept, pageNum, pageSize);
+		for (DeptDO temp : data) {
+			DeptDO tdo = deptDAO.getById(temp.getParentId());
+			if (tdo == null) {
+				temp.setParentName(env.getProperty("web.compony.name"));
+			} else {
+				temp.setParentName(tdo.getName());
+			}
+		}
+		// 返回根据条件查询的所有记录条数
+		int totalNum = deptDAO.pageListCount2(dept);
+		// 返回给页面总条数和每页查询的数据
+		ResultPageDTO<DeptDO> result = new ResultPageDTO<DeptDO>(totalNum, data);
+		return result;
+
+	}
 
 	/**
 	 * 查询部门相关信息
@@ -64,10 +92,14 @@ public class SysDeptService extends BaseService {
 	 * @param flag:true-表示需要带自制根节点;false不需要带
 	 * @return
 	 */
-	public List<DeptDO> queryName(Boolean flag,String name) {
+	public List<DeptDO> queryName(Boolean flag, UserDO userDO) {
 		// 返回根据条件查询的所有记录条数
-		List<DeptDO> data = deptDAO.pageNameList(name);
-		// ResultDTO<DeptDO> result = new ResultDTO<DeptDO>(data);
+		List<DeptDO> data = new ArrayList<>();
+		if(userDO.getAgentId() != null){ //代理下部门
+			data = deptDAO.pageNameList(userDO.getAgentId());
+		}else{ //查询全部
+			data = deptDAO.pageNameList2();
+		}
 		if (flag) {
 			// 添加顶级菜单
 			DeptDO root = new DeptDO();
@@ -143,4 +175,5 @@ public class SysDeptService extends BaseService {
 		}
 		return ResultDTO.success();
 	}
+
 }
