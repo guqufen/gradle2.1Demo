@@ -342,7 +342,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
 
         //判断手机号是否已经注册
         if (appUserDao.selectAppUserByMobile(appUserDTO.getMobile()) == null) {
-            return ResultDTO.fail(ApiConstant.E_APP_PHONE_ERROR);
+            return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
         }
         String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
         //对比验证码
