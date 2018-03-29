@@ -118,7 +118,7 @@ public class ConmmController extends BaseController {
     }
   //易账房邀新
     @RequestMapping(value = "/getYZFInviteUrl", method = RequestMethod.GET)
-    @ApiOperation(value = "返回邀新链接地址")
+    @ApiOperation(value = "返回易账房邀新链接地址")
     @ResponseBody
     public ResultDTO<Map<String, Object>> getYZFInviteUrl(@RequestParam String entityInnerCode) {
         
