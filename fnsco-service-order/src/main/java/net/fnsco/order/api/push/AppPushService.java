@@ -26,7 +26,7 @@ public interface AppPushService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    Integer sendAndroidListcast(String param_and, String content,String sendTime,String contentJson) throws Exception;
+    Integer sendAndroidListcast(String param_and, String content,String sendTime,String contentJson,Integer msgType) throws Exception;
     
     /**
      * sendAndroidListcast:(带扩展参数的  安卓推送--列播)
@@ -53,7 +53,7 @@ public interface AppPushService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public Integer sendIOSListcast(String param_ios, String content,String sendTime) throws Exception;
+    public Integer sendIOSListcast(String param_ios, String content,String sendTime,Integer msgType) throws Exception;
     
     /**
      * sendAndroidBroadcast:(这里用一句话描述这个方法的作用) 安卓--广播
@@ -66,7 +66,7 @@ public interface AppPushService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public Integer sendAndroidBroadcast(String content,String sendTime,String contentJson) throws Exception;
+    public Integer sendAndroidBroadcast(String content,String sendTime,String contentJson,Integer msgType) throws Exception;
     
     /**
      * sendIOSBroadcast:(这里用一句话描述这个方法的作用) ios--广播
@@ -79,7 +79,7 @@ public interface AppPushService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public Integer sendIOSBroadcast(String content,String sendTime) throws Exception;
+    public Integer sendIOSBroadcast(String content,String sendTime,Integer msgType) throws Exception;
     
     /**
      * sendAndroidUnicast:(这里用一句话描述这个方法的作用) andorid -- 单播
@@ -92,7 +92,7 @@ public interface AppPushService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public Integer sendAndroidUnicast(String adrUnicastToken,String innerTermCode,String content) throws Exception;
+    public Integer sendAndroidUnicast(String adrUnicastToken,String innerTermCode,String content,Integer msgType) throws Exception;
     
     /**
      * sendIOSUnicast:(这里用一句话描述这个方法的作用) ios -- 单播
@@ -105,7 +105,7 @@ public interface AppPushService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public Integer sendIOSUnicast(String iosUnicastToken,JSONObject content,Integer badge,String contentJson) throws Exception ;
+    public Integer sendIOSUnicast(String iosUnicastToken,JSONObject content,Integer badge,String contentJson,Integer msgType) throws Exception ;
     
     /**
      * sendIOSUnicast:(带扩展参数的  IOS推送--单播)
