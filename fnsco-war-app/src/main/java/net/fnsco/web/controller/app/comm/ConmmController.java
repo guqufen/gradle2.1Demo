@@ -116,5 +116,30 @@ public class ConmmController extends BaseController {
         resultMap.put("count", count);
         return ResultDTO.success(resultMap);
     }
-
+  //易账房邀新
+    @RequestMapping(value = "/getYZFInviteUrl", method = RequestMethod.GET)
+    @ApiOperation(value = "返回邀新链接地址")
+    @ResponseBody
+    public ResultDTO<Map<String, Object>> getYZFInviteUrl(@RequestParam String entityInnerCode) {
+        
+        if(Strings.isNullOrEmpty(entityInnerCode)) {
+        	 return ResultDTO.fail(BigdataConstant.APP_MER_ENTITY_INNERCODE_NULL);
+        }
+      
+        String url = env.getProperty("web.base.url") + "/acti/lklregister.html?entityId=" + entityInnerCode;
+        Map<String, Object> resultMap = Maps.newHashMap();
+        List<IntegralLog> list = integralRuleLogService.queryListByEntityInnerCode(entityInnerCode);
+        Integer integral = 0;// 积分值 
+        int count = 0;
+        if (list != null) {
+            count = list.size();
+            for (IntegralLog log : list) {
+                integral += log.getIntegral();
+            }
+        }
+        resultMap.put("url", url);
+        resultMap.put("integral", integral);
+        resultMap.put("count", count);
+        return ResultDTO.success(resultMap);
+    }
 }
