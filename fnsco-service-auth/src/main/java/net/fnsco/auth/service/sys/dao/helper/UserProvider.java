@@ -58,6 +58,7 @@ public class UserProvider {
         if (user.getStatus() != null) {
             SET("status=#{user.status}");
         }
+        WHERE("status != 0");
         WHERE("id = #{user.id}");
         }}.toString();
     }
@@ -117,6 +118,7 @@ public class UserProvider {
         if (user.getModifyUserId() != null) {
             WHERE("modify_user_id=#{user.modifyUserId}");
         }
+        WHERE("status != 0");
         ORDER_BY("id limit " + start + ", " + limit );
         }}.toString();
 

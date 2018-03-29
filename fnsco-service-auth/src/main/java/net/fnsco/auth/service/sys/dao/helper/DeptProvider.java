@@ -104,12 +104,12 @@ public class DeptProvider {
         return new SQL() {{
 //        SELECT(" * FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{dept.agentId}) and del_flag=0" );
         SELECT(" * FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{dept.agentId}) and del_flag=0 "
-        		+ "UNION "
-        		+ "SELECT * FROM sys_dept where parent_id in (SELECT id FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{dept.agentId}) and del_flag=0)"
-        		+ "UNION "
-        		+ "SELECT * FROM sys_dept where parent_id in (SELECT id FROM sys_dept where parent_id in (SELECT id FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{dept.agentId}) and del_flag=0))"
-        		+ "UNION "
-        		+ "SELECT * FROM sys_dept where parent_id in (SELECT id FROM sys_dept where parent_id in (SELECT id FROM sys_dept where parent_id in (SELECT id FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{dept.agentId}) and del_flag=0)))");
+        		+ " UNION "
+        		+ "SELECT * FROM sys_dept where parent_id in (SELECT id FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{dept.agentId})) and del_flag=0"
+        		+ " UNION "
+        		+ "SELECT * FROM sys_dept where parent_id in (SELECT id FROM sys_dept where parent_id in (SELECT id FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{dept.agentId}))) and del_flag=0"
+        		+ " UNION "
+        		+ "SELECT * FROM sys_dept where parent_id in (SELECT id FROM sys_dept where parent_id in (SELECT id FROM sys_dept where parent_id in (SELECT id FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{dept.agentId})))) and del_flag=0");
         
 //        WHERE("del_flag=0");
         ORDER_BY("order_num asc limit " + start + ", " + limit );
@@ -121,12 +121,12 @@ public class DeptProvider {
         DeptDO dept = (DeptDO) params.get("dept");
         return new SQL() {{
             SELECT("count(1) from (select *  FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{dept.agentId}) and del_flag=0 "
-        		+ "UNION "
-        		+ "SELECT * FROM sys_dept where parent_id in (SELECT id FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{dept.agentId}) and del_flag=0)"
-        		+ "UNION "
-        		+ "SELECT * FROM sys_dept where parent_id in (SELECT id FROM sys_dept where parent_id in (SELECT id FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{dept.agentId}) and del_flag=0))"
-        		+ "UNION "
-        		+ "SELECT * FROM sys_dept where parent_id in (SELECT id FROM sys_dept where parent_id in (SELECT id FROM sys_dept where parent_id in (SELECT id FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{dept.agentId}) and del_flag=0)))");
+        		+ " UNION "
+        		+ "SELECT * FROM sys_dept where parent_id in (SELECT id FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{dept.agentId})) and del_flag=0"
+        		+ " UNION "
+        		+ "SELECT * FROM sys_dept where parent_id in (SELECT id FROM sys_dept where parent_id in (SELECT id FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{dept.agentId}))) and del_flag=0"
+        		+ " UNION "
+        		+ "SELECT * FROM sys_dept where parent_id in (SELECT id FROM sys_dept where parent_id in (SELECT id FROM sys_dept where parent_id in (SELECT id FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{dept.agentId}))))and del_flag=0");
 //            FROM(TABLE_NAME);
 //            if (dept.getId() != null) {
 //                WHERE("id=#{dept.id}");
