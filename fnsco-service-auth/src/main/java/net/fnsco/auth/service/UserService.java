@@ -198,4 +198,11 @@ public class UserService extends BaseService {
 		return null;
 		
 	}
+
+	public List<Integer> getByDepartId(Integer integer) {
+		 List<Integer> user = userDAO.getByDepartId(integer);
+		
+		return user;
+		
+	}
 }

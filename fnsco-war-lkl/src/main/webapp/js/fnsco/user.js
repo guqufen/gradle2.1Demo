@@ -93,6 +93,7 @@ function add(date) {
 }
 //修改确认事件方法
 function edit(date) {
+	console.log("&&="+date);
 	$.ajax({
 		traditional:true,
 		url : json.auth_user_toEdit,
@@ -230,8 +231,6 @@ function getDept() {
 		success : function(data) {
 			dept_ztree = $.fn.zTree.init($("#deptTree"), dept_setting,data.data);
 			// data.data就是所有数据集
-			console.log(data.data);
-			console.log(dept_ztree);
 		},
 		error : function(data) {
 			alert(" 数据加载失败！" + data);
@@ -257,10 +256,13 @@ function dotext(a) {
 			var node = dept_ztree.getSelectedNodes();
 			//选择上级部门
 			name = node[0].name;
+			id = node[0].id;
 			if(a==1){
 				$("#department").val(name);
+				$("#departId").val(id);
 			}else if(a==2){
 				$("#department1").val(name);
+				$("#departId1").val(id);
 			}	
 			layer.close(index);
 		}
@@ -353,6 +355,7 @@ $('#btn_yes').click(function() {
 					"roleList" : roleid,
 					//"mobile" : mobile,
 					"department" : department,
+					"departId" : $('#departId').val(),
 					//"sex" : sex,
 					"status" : status,
 					"realName" : $('#realname').val(),
@@ -422,6 +425,7 @@ $('#btn_yes1').click(
 					"roleList" : roleid,
 					//"mobile" : mobile,
 					"department" : department,
+					"departId" : $('#departId1').val(),
 					//"sex" : sex,
 					"status" : status,
 					"realName" : $('#realname1').val(),

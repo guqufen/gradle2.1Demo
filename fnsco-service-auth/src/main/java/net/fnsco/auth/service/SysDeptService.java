@@ -36,6 +36,8 @@ public class SysDeptService extends BaseService {
 	private RoleDeptDAO roleDeptDAO;
 	@Autowired
 	private Environment env;
+	@Autowired
+	private UserService userService;
 
 	/**
 	 * 分页查询部门管理首页信息
@@ -61,30 +63,7 @@ public class SysDeptService extends BaseService {
 		ResultPageDTO<DeptDO> result = new ResultPageDTO<DeptDO>(totalNum, data);
 		return result;
 	}
-	/**
-	 * 根据代理商查询部门信息
-	 * queryList2:(这里用一句话描述这个方法的作用)
-	 *
-	 * binghui.li
-	 */
-	public ResultPageDTO<DeptDO> queryList2(DeptDO dept, Integer pageNum, Integer pageSize) {
-
-		List<DeptDO> data = deptDAO.pageList2(dept, pageNum, pageSize);
-		for (DeptDO temp : data) {
-			DeptDO tdo = deptDAO.getById(temp.getParentId());
-			if (tdo == null) {
-				temp.setParentName(env.getProperty("web.compony.name"));
-			} else {
-				temp.setParentName(tdo.getName());
-			}
-		}
-		// 返回根据条件查询的所有记录条数
-		int totalNum = deptDAO.pageListCount2(dept);
-		// 返回给页面总条数和每页查询的数据
-		ResultPageDTO<DeptDO> result = new ResultPageDTO<DeptDO>(totalNum, data);
-		return result;
-
-	}
+	
 
 	/**
 	 * 查询部门相关信息
@@ -164,9 +143,15 @@ public class SysDeptService extends BaseService {
 	@Transactional
 	public ResultDTO<String> deleteById(Integer[] id) {
 		for (int i = 0; i < id.length; i++) {
+			//判断部门下是否有子部门
 			List<Integer> dept = deptDAO.getByparentId(id[i]);
 			if (dept.size() != 0) {
 				return ResultDTO.fail(AuthConstant.E_PEPT_EXIST);
+			}
+			//判断部门下是否已有用户
+			List<Integer> user = userService.getByDepartId(id[i]);
+			if(user.size() != 0){
+				return ResultDTO.fail("部门下有用户，无法删除");
 			}
 		}
 		for (int i = 0; i < id.length; i++) {

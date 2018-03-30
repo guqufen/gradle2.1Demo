@@ -568,16 +568,16 @@
         	AND time_stamp <= #{condition.endTime,jdbcType=VARCHAR}
         ]]>
       </if>
-      <if test="condition.innerCodeList != null">
+      <if test="condition.innerCodeList != null ">
 			AND inner_code in 
 			<foreach collection="condition.innerCodeList" item="innerCode" open="(" separator="," close=")">#{innerCode}</foreach>
 	 		
 	  </if>
-	  <if test="condition.paySubTypes != null" >
+	  <if test="condition.paySubTypes != null " >
         AND pay_sub_type in 
 		<foreach collection="condition.paySubTypes" item="txnSubType" open="(" separator="," close=")">#{txnSubType}</foreach>
       </if>
-	  <if test="condition.terminalList != null">
+	  <if test="condition.terminalList != null " >
 			AND (term_id IN 
 			<foreach collection="condition.terminalList" item="terminal" open="(" separator="," close=")">#{terminal}</foreach>
 			<if test="condition.payMedium != null and condition.payMedium !='' " >

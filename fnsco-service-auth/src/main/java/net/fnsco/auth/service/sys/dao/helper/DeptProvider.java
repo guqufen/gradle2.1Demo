@@ -60,6 +60,9 @@ public class DeptProvider {
             if (dept.getOrderNum() != null) {
                 WHERE("order_num=#{dept.orderNum}");
             }
+            if (dept.getAgentId() != null) {
+                WHERE("agent_id=#{dept.agentId}");
+            }
             WHERE("del_flag=0");
             ORDER_BY("order_num asc limit " + start + ", " + limit );
             }}.toString();
@@ -83,65 +86,14 @@ public class DeptProvider {
             if (dept.getOrderNum() != null) {
                 WHERE("order_num=#{dept.orderNum}");
             }
+            if (dept.getAgentId() != null) {
+                WHERE("agent_id=#{dept.agentId}");
+            }
             WHERE("del_flag=0");
             }}.toString();
     }
     
- 
     
-    public String pageList2(Map<String, Object> params) {
-        DeptDO dept = (DeptDO) params.get("dept");
-        Integer pageNum = (Integer) params.get("pageNum");
-        Integer pageSize = (Integer) params.get("pageSize");
-        if (pageNum == null || pageNum == 0) {
-            pageNum = 1;
-        }
-        if (pageSize == null || pageSize == 0) {
-            pageSize = 20;
-        }
-        int start = (pageNum - 1) * pageSize;
-        int limit = pageSize;
-        return new SQL() {{
-//        SELECT(" * FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{dept.agentId}) and del_flag=0" );
-        SELECT(" * FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{dept.agentId}) and del_flag=0 "
-        		+ " UNION "
-        		+ "SELECT * FROM sys_dept where parent_id in (SELECT id FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{dept.agentId})) and del_flag=0"
-        		+ " UNION "
-        		+ "SELECT * FROM sys_dept where parent_id in (SELECT id FROM sys_dept where parent_id in (SELECT id FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{dept.agentId}))) and del_flag=0"
-        		+ " UNION "
-        		+ "SELECT * FROM sys_dept where parent_id in (SELECT id FROM sys_dept where parent_id in (SELECT id FROM sys_dept where parent_id in (SELECT id FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{dept.agentId})))) and del_flag=0");
-        
-//        WHERE("del_flag=0");
-        ORDER_BY("order_num asc limit " + start + ", " + limit );
-        }}.toString();
-    }
-    
-    
-    public String pageListCount2(Map<String, Object> params) {
-        DeptDO dept = (DeptDO) params.get("dept");
-        return new SQL() {{
-            SELECT("count(1) from (select *  FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{dept.agentId}) and del_flag=0 "
-        		+ " UNION "
-        		+ "SELECT * FROM sys_dept where parent_id in (SELECT id FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{dept.agentId})) and del_flag=0"
-        		+ " UNION "
-        		+ "SELECT * FROM sys_dept where parent_id in (SELECT id FROM sys_dept where parent_id in (SELECT id FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{dept.agentId}))) and del_flag=0"
-        		+ " UNION "
-        		+ "SELECT * FROM sys_dept where parent_id in (SELECT id FROM sys_dept where parent_id in (SELECT id FROM sys_dept where parent_id in (SELECT id FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{dept.agentId}))))and del_flag=0");
-//            FROM(TABLE_NAME);
-//            if (dept.getId() != null) {
-//                WHERE("id=#{dept.id}");
-//            }
-//            if (dept.getParentId() != null) {
-//                WHERE("parent_id=#{dept.parentId}");
-//            }
-//            if (StringUtils.isNotBlank(dept.getName())){
-//                WHERE("name=#{dept.name}");
-//            }
-//            if (dept.getOrderNum() != null) {
-//                WHERE("order_num=#{dept.orderNum}");
-//            }
-//            WHERE("del_flag=0");
-            }}.toString()+")t";
-    }
+   
 }
 

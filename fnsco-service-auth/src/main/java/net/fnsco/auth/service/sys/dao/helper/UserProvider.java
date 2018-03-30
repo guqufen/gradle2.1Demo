@@ -43,6 +43,10 @@ public class UserProvider {
         if (StringUtils.isNotBlank(user.getDepartment())){
             SET("department=#{user.department}");
         }
+        //新增部门id
+        if (user.getDepartId() != null){
+            SET("depart_id=#{user.departId}");
+        }
         if (user.getAgentId() != null) {
             SET("agent_id=#{user.agentId}");
         }

@@ -29,7 +29,7 @@ public interface DeptDAO {
     @Select("SELECT id FROM sys_dept WHERE name= #{parentName}")
     public int getByName(@Param("parentName") String parentName);
 
-    @Insert("INSERT into sys_dept(parent_id,name,order_num,del_flag) VALUES (#{parentId},#{name},#{orderNum},#{delFlag})")
+    @Insert("INSERT into sys_dept(parent_id,name,order_num,del_flag,agent_id) VALUES (#{parentId},#{name},#{orderNum},#{delFlag},#{agentId})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public int insert(DeptDO dept);
 
@@ -43,18 +43,9 @@ public interface DeptDAO {
     @SelectProvider(type = DeptProvider.class, method = "pageList")
     public List<DeptDO> pageList(@Param("dept") DeptDO dept, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
     
-    @Results({@Result( column = "parent_id",property = "parentId"),@Result( column = "order_num",property = "orderNum"),@Result( column = "del_flag",property = "delFlag"),@Result( column = "parentName",property = "parentName")})
-    @SelectProvider(type = DeptProvider.class, method = "pageList2")
-    public List<DeptDO> pageList2(@Param("dept") DeptDO dept, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
     
-//    @Select("SELECT * FROM sys_dept where del_flag = 0 order by order_num")
     @Results({@Result( column = "parent_id",property = "parentId"),@Result( column = "order_num",property = "orderNum"),@Result( column = "del_flag",property = "delFlag") })
-    @Select(" Select * FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{agentId}) and del_flag=0 "
-    		+ " UNION "
-    		+ "SELECT * FROM sys_dept where parent_id in (SELECT id FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{agentId}) ) and del_flag=0"
-    		+ " UNION "
-    		+ "SELECT * FROM sys_dept where parent_id in (SELECT id FROM sys_dept where parent_id in (SELECT id FROM sys_dept WHERE `name` in ( SELECT department FROM sys_user WHERE agent_id = #{agentId}) )) and del_flag=0"
-    		+ "")
+    @Select(" SELECT * FROM sys_dept WHERE agent_id = #{agentId} AND del_flag = 0 ")
     public List<DeptDO> pageNameList(@Param("agentId") Integer agentId);
     
     
@@ -66,8 +57,6 @@ public interface DeptDAO {
     @SelectProvider(type = DeptProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("dept") DeptDO dept);
     
-    @SelectProvider(type = DeptProvider.class, method = "pageListCount2")
-    public Integer pageListCount2(@Param("dept") DeptDO dept);
 
 
 	

@@ -68,6 +68,7 @@ public class UserDO {
     /**
      * 部门
      */
+    private Integer departId;
     private String department;
 
     /**
@@ -185,7 +186,30 @@ public class UserDO {
         this.aliasName = aliasName;
     }
 
-    public String getDepartment() {
+    
+    /**
+	 * departId
+	 *
+	 * @return  the departId
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Integer getDepartId() {
+		return departId;
+	}
+
+	/**
+	 * departId
+	 *
+	 * @param   departId    the departId to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setDepartId(Integer departId) {
+		this.departId = departId;
+	}
+
+	public String getDepartment() {
         return department;
     }
 
