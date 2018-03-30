@@ -143,7 +143,7 @@ public class AppPushHelper extends BaseService {
                     //周报发送内容有区别
                     androidStatus = appPushService.sendAndroidListcast(appUser.getDeviceToken(), message.getMsgSubTitle(),extraField);
                 }else{
-                    androidStatus = appPushService.sendAndroidListcast(appUser.getDeviceToken(), message.getMsgSubTitle(), DateUtils.dateFormatToStr(message.getSendTime()), message.getId().toString());
+                    androidStatus = appPushService.sendAndroidListcast(appUser.getDeviceToken(), message.getMsgSubTitle(), DateUtils.dateFormatToStr(message.getSendTime()), message.getId().toString(),message.getMsgType());
                 }
                 
                 if (androidStatus == 200) {
@@ -171,7 +171,7 @@ public class AppPushHelper extends BaseService {
                   //周报发送内容有区别
                     iosStatus = appPushService.sendIOSUnicast(appUser.getDeviceToken(), alertContext, countInfo.getData().getUnReadCount() + 1, extraField);
                 }else{
-                    iosStatus = appPushService.sendIOSUnicast(appUser.getDeviceToken(), alertContext, countInfo.getData().getUnReadCount() + 1, message.getId().toString());
+                    iosStatus = appPushService.sendIOSUnicast(appUser.getDeviceToken(), alertContext, countInfo.getData().getUnReadCount() + 1, message.getId().toString(),message.getMsgType());
                 }
                 
                 if (iosStatus == 200) {

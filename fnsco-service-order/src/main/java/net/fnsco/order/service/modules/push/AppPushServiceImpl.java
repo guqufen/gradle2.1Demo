@@ -89,17 +89,30 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
      * @date 2017年7月12日 上午10:49:26
      */
     @Override
-    public Integer sendAndroidListcast(String param_and, String content, String sendTime,String contentJson) throws Exception {
+    public Integer sendAndroidListcast(String param_and, String content, String sendTime,String contentJson,Integer msgType) throws Exception {
 
         logger.warn("开始安卓列播推送");
-        String appkey = this.env.getProperty("ad.appkey");
-        String appMasterSecret = this.env.getProperty("ad.app.master.secret");
+        String appkey = null;
+        String appMasterSecret = null;
+        String ticker= null;
+        String tTitle =null;
+        if(msgType==4) {
+            appkey = this.env.getProperty("yzf.ad.appkey");
+            appMasterSecret = this.env.getProperty("yzf.ad.app.master.secret");
+            ticker = this.env.getProperty("yzf.ad.ticker");
+            tTitle = this.env.getProperty("yzf.ad.title");
+        }else {
+            appkey = this.env.getProperty("sqb.ad.appkey");
+            appMasterSecret = this.env.getProperty("sqb.ad.app.master.secret");
+            ticker = this.env.getProperty("sqb.ad.ticker");
+            tTitle = this.env.getProperty("sqb.ad.title");
+        }
         AndroidListcast listcast = new AndroidListcast(appkey,appMasterSecret);
         listcast.setDeviceToken(param_and);
         //listcast.setTicker("【数钱吧】您有一条新消息");
         //listcast.setTitle("数钱吧");
-        listcast.setTicker(this.env.getProperty("ad.ticker"));
-        listcast.setTitle(this.env.getProperty("ad.title"));
+        listcast.setTicker(ticker);
+        listcast.setTitle(tTitle);
         listcast.setText(content);
         listcast.goAppAfterOpen();
         listcast.setDisplayType(AndroidNotification.DisplayType.NOTIFICATION);//通知
@@ -109,7 +122,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
             listcast.setProductionMode();// 正式模式
         }
         listcast.setDescription("列播通知-Android");
-        listcast.setExtraField("msgType", "1");//系统通知
+        listcast.setExtraField("msgType", msgType.toString());//系统通知
         listcast.setExtraField("sendTime", sendTime);//推送时间
         listcast.setExtraField("titleType", "系统消息");
         listcast.setExtraField("msgId", contentJson);
@@ -127,11 +140,18 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
      * @date 2017年7月12日 上午10:49:26
      */
     @Override
-    public Integer sendIOSListcast(String param_ios, String content, String sendTime) throws Exception {
+    public Integer sendIOSListcast(String param_ios, String content, String sendTime,Integer msgType) throws Exception {
 
         logger.warn("开始IOS列播推送");
-        String appkey = this.env.getProperty("ios.appkey");
-        String appMasterSecret = this.env.getProperty("ios.app.master.secret");
+        String appkey = null;
+        String appMasterSecret = null;
+        if(msgType==4) {
+            appkey = this.env.getProperty("yzf.ios.appkey");
+            appMasterSecret = this.env.getProperty("yzf.ios.app.master.secret");
+        }else {
+            appkey = this.env.getProperty("sqb.ios.appkey");
+            appMasterSecret = this.env.getProperty("sqb.ios.app.master.secret");
+        }
         IOSListcast listcast = new IOSListcast(appkey,appMasterSecret);
         listcast.setDeviceToken(param_ios);
         listcast.setAlert(content);//内容
@@ -142,7 +162,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         } else if (StringUtils.equals(this.env.getProperty("youmeng.msg.mode"), "www")) {
             listcast.setProductionMode();// 正式模式
         }
-        listcast.setCustomizedField("msgType", "1");//系统通知
+        listcast.setCustomizedField("msgType", msgType.toString());//系统通知
         listcast.setCustomizedField("sendTime", sendTime);//推送时间
         listcast.setCustomizedField("titleType", "系统消息");
         int status = client.send(listcast);
@@ -156,16 +176,29 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
      * @date 2017年7月12日 上午10:49:26
      */
     @Override
-    public Integer sendAndroidBroadcast(String content, String sendTime,String ids) throws Exception {
+    public Integer sendAndroidBroadcast(String content, String sendTime,String ids,Integer msgType) throws Exception {
 
         logger.warn("开始安卓广播推送");
-        String appkey = this.env.getProperty("ad.appkey");
-        String appMasterSecret = this.env.getProperty("ad.app.master.secret");
+        String appkey = null;
+        String appMasterSecret = null;
+        String ticker= null;
+        String tTitle =null;
+        if(msgType==4) {
+            appkey = this.env.getProperty("yzf.ad.appkey");
+            appMasterSecret = this.env.getProperty("yzf.ad.app.master.secret");
+            ticker = this.env.getProperty("yzf.ad.ticker");
+            tTitle = this.env.getProperty("yzf.ad.title");
+        }else {
+            appkey = this.env.getProperty("sqb.ad.appkey");
+            appMasterSecret = this.env.getProperty("sqb.ad.app.master.secret");
+            ticker = this.env.getProperty("sqb.ad.ticker");
+            tTitle = this.env.getProperty("sqb.ad.title");
+        }
         AndroidBroadcast broadcast = new AndroidBroadcast(appkey,appMasterSecret);
         //broadcast.setTicker("【数钱吧】您有一条新消息");
         //broadcast.setTitle("数钱吧");
-        broadcast.setTicker(this.env.getProperty("ad.ticker"));
-        broadcast.setTitle(this.env.getProperty("ad.title"));
+        broadcast.setTicker(ticker);
+        broadcast.setTitle(tTitle);
         broadcast.setText(content);
         broadcast.goAppAfterOpen();
         broadcast.setDisplayType(AndroidNotification.DisplayType.NOTIFICATION);
@@ -174,7 +207,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         } else if (StringUtils.equals(this.env.getProperty("youmeng.msg.mode"), "www")) {
             broadcast.setProductionMode();// 正式模式
         }
-        broadcast.setExtraField("msgType", "1");//系统通知
+        broadcast.setExtraField("msgType", msgType.toString());//系统通知
         broadcast.setExtraField("sendTime", sendTime);
         broadcast.setExtraField("titleType", "系统消息");
         broadcast.setExtraField("msgId", ids);
@@ -189,11 +222,18 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
      * @date 2017年7月12日 上午10:49:26
      */
     @Override
-    public Integer sendIOSBroadcast(String content, String sendTime) throws Exception {
+    public Integer sendIOSBroadcast(String content, String sendTime,Integer msgType) throws Exception {
 
         logger.warn("开始IOS广播推送");
-        String appkey = this.env.getProperty("ios.appkey");
-        String appMasterSecret = this.env.getProperty("ios.app.master.secret");
+        String appkey = null;
+        String appMasterSecret = null;
+        if(msgType==4) {
+            appkey = this.env.getProperty("yzf.ios.appkey");
+            appMasterSecret = this.env.getProperty("yzf.ios.app.master.secret");
+        }else {
+            appkey = this.env.getProperty("sqb.ios.appkey");
+            appMasterSecret = this.env.getProperty("sqb.ios.app.master.secret");
+        }
         IOSBroadcast broadcast = new IOSBroadcast(appkey,appMasterSecret);
         broadcast.setAlert(content);
         broadcast.setBadge( 1);//角标消息数量
@@ -204,7 +244,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         } else if (StringUtils.equals(this.env.getProperty("youmeng.msg.mode"), "www")) {
             broadcast.setProductionMode();// 正式模式
         }
-        broadcast.setCustomizedField("msgType", "1");//系统通知
+        broadcast.setCustomizedField("msgType", msgType.toString());//系统通知
         broadcast.setCustomizedField("sendTime", sendTime);//系统通知
         broadcast.setCustomizedField("titleType", "系统消息");//系统通知
         int status = client.send(broadcast);
@@ -219,11 +259,18 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
      * @date 2017年7月12日 上午10:49:26
      */
     @Override
-    public Integer sendAndroidUnicast(String adrUnicastToken, String innerTermCode, String content) throws Exception {
+    public Integer sendAndroidUnicast(String adrUnicastToken, String innerTermCode, String content,Integer msgType) throws Exception {
 
         logger.warn("开始安卓单播推送");
-        String appkey = this.env.getProperty("ad.appkey");
-        String appMasterSecret = this.env.getProperty("ad.app.master.secret");
+        String appkey = null;
+        String appMasterSecret = null;
+        if(msgType==4) {
+            appkey = this.env.getProperty("yzf.ad.appkey");
+            appMasterSecret = this.env.getProperty("yzf.ad.app.master.secret");
+        }else {
+            appkey = this.env.getProperty("sqb.ad.appkey");
+            appMasterSecret = this.env.getProperty("sqb.ad.app.master.secret");
+        }
         AndroidUnicast unicast = new AndroidUnicast(appkey,appMasterSecret);
         unicast.setDeviceToken(adrUnicastToken);
         unicast.setTitle("浙付通");
@@ -236,7 +283,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
             unicast.setProductionMode();// 正式模式
         }
         // Set customized fields
-        unicast.setExtraField("msgType", "1");//通知
+        unicast.setExtraField("msgType", msgType.toString());//通知
         unicast.setExtraField("titleType", "系统通知");
         unicast.setExtraField("innerTermCode", innerTermCode);
         //unicast.setTicker("【数钱吧】您有一条新消息");
@@ -252,11 +299,18 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
      * @date 2017年7月12日 上午10:49:26
      */
     @Override
-    public Integer sendIOSUnicast(String iosUnicastToken, JSONObject content,Integer badge,String ids) throws Exception {
+    public Integer sendIOSUnicast(String iosUnicastToken, JSONObject content,Integer badge,String ids,Integer msgType) throws Exception {
 
         logger.warn("开始IOS单播推送");
-        String appkey = this.env.getProperty("ios.appkey");
-        String appMasterSecret = this.env.getProperty("ios.app.master.secret");
+        String appkey = null;
+        String appMasterSecret = null;
+        if(msgType==4) {
+            appkey = this.env.getProperty("yzf.ios.appkey");
+            appMasterSecret = this.env.getProperty("yzf.ios.app.master.secret");
+        }else {
+            appkey = this.env.getProperty("sqb.ios.appkey");
+            appMasterSecret = this.env.getProperty("sqb.ios.app.master.secret");
+        }
         IOSUnicast unicast = new IOSUnicast(appkey,appMasterSecret);
         
         unicast.setDeviceToken(iosUnicastToken);
@@ -271,7 +325,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
             unicast.setProductionMode();// 正式模式
         }
         // Set customized fields
-        unicast.setCustomizedField("msgType", "1");//通知
+        unicast.setCustomizedField("msgType", msgType.toString());//通知
         unicast.setCustomizedField("titleType", "系统通知");
         unicast.setCustomizedField("msgId", ids);
         int status = client.send(unicast);
@@ -299,7 +353,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
             sendTime = sdf.format(sysAppMessage.getSendTime());//定义传递给友盟的时间
             try {
                 //  安卓                  
-                int androidStatus = sendAndroidBroadcast(sysAppMessage.getMsgSubTitle(), sendTime,sysAppMessage.getId().toString());
+                int androidStatus = sendAndroidBroadcast(sysAppMessage.getMsgSubTitle(), sendTime,sysAppMessage.getId().toString(),sysAppMessage.getMsgType());
                 if (androidStatus == 200) {
                     logger.warn("安卓信息推送成功");
                 } else {
@@ -326,7 +380,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
                     sysMsgAppFail.setStatus(0);
                     if(appUser.getDeviceType() == 2){
                         ResultDTO<PushMsgInfoDTO> countInfo =  sysAppMsgService.queryNewsCount(appUser.getId(), false, appUser.getDeviceType());
-                        int iosStatus = sendIOSUnicast(appUser.getDeviceToken(),  alertContext, countInfo.getData().getUnReadCount()+1,sysAppMessage.getId().toString());
+                        int iosStatus = sendIOSUnicast(appUser.getDeviceToken(),  alertContext, countInfo.getData().getUnReadCount()+1,sysAppMessage.getId().toString(),sysAppMessage.getMsgType());
                         
                         if (iosStatus == 200) {
                             sysMsgAppSucc.setPhoneType(2);
@@ -415,7 +469,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
             
             if(appuser.getDeviceType() == 1){//android
                 try {
-                    Integer androidStatus  = sendAndroidListcast(appuser.getDeviceToken(),message.getMsgSubTitle(),DateUtils.dateFormatToStr(message.getSendTime()),message.getId().toString());
+                    Integer androidStatus  = sendAndroidListcast(appuser.getDeviceToken(),message.getMsgSubTitle(),DateUtils.dateFormatToStr(message.getSendTime()),message.getId().toString(),message.getMsgType());
                     sysMsgAppFail.setPhoneType(1);
                     if(androidStatus == 200){
                         msgAppSucc.setPhoneType(1);
@@ -439,7 +493,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
                     alertContext.put("title", message.getMsgSubject());
                     alertContext.put("subtitle", "");
                     alertContext.put("body", message.getMsgSubTitle());
-                    iosStatus = sendIOSUnicast(appuser.getDeviceToken(),  alertContext, countInfo.getData().getUnReadCount()+1,message.getId().toString());
+                    iosStatus = sendIOSUnicast(appuser.getDeviceToken(),  alertContext, countInfo.getData().getUnReadCount()+1,message.getId().toString(),message.getMsgType());
                     sysMsgAppFail.setPhoneType(2);
                     if (iosStatus == 200) {
                         msgAppSucc.setPhoneType(2);
