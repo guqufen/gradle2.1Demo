@@ -22,7 +22,7 @@ function importEvent(){
 $(function () {
     //0.初始化fileinput
     var oFileInput = new FileInput();
-    oFileInput.Init("excel_file_merchant", PROJECT_NAME+'/web/merchantinfoImport/doImport');
+    oFileInput.Init("excel_file_merchant", PROJECT_NAME+'/web/merchantinfoImport/doImportLKL');
 });
 //初始化fileinput
 var FileInput = function () {

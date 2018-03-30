@@ -11,21 +11,21 @@ import com.google.common.collect.Lists;
 import net.fnsco.core.utils.StringUtil;
 
 /**@desc 
- * @author tangliang
- * @date 2017年9月21日 上午10:54:00
+ * @author binghui.li
+ * @date 
  */
-public class MerchantSynchronizationDTO {
+public class LKLMerchantSynchronizationDTO {
 	
 	private String merchant;
 	private String businessLicenseNum;
-	private String paperNum;
+	private String paperNum; //身份证号
 	private String merLegalPerson;
 	private String legalPersonTel;
 	private String paperValidTime;
 	private String businessLicenseValidTime;
 	private String merRegistAddress;
 	private String mercFlag;
-	private String channelMerchant;
+	private String channelMerchant; 
 	private String salesSlip;
 	
 	private String linkMan;
@@ -50,10 +50,10 @@ public class MerchantSynchronizationDTO {
 	private String openBankCity;
 	
 	private String createTime;
-	private String busiCode;
-	private String privateKye;
+//	private String busiCode;
+//	private String privateKye;
 	private String taxRegistCode;
-	private String xx;
+	private String xx;//扫码扣费
 	private String fileInfos;
 	
 	private String snCode;
@@ -65,49 +65,55 @@ public class MerchantSynchronizationDTO {
 	private String creditCardMaxFee;
 	private String posType;
 	private String posFactory;
-	private String merchantCode;
-	private String terminalCode;
-	private String innerTermCode;
-	private String innerCode;
+	private String qGroupId;//一级类目
+	private String categroryId;//二级类目
+
 	
-	private String channelTerminalCode;
-	private String qrChannelTerminalCode;
-	private String terminalType;
-	private String subAppId;
-	private String qGroupId;
-	private String categroryId;
-	private String settleCycle;
+	private String merchantCode;//渠道商户号
+	private String terminalCode;//渠道终端号
+//	private String innerTermCode;//内部终端号
+	private String innerCode;//内部商户号
+	
+//	private String channelTerminalCode;//通道终端号
+//	private String qrChannelTerminalCode;
+	private String terminalType;//终端类型
+//	private String subAppId;
+//	
 	
 	
-	public String getChannelTerminalCode() {
-		return channelTerminalCode;
+	
+	
+//	public String getChannelTerminalCode() {
+//		return channelTerminalCode;
+//	}
+	/**
+	 * qGroupId
+	 *
+	 * @return  the qGroupId
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getqGroupId() {
+		return qGroupId;
 	}
-	public void setChannelTerminalCode(String channelTerminalCode) {
-		this.channelTerminalCode = channelTerminalCode;
+	/**
+	 * qGroupId
+	 *
+	 * @param   qGroupId    the qGroupId to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setqGroupId(String qGroupId) {
+		this.qGroupId = qGroupId;
 	}
-	public String getQrChannelTerminalCode() {
-		return qrChannelTerminalCode;
-	}
-	public void setQrChannelTerminalCode(String qrChannelTerminalCode) {
-		this.qrChannelTerminalCode = qrChannelTerminalCode;
-	}
+//	public void setChannelTerminalCode(String channelTerminalCode) {
+//		this.channelTerminalCode = channelTerminalCode;
+//	}
 	public String getTerminalType() {
 		return terminalType;
 	}
 	public void setTerminalType(String terminalType) {
 		this.terminalType = terminalType;
-	}
-	public String getSubAppId() {
-		return subAppId;
-	}
-	public void setSubAppId(String subAppId) {
-		this.subAppId = subAppId;
-	}
-	public String getqGroupId() {
-		return qGroupId;
-	}
-	public void setqGroupId(String qGroupId) {
-		this.qGroupId = qGroupId;
 	}
 	public String getCategroryId() {
 		return categroryId;
@@ -115,12 +121,12 @@ public class MerchantSynchronizationDTO {
 	public void setCategroryId(String categroryId) {
 		this.categroryId = categroryId;
 	}
-	public String getSettleCycle() {
-		return settleCycle;
-	}
-	public void setSettleCycle(String settleCycle) {
-		this.settleCycle = settleCycle;
-	}
+//	public String getSettleCycle() {
+//		return settleCycle;
+//	}
+//	public void setSettleCycle(String settleCycle) {
+//		this.settleCycle = settleCycle;
+//	}
 	/**
      * innerCode
      *
@@ -369,18 +375,6 @@ public class MerchantSynchronizationDTO {
 	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
 	}
-	public String getBusiCode() {
-		return busiCode;
-	}
-	public void setBusiCode(String busiCode) {
-		this.busiCode = busiCode;
-	}
-	public String getPrivateKye() {
-		return privateKye;
-	}
-	public void setPrivateKye(String privateKye) {
-		this.privateKye = privateKye;
-	}
 	public String getTaxRegistCode() {
 		return taxRegistCode;
 	}
@@ -465,12 +459,12 @@ public class MerchantSynchronizationDTO {
 	public void setTerminalCode(String terminalCode) {
 		this.terminalCode = terminalCode;
 	}
-	public String getInnerTermCode() {
-		return innerTermCode;
-	}
-	public void setInnerTermCode(String innerTermCode) {
-		this.innerTermCode = innerTermCode;
-	}
+//	public String getInnerTermCode() {
+//		return innerTermCode;
+//	}
+//	public void setInnerTermCode(String innerTermCode) {
+//		this.innerTermCode = innerTermCode;
+//	}
 	
 	@Override
 	public String toString() {
@@ -482,10 +476,10 @@ public class MerchantSynchronizationDTO {
      * @param lists
      * @return
      */
-    public static List<Object[]> installListDatas(List<MerchantSynchronizationDTO> lists) {
+    public static List<Object[]> installListDatas(List<LKLMerchantSynchronizationDTO> lists) {
         List<Object[]>  result = Lists.newArrayList();
         
-        for (MerchantSynchronizationDTO merDo : lists) {
+        for (LKLMerchantSynchronizationDTO merDo : lists) {
             Object[]  data = new Object[45]; 
             data[0] = (merDo.getMerchant());
             data[1] =(merDo.getBusinessLicenseNum());
@@ -517,8 +511,8 @@ public class MerchantSynchronizationDTO {
             data[25] =(merDo.getSubBankName());
             data[26] =(merDo.getOpenBankNum());
             data[27] =(merDo.getCreateTime());
-            data[28] =(merDo.getBusiCode());
-            data[29] =(merDo.getPrivateKye());
+//            data[28] =(merDo.getBusiCode());
+//            data[29] =(merDo.getPrivateKye());
             data[30] =(merDo.getTaxRegistCode());
             data[31] =(merDo.getXx());
             
@@ -534,7 +528,7 @@ public class MerchantSynchronizationDTO {
             data[41] =(merDo.getPosFactory());
             data[42] =(merDo.getMerchantCode());
             data[43] =(merDo.getTerminalCode());
-            data[44] =(merDo.getInnerTermCode());
+//            data[44] =(merDo.getInnerTermCode());
             
             result.add(data);
         }
@@ -549,8 +543,8 @@ public class MerchantSynchronizationDTO {
      * @date      2017年9月28日 上午10:36:23
      * @return MerchantSynchronizationDTO    DOM对象
      */
-    public static  MerchantSynchronizationDTO installMerchantSynDto(Object[] objs){
-        MerchantSynchronizationDTO dto = new MerchantSynchronizationDTO();
+    public static  LKLMerchantSynchronizationDTO installMerchantSynDto(Object[] objs){
+        LKLMerchantSynchronizationDTO dto = new LKLMerchantSynchronizationDTO();
      // 工商注册名称（协议签约一致）
         dto.setMerchant(StringUtil.valueOf(objs[0]).trim());
         // 营业执照注册号
@@ -607,43 +601,58 @@ public class MerchantSynchronizationDTO {
         dto.setOpenBankCity(StringUtil.valueOf(objs[29]).trim());
         //createTime
         dto.setCreateTime(StringUtil.valueOf(objs[30]).trim());
-        // busiCode
-        dto.setBusiCode(StringUtil.valueOf(objs[31]).trim());
-        dto.setPrivateKye(StringUtil.valueOf(objs[32]).trim());
-        dto.setTaxRegistCode(StringUtil.valueOf(objs[33]).trim());
+        
+        dto.setTaxRegistCode(StringUtil.valueOf(objs[31]).trim());
         // 扫码扣率
-        dto.setXx(StringUtil.valueOf(objs[34]).trim());
+        dto.setXx(StringUtil.valueOf(objs[32]).trim());
         //文件信息
-        dto.setFileInfos(StringUtil.valueOf(objs[35]).trim());
+        dto.setFileInfos(StringUtil.valueOf(objs[33]).trim());
         
         // 一号pos机
         // 备注/1号机具SN
-        dto.setSnCode(StringUtil.valueOf(objs[36]).trim());
+        dto.setSnCode(StringUtil.valueOf(objs[34]).trim());
         //debitCardRate
-        dto.setDebitCardRate(StringUtil.valueOf(objs[37]).trim());
+        dto.setDebitCardRate(StringUtil.valueOf(objs[35]).trim());
         //creditCardRate
-        dto.setCreditCardRate(StringUtil.valueOf(objs[38]).trim());
+        dto.setCreditCardRate(StringUtil.valueOf(objs[36]).trim());
         //debitCardFee
-        dto.setDebitCardFee(StringUtil.valueOf(objs[39]).trim());
+        dto.setDebitCardFee(StringUtil.valueOf(objs[37]).trim());
         //creditCardFee
-        dto.setCreditCardFee(StringUtil.valueOf(objs[40]).trim());
+        dto.setCreditCardFee(StringUtil.valueOf(objs[38]).trim());
         //debitCardMaxFee
-        dto.setDebitCardMaxFee(StringUtil.valueOf(objs[41]).trim());
+        dto.setDebitCardMaxFee(StringUtil.valueOf(objs[39]).trim());
         //creditCardMaxFee
-        dto.setCreditCardMaxFee(StringUtil.valueOf(objs[42]).trim());
+        dto.setCreditCardMaxFee(StringUtil.valueOf(objs[40]).trim());
         //posType
-        dto.setPosType(StringUtil.valueOf(objs[43]).trim());
+        dto.setPosType(StringUtil.valueOf(objs[41]).trim());
         //posFactory
-        dto.setPosFactory(StringUtil.valueOf(objs[44]).trim());
+        dto.setPosFactory(StringUtil.valueOf(objs[42]).trim());
+        dto.setqGroupId(StringUtil.valueOf(objs[43]).trim());
+        dto.setCategroryId(StringUtil.valueOf(objs[44]).trim());
+        
+        //-------------------//
         //merchantCode
         dto.setMerchantCode(StringUtil.valueOf(objs[45]).trim());
         //terminalCode
         dto.setTerminalCode(StringUtil.valueOf(objs[46]).trim());
         //innerTermCode
-        dto.setInnerTermCode(StringUtil.valueOf(objs[47]).trim());
+//        dto.setInnerTermCode(StringUtil.valueOf(objs[47]).trim());
         //innerCode
 //        dto.setInnerCode(StringUtil.valueOf(objs[48]).trim());
-       
+        //channelTerminalCode
+//        dto.setChannelTerminalCode(StringUtil.valueOf(objs[49]).trim());
+        //qrChannelTerminalCode
+//        dto.setQrChannelTerminalCode(StringUtil.valueOf(objs[50]).trim());
+        //terminalType
+        dto.setTerminalType(StringUtil.valueOf(objs[47]).trim());
+        //subAppId
+//        dto.setSubAppId(StringUtil.valueOf(objs[52]).trim());
+        //qGroupId
+//        dto.setqGroupId(StringUtil.valueOf(objs[53]).trim());
+        //categroryId
+//        dto.setCategroryId(StringUtil.valueOf(objs[54]).trim());
+        //settleCycle
+//        dto.setSettleCycle(StringUtil.valueOf(objs[55]).trim());
         
         return dto;
     }
