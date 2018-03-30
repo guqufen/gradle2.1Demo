@@ -125,7 +125,7 @@ public class ConmmController extends BaseController {
         if(Strings.isNullOrEmpty(entityInnerCode)) {
         	 return ResultDTO.fail(BigdataConstant.APP_MER_ENTITY_INNERCODE_NULL);
         }
-        String url = env.getProperty("web.base.url") + "/acti/lklregister.html?entityId=" + entityInnerCode;
+        String url = env.getProperty("lklweb.base.url") + "/acti/lklregister.html?entityId=" + entityInnerCode;
         Map<String, Object> resultMap = Maps.newHashMap();
         List<IntegralLog> list = integralRuleLogService.queryListByEntityInnerCode(entityInnerCode);
         Integer integral = 0;// 积分值 
