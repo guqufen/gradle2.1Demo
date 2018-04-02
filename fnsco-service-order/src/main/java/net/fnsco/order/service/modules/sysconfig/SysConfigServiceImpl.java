@@ -33,6 +33,7 @@ public class SysConfigServiceImpl extends BaseService implements SysConfigServic
     private Environment         env;
 
     private static final String baseUrl = "h5.base.url";
+    private static final String lklbaseUrl = "lklh5.base.url";
 
     /**
      * (non-Javadoc)
@@ -151,8 +152,10 @@ public class SysConfigServiceImpl extends BaseService implements SysConfigServic
         if (Strings.isNullOrEmpty(value)) {
             return null;
         }
-
         value = env.getProperty(baseUrl) + value;
+        if("01".equals(config.getType()) && "02".equals(config.getName())) {
+            value = env.getProperty(lklbaseUrl) + value;
+        }
 
         String temp = FrameworkConstant.TOKEN_ID + appConfigDTO.getUserId();
         String trueTokenId = Md5Util.getInstance().md5(temp);
