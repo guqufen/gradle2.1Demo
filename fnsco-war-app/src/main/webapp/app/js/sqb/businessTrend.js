@@ -126,7 +126,7 @@ function trendData(tokenId,userId,startDate,endDate,innerCode){
     mui.alert('获取用户信息失败');
   }else{
 
-    var jsonstr = {
+    /*var jsonstr = {
       'userId': userId
     };
     var params = JSON.stringify(jsonstr);
@@ -148,7 +148,7 @@ function trendData(tokenId,userId,startDate,endDate,innerCode){
           $(".filter-name").html("全部商铺");
         }
       }
-    });
+    });*/
     $.ajax({
       url:'../app/tradeReport/queryBusinessTrends?timer='+new Date().getTime(),
       dataType : "json",
