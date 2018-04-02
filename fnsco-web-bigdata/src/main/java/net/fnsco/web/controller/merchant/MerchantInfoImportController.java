@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.google.common.collect.Lists;
 
+import net.fnsco.bigdata.api.dto.LKLMerchantSynchronizationDTO;
 import net.fnsco.bigdata.api.dto.MerchantSynchronizationDTO;
 import net.fnsco.bigdata.service.modules.merchant.MerchantInfoImportService;
 import net.fnsco.core.base.BaseController;
@@ -34,6 +35,69 @@ public class MerchantInfoImportController extends BaseController {
     @Autowired
     private ImportErrorDAO            importErrorDAO;
 
+    
+    /**
+     * doImportLkl (拉卡拉商户数据导入)
+     * 
+     * @auther  binghui.li
+     */
+    @RequestMapping(value = "/doImportLKL", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultDTO<List<ImportErrorDO>> doImportLkl() {
+        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+        Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
+        MultipartFile file = fileMap.get("excel_file_merchant");
+        // 判断文件是否为空
+        if (file == null) {
+            return null;
+        }
+        // 获取文件名
+        String name = file.getOriginalFilename();
+        // 进一步判断文件是否为空（即判断其大小是否为0或其名称是否为null）
+        long size = file.getSize();
+        if (name == null || ("").equals(name) && size == 0) {
+            return null;
+        }
+        // 创建处理EXCEL
+        ReadExcel readExcel = new ReadExcel();
+        // 解析excel，获取客户信息集合。
+        List<Object[]> customerList = readExcel.getExcelInfo(name, file);
+        // 获取当前登录的用户
+        WebUserDTO adminUser = (WebUserDTO) getSessionUser();
+        Integer userId = adminUser.getId();
+        // 批量导入。参数：文件名，文件。
+        List<ImportErrorDO> errorMsgs = Lists.newArrayList();
+        if (customerList.size() != 0) {
+            // excel导出的空数据是“null”，赋值一个空字符串
+            int timeNum = 1;
+            for (Object[] objs : customerList) {
+                timeNum = timeNum + 1;
+                if(objs.length < 48){
+                    logger.error("文件数据格式不正确!"+name);
+                    return ResultDTO.fail("文件数据格式不正确!");
+                }
+                try {
+                    //处理单个,转换成对象
+                	LKLMerchantSynchronizationDTO dto = LKLMerchantSynchronizationDTO.installMerchantSynDto(objs);
+                    ResultDTO<String> result1 = merchantInfoImportService.merchantBatchImportToDBLKL(dto, userId, timeNum);
+                    
+                    if(!result1.isSuccess()){
+                        StringBuffer errorMsg = new StringBuffer("第").append(timeNum).append(result1.getData());
+                        ImportErrorDO errorId = saveErrorMsgToDB(new Date(), null, null, userId, timeNum, name, errorMsg.toString(), dto.toString(), null);
+                        errorMsgs.add(errorId);
+                    }
+                   
+                } catch (ParseException e) {
+                    logger.error("接口导入数据程序异常", e);
+                    return ResultDTO.fail();
+                }
+            }
+        }
+        
+        return ResultDTO.success(errorMsgs);
+    }
+    
+    
     /**
     * 
     * doImport:(商户数据导入)

@@ -1227,7 +1227,7 @@ function removePos(num){
         poses=poses.concat({merChannel:{channelMerId,channelType,channelMerKey,id},posDeviceInfos,terminaInfos});  
       }
     }
-    console.log({poses,"innerCode":$('input[name="innerCode"]').val()});  
+//    console.log({poses,"innerCode":$('input[name="innerCode"]').val()});  
     // 保存
     // if(channelArr && channelArr.length == 0){
     // layer.msg('保存成功');return ;
@@ -1241,7 +1241,7 @@ function removePos(num){
      success:function(data){
        unloginHandler(data);
        layer.msg(data.message);// 返回innerCode
-       console.log(data);
+//       console.log(data);
         var channelsLen=data.data.length;
         for(var i=0;i<channelsLen;i++){
             $('#'+conId+' input[name="channelMerKey'+data.data[i].id+'"]').val(data.data[i].channelMerKey);

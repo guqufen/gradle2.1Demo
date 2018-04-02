@@ -33,7 +33,7 @@ public interface UserDAO {
     @Select("SELECT * FROM sys_user WHERE name=#{name} and status = 1 limit 1")
     public UserDO getByName(@Param("name") String name);
 
-    @Insert("INSERT into sys_user(id,type,name,password,real_name,mobile,sex,alias_name,department,agent_id,remark,modify_time,modify_user_id,status) VALUES (#{id},#{type},#{name},#{password},#{realName},#{mobile},#{sex},#{aliasName},#{department},#{agentId},#{remark},#{modifyTime},#{modifyUserId},#{status})")
+    @Insert("INSERT into sys_user(id,type,name,password,real_name,mobile,sex,alias_name,depart_id,department,agent_id,remark,modify_time,modify_user_id,status) VALUES (#{id},#{type},#{name},#{password},#{realName},#{mobile},#{sex},#{aliasName},#{departId},#{department},#{agentId},#{remark},#{modifyTime},#{modifyUserId},#{status})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public int insert(UserDO user);
 
@@ -54,4 +54,8 @@ public interface UserDAO {
     @Results({ @Result(column = "perms", property = "perms") })
     @SelectProvider(type = UserProvider.class, method = "queryAllPerms")
     public List<String> queryAllPerms(@Param("userId") Integer userId);
+
+    @Results({ @Result(column = "id", property = "id") })
+    @Select("SELECT id FROM sys_user WHERE depart_id = #{integer}")
+	public List<Integer> getByDepartId(Integer integer);
 }

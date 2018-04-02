@@ -52,12 +52,8 @@ public class DeptManageController extends BaseController {
 		//用户有代理查代理下部门，无代理查全部
 		ResultPageDTO<DeptDO> result = null;
 		if(userDO != null){
-			if(userDO.getAgentId() == null){
+			dept.setAgentId(userDO.getAgentId());
 				result = sysDeptService.queryList(dept, pageNum, pageSize);
-			}else{
-				dept.setAgentId(userDO.getAgentId());
-				result = sysDeptService.queryList2(dept, pageNum, pageSize);
-			}
 		}
 		return success(result);
 		
@@ -77,13 +73,6 @@ public class DeptManageController extends BaseController {
 		if(userDO == null){
 			return null;
 		}
-//		Integer agentId = null;
-//		String name;
-//		if(userDO != null){
-//			if(userDO.getAgentId() != null){
-//				name = userDO.getName();
-//			}
-//		}
 		List<DeptDO> result = sysDeptService.queryName(false,userDO);
 		return success(result);
 	}
@@ -99,12 +88,6 @@ public class DeptManageController extends BaseController {
 	public ResultDTO<DeptDO> queryNoRoottree() {
 		Integer userID = this.getUserId();
 		UserDO userDO = userService.getUserById(userID);
-//		Integer agentId = null;
-//		if(userDO != null){
-//			if(userDO.getAgentId() != null){
-//				agentId = userDO.getAgentId();
-//			}
-//		}
 		List<DeptDO> result = sysDeptService.queryName(false,userDO);
 		return success(result);
 	}
@@ -119,6 +102,11 @@ public class DeptManageController extends BaseController {
 	@ResponseBody
 	@RequiresPermissions(value = {"sys:dept:save"})
 	public ResultDTO<String> toAdd(DeptDO dept) {
+		Integer userID = this.getUserId();
+		UserDO userDO = userService.getUserById(userID);
+		if(userDO != null){
+			dept.setAgentId(userDO.getAgentId());
+		}
 		sysDeptService.doAddDept(dept);
 		return ResultDTO.successForSave(null);
 	}

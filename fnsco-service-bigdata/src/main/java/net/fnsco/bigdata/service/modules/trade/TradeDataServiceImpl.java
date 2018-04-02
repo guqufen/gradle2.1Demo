@@ -264,7 +264,12 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         //查询agentid下所有内部商户号信息
         if(agentId != null){
         	 List<String> innerCodeList = merchantCoreDao.queryAllInnercodeByAgentId(agentId);
-             tradeData.setInnerCodeList(innerCodeList);	
+        	 if(innerCodeList.size() >0){
+        		 tradeData.setInnerCodeList(innerCodeList);	
+        		 
+        	 }else{
+        		 return null;
+        	 }
         }
        
         
@@ -318,11 +323,16 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
     @Override
     public String queryTotalAmount(TradeDataDTO tradeDataDTO,Integer agentId) {
         TradeData tradeData = new TradeData();
-        //查询agentid下所有内部商户号信息
-        if(agentId != null){
-        	List<String> innerCodeList = merchantCoreDao.queryAllInnercodeByAgentId(agentId);
-            tradeData.setInnerCodeList(innerCodeList);
-        }
+		// 查询agentid下所有内部商户号信息
+		if (agentId != null) {
+			List<String> innerCodeList = merchantCoreDao.queryAllInnercodeByAgentId(agentId);
+			if (innerCodeList.size() > 0) {
+				tradeData.setInnerCodeList(innerCodeList);
+
+			} else {
+				return null;
+			}
+		}
         
         if (tradeDataDTO.getPayType() != null &&tradeDataDTO.getPayType().equals("03")) {
             tradeDataDTO.setPayType(null);
