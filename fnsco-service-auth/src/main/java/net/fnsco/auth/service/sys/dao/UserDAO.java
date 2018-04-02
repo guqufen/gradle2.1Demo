@@ -56,6 +56,6 @@ public interface UserDAO {
     public List<String> queryAllPerms(@Param("userId") Integer userId);
 
     @Results({ @Result(column = "id", property = "id") })
-    @Select("SELECT id FROM sys_user WHERE depart_id = #{integer}")
+    @Select("SELECT id FROM sys_user WHERE depart_id = #{integer} and status = 1")
 	public List<Integer> getByDepartId(Integer integer);
 }

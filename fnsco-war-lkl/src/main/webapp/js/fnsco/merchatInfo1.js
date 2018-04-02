@@ -1281,6 +1281,7 @@ function removePos(num){
               $('#'+conId+' select[name="categroryId'+data.data[i].terminaInfos[o].id+'"]').find("option[value='"+data.data[i].terminaInfos[o].categroryId+"']").attr("selected",true);
             }
         }
+        $('#editModal').modal('hide');
       },
 
     // for (var i=0;i<data.data.length;i++){
