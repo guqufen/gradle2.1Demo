@@ -34,6 +34,9 @@ function getDownload(){
 	if(/android/i.test(navigator.userAgent)){
 		$.ajax({
 			url:'../h5/user/getLastVersion',
+			data : {
+				'code' : YZF
+			},
 			type:'get',
 			success:function(data){
 				checkPlatform(data.data.downloadUrl1);

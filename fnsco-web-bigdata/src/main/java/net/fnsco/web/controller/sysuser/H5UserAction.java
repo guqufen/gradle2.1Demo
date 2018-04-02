@@ -8,7 +8,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.beust.jcommander.Strings;
 
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
@@ -65,8 +68,11 @@ public class H5UserAction extends BaseController {
     @RequestMapping(value = "/getLastVersion", method = RequestMethod.GET)
     @ApiOperation(value = "获取最新版本")
     @ResponseBody
-    public ResultDTO getLastVersion() {
-        String appCode = AppTypeEnum.SQB.getCode();
+    public ResultDTO getLastVersion(@RequestParam String code) {
+	String appCode = AppTypeEnum.SQB.getCode();
+	if(!Strings.isStringEmpty(code)) {
+	    appCode = code;
+	}
         VersionDTO sysVersionDTO = new VersionDTO();
         sysVersionDTO.setAppCode(appCode);
         sysVersionDTO.setAppType(1);
