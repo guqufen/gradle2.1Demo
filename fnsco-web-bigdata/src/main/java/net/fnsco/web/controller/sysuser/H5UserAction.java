@@ -68,11 +68,30 @@ public class H5UserAction extends BaseController {
     @RequestMapping(value = "/getLastVersion", method = RequestMethod.GET)
     @ApiOperation(value = "获取最新版本")
     @ResponseBody
-    public ResultDTO getLastVersion(@RequestParam String code) {
+    public ResultDTO getLastVersion() {
 	String appCode = AppTypeEnum.SQB.getCode();
-	if(!Strings.isStringEmpty(code)) {
-	    appCode = code;
-	}
+        VersionDTO sysVersionDTO = new VersionDTO();
+        sysVersionDTO.setAppCode(appCode);
+        sysVersionDTO.setAppType(1);
+        sysVersionDTO.setVersion("0.0.0");
+        ResultDTO result = conmmService.queryLastVersionInfo(sysVersionDTO);
+        return result;
+    }
+    
+    /**
+     * 
+     * checkUpdate:(获取最新版本)
+     *
+     * @param sysVersionDTO
+     * @return   ResultDTO    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    @RequestMapping(value = "/getLklLastVersion", method = RequestMethod.GET)
+    @ApiOperation(value = "获取拉卡拉最新版本")
+    @ResponseBody
+    public ResultDTO getLklLastVersion() {
+	String appCode = AppTypeEnum.YZF.getCode();
         VersionDTO sysVersionDTO = new VersionDTO();
         sysVersionDTO.setAppCode(appCode);
         sysVersionDTO.setAppType(1);
