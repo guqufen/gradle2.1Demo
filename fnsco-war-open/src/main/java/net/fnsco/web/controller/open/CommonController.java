@@ -8,6 +8,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.Lists;
@@ -56,8 +57,11 @@ public class CommonController extends BaseController {
      */
     @RequestMapping(value = "/appDownUrl")
     @ApiOperation(value = "获取APP下载地址")
-    public ResultDTO getMerCode() {
-        return success(env.getProperty(ApiConstant.THIS_PROGREM_URL));
+    public ResultDTO getMerCode(@RequestParam("type")String type) {
+	if("YZF".equals(type)) {
+	    return success(env.getProperty(ApiConstant.THIS_PROGREM_YZF_URL));
+	}
+        return success(env.getProperty(ApiConstant.THIS_PROGREM_SQB_URL));
     }
 
     /**
@@ -96,6 +100,9 @@ public class CommonController extends BaseController {
             return ResultDTO.fail(ApiConstant.E_EDITION_ERROR);
         }
         String appCode = AppTypeEnum.LKL.getCode();
+        if ("YZF".equals(commJO.getAppType())) {
+            appCode = AppTypeEnum.YZF.getCode();
+	}
         VersionDTO sysVersionDTO = new VersionDTO();
         sysVersionDTO.setAppType(type);
         sysVersionDTO.setVersion(version);

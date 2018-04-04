@@ -1,5 +1,6 @@
 package net.fnsco.web.controller.open.jo;
 
+import ch.qos.logback.core.subst.Token.Type;
 import net.fnsco.core.base.JO;
 
 public class CommJO extends JO {
@@ -11,6 +12,7 @@ public class CommJO extends JO {
     private String  merCode;
     //pos机的snCode码
     private String  snCode;
+    private String  appType;
 
     /**
      * merCode
@@ -98,6 +100,14 @@ public class CommJO extends JO {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public String getAppType() {
+        return appType;
+    }
+
+    public void setAppType(String appType) {
+        this.appType = appType;
     }
 
 }

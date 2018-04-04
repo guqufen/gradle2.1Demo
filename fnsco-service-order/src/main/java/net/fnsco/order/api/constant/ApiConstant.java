@@ -3,7 +3,8 @@ package net.fnsco.order.api.constant;
 import net.fnsco.core.constants.CoreConstants;
 
 public class ApiConstant extends CoreConstants {
-    public static String THIS_PROGREM_URL          = "app.download.url";
+    public static String THIS_PROGREM_SQB_URL          = "appsqb.download.url";
+    public static String THIS_PROGREM_YZF_URL          = "appyzf.download.url";
     public static String THIS_ANDROID_URL          = "app.download.android";
     public static String THIS_IOS_URL              = "app.download.ios";
     public static String FINA_MARKET_URL           = "fina.market.url";
