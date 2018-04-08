@@ -57,8 +57,8 @@ public class CommonController extends BaseController {
      */
     @RequestMapping(value = "/appDownUrl")
     @ApiOperation(value = "获取APP下载地址")
-    public ResultDTO getMerCode(@RequestParam("type")String type) {
-	if("YZF".equals(type)) {
+    public ResultDTO getMerCode(@RequestParam("appType")String appType) {
+	if("YZFSYT".equals(appType)) {
 	    return success(env.getProperty(ApiConstant.THIS_PROGREM_YZF_URL));
 	}
         return success(env.getProperty(ApiConstant.THIS_PROGREM_SQB_URL));
@@ -100,8 +100,8 @@ public class CommonController extends BaseController {
             return ResultDTO.fail(ApiConstant.E_EDITION_ERROR);
         }
         String appCode = AppTypeEnum.LKL.getCode();
-        if ("YZF".equals(commJO.getAppType())) {
-            appCode = AppTypeEnum.YZF.getCode();
+        if ("YZFSYT".equals(commJO.getAppType())) {
+            appCode = AppTypeEnum.YZFSYT.getCode();
 	}
         VersionDTO sysVersionDTO = new VersionDTO();
         sysVersionDTO.setAppType(type);

@@ -3,7 +3,7 @@ package net.fnsco.order.api.constant;
 public class ConstantEnum {
 
     public static enum AppTypeEnum {
-                                    SQB("SQB", "数钱吧"), LKL("LKL", "拉卡拉"),E789("e789","e789"),YZF("YZF","易账房");
+                                    SQB("SQB", "数钱吧"), LKL("LKL", "拉卡拉"),E789("e789","e789"),YZF("YZF","易账房"),YZFSYT("YZFSYT","易账房收银台");
         private String code;
         private String name;
 
