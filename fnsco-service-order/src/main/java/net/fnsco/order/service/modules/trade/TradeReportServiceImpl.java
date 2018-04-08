@@ -433,7 +433,8 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             resultData.setOrderNum(turnover.getOrderNum());
             BigDecimal tur = divide(turnover.getTurnover(), 100);
             resultData.setTurnover(tur.setScale(2, BigDecimal.ROUND_HALF_UP));//转化为元单位
-            resultData.setOrderPrice(divide(turnover.getTurnover(), turnover.getOrderNum()*100));
+            BigDecimal orDecimal = divide(turnover.getTurnover(), turnover.getOrderNum()*100);
+            resultData.setOrderPrice(orDecimal.setScale(2, BigDecimal.ROUND_HALF_UP));
         }
         
         //返回支付渠道类型数据
