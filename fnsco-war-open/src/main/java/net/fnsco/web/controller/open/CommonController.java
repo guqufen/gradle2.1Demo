@@ -1,6 +1,7 @@
 package net.fnsco.web.controller.open;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +58,8 @@ public class CommonController extends BaseController {
      */
     @RequestMapping(value = "/appDownUrl")
     @ApiOperation(value = "获取APP下载地址")
-    public ResultDTO getMerCode(@RequestParam("appType")String appType) {
+    public ResultDTO getMerCode(@RequestBody Map<String,Object> params) {
+	String appType = params.get("appType").toString();
 	if("YZFSYT".equals(appType)) {
 	    return success(env.getProperty(ApiConstant.THIS_PROGREM_YZF_URL));
 	}
