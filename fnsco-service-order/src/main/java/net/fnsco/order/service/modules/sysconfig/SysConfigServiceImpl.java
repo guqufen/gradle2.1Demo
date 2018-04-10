@@ -169,7 +169,31 @@ public class SysConfigServiceImpl extends BaseService implements SysConfigServic
         }
         return config.getValue() + "userId=" + appConfigDTO.getUserId() + "&tokenId=" + trueTokenId;
     }
-
+    /**
+     * 获取没有APPuserID的配置信息
+     * (non-Javadoc)
+     * @see net.fnsco.order.api.config.SysConfigService#getNoIdValueUrl(net.fnsco.order.api.dto.AppConfigDTO)
+     */
+    @Override
+    public String getNoIdValueUrl(AppConfigDTO appConfigDTO) {
+	SysConfig record = new SysConfig();
+        record.setType(appConfigDTO.getType());
+        record.setName(appConfigDTO.getName());
+        SysConfig config = selectByCondition(record);
+        if (null == config) {
+            return null;
+        }
+        String value = config.getValue();
+        if (Strings.isNullOrEmpty(value)) {
+            return null;
+        }
+        if("01".equals(config.getType()) && "05".equals(config.getName())) {
+            return value;
+        }
+	return null;
+    }
+    
+    
     /**
      * 
      * (non-Javadoc)
@@ -209,4 +233,5 @@ public class SysConfigServiceImpl extends BaseService implements SysConfigServic
 	public List<PermissionsDTO> selectLevelPrivilege() {		
 		return sysConfigDao.selectLevelPrivilege();
 	}
+
 }

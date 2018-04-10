@@ -39,6 +39,8 @@ public interface SysConfigService {
      */
     String getValueUrl(AppConfigDTO appConfigDTO);
     
+    String getNoIdValueUrl(AppConfigDTO appConfigDTO);
+    
     List<SysConfig> selectAllByCondition(SysConfig record);
     
     /**
