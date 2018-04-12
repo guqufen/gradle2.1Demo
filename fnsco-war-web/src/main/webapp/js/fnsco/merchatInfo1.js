@@ -935,8 +935,6 @@ function getWechat(num,innerCode,weChat1){
 		type:'POST',
 		data:{'innerCode':innerCode},
 		success:function(data){
-			// unloginHandler(data.data);
-			console.log(data);
 			$("#qGroupId"+num).html('');
 			for(var i=0;i<data.data.length;i++){
 				$("#qGroupId"+num).append('<option value='+data.data[i].groupId+'>'+data.data[i].groupName+'</option>');

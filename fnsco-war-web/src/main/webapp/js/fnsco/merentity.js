@@ -238,7 +238,7 @@ $("#btn_add").click(function(){
     $("#myModalLabel").html("新增商户实体");
     $('#addForm')[0].reset();
     queryIndustryEvent(null);
-    requestAgent(null);//请求所有代理商
+    requestAgent(null);//请求该用户所属代理
     merProvince("0");
 })
 $('.sunmitBtn').click(function(){
@@ -550,14 +550,9 @@ function requestAgent(type){
 					   html_opt += '<option value="'+value.id+'">'+value.name+'</option>';
 				   }
 			   })
-			   if(!type){//type 未代理商id
-				   $('#agentId').html('');
-//				   $('#agentId').append(html_opt);
-			   }else{
-//				   $('#agentId').html('');
-				   $('#agentId').append(html_opt);
-				   $('#agentId1').append(html_opt);
-			   }
+			   
+			    $('#agentId').html(html_opt);
+				$('#agentId1').append(html_opt);
 		   },
 		   error:function(e){
 			   layer.msg('服务器出错');
